@@ -1,8 +1,9 @@
 #pragma once
 
-#include <SimParticle.hpp>
 #include <array>
 #include <cstdint>
+
+#include <SimParticle.hpp>
 
 namespace SHiP {
 
