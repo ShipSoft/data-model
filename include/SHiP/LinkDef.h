@@ -13,4 +13,9 @@
 #pragma link C++ class SHiP::SimResult+;
 #pragma link C++ class std::vector<SHiP::SimHit>+;
 #pragma link C++ class std::vector<SHiP::SimParticle>+;
+
+
+// Reconstruction
+#pragma link C++ class SHiP::RecParticle+;
+#pragma link C++ class std::vector<SHiP::RecParticle>+;
 #endif

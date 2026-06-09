@@ -19,6 +19,7 @@ target_sources(
             include/SHiP/SimHit.hpp
             include/SHiP/SimParticle.hpp
             include/SHiP/SimResult.hpp
+            include/SHiP/RecParticle.hpp
 )
 target_link_libraries(SHiPDataModel PUBLIC ROOT::Core)
 set_target_properties(SHiPDataModel PROPERTIES LINKER_LANGUAGE CXX)
@@ -29,6 +30,7 @@ root_generate_dictionary(
   SHiP/SimHit.hpp
   SHiP/SimParticle.hpp
   SHiP/SimResult.hpp
+  SHiP/RecParticle.hpp
   MODULE
   SHiPDataModel
   LINKDEF
