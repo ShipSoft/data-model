@@ -8,7 +8,6 @@ namespace SHiP {
 
 /// Reconstructed particle
 struct RecParticle {
-
   std::int32_t trackId{0};
   std::int32_t parentId{0};
   std::int32_t pdgCode{0};
@@ -21,19 +20,18 @@ struct RecParticle {
   double ipPV{0};  ///< IP wrt to the PV (at 0,0,0) [mm]
 };
 
-inline RecParticle fromSimParticle(SimParticle const& sp)
-{
+inline RecParticle fromSimParticle(SimParticle const& sp) {
   return {
-    .trackId        = sp.trackId,
-    .parentId       = sp.parentId,
-    .pdgCode        = sp.pdgCode,
-    .vertex         = sp.vertex,
-    .endpoint       = sp.endpoint,
-    .momentum       = sp.momentum,
-    .energy         = sp.energy,
-    .time           = sp.time,
-    .creatorProcess = sp.creatorProcess,
-    .ipPV           = 0.0,
+      .trackId = sp.trackId,
+      .parentId = sp.parentId,
+      .pdgCode = sp.pdgCode,
+      .vertex = sp.vertex,
+      .endpoint = sp.endpoint,
+      .momentum = sp.momentum,
+      .energy = sp.energy,
+      .time = sp.time,
+      .creatorProcess = sp.creatorProcess,
+      .ipPV = 0.0,
   };
 };
 
