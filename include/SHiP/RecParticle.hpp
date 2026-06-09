@@ -3,7 +3,7 @@
 #include <array>
 #include <cstdint>
 
-#include <SimParticle.hpp>
+#include <SHiP/SimParticle.hpp>
 
 namespace SHiP {
 
@@ -22,7 +22,6 @@ class RecParticle {
         time(sp.time),
         creatorProcess(sp.creatorProcess) {}
 
- private:
   std::int32_t trackId{0};
   std::int32_t parentId{0};
   std::int32_t pdgCode{0};
@@ -32,7 +31,7 @@ class RecParticle {
   double energy{0};                         ///< Initial kinetic energy [GeV]
   double time{0};                           ///< Production time [ns]
   std::int32_t creatorProcess{0};
-  double ipPV{0};  ///< IP wrt to the PV (at 0,0,0) [mm]>
+  double ipPV{0};  ///< IP wrt to the PV (at 0,0,0) [mm]
 };
 
 }  // namespace SHiP
