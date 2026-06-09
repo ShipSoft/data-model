@@ -1,8 +1,9 @@
 #pragma once
 
-#include <SHiP/SimParticle.hpp>
 #include <array>
 #include <cstdint>
+
+#include <SHiP/SimParticle.hpp>
 
 namespace SHiP {
 
@@ -33,6 +34,6 @@ inline RecParticle fromSimParticle(SimParticle const& sp) {
       .creatorProcess = sp.creatorProcess,
       .ipPV = 0.0,
   };
-};
+}
 
 }  // namespace SHiP
