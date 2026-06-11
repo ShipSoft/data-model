@@ -10,6 +10,7 @@ Event data model for the SHiP experiment, providing C++ data classes with ROOT d
 | `SHiP/SimHit.hpp` | `SHiP::SimHit` | Simulation |
 | `SHiP/SimParticle.hpp` | `SHiP::SimParticle` | Simulation |
 | `SHiP/SimResult.hpp` | `SHiP::SimResult` | Simulation |
+| `SHiP/RecParticle.hpp` | `SHiP::RecParticle` | Reconstruction |
 
 All classes are plain structs with default member initialisers, suitable for ROOT I/O via RNTuple or TTree.
 
