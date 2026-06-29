@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 .claude/
 .superpowers/
+doxygen/html/
+doxygen/latex/
