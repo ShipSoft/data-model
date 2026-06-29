@@ -1,0 +1,12 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  prek:
+    uses: ShipSoft/.github/.github/workflows/prek.yml@main

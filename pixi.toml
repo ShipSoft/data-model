@@ -1,0 +1,37 @@
+# Lint-only pixi workspace. data-model is built as part of the downstream
+# frameworks; this manifest exists solely to provide the prek hook tools (see
+# .pre-commit-config.yaml) reproducibly, including on NixOS.
+[workspace]
+name = "data-model"
+description = "SHiP event data model"
+channels = ["https://prefix.dev/ship", "conda-forge"]
+platforms = ["linux-64"]
+
+[feature.lint.dependencies]
+prek = "*"
+python = ">=3.11"
+clang-format = "22.*"
+codespell = "*"
+reuse = "*"
+cffconvert = "*"
+
+# Pinned via PyPI to match the previous hook revs exactly: conda-forge's cpplint
+# is stuck at 1.6.0 (a different, stale fork). gersemi is standardised on 0.27.7
+# (the version used by the other SHiP repos; data-model previously pinned 0.17.1).
+[feature.lint.pypi-dependencies]
+cpplint = "==2.0.2"
+gersemi = "==0.27.7"
+
+[feature.lint.tasks]
+lint = "prek run --all-files"
+# Install the git hooks and route them through `pixi run` so the conda-provided
+# hook tools are on PATH at commit time (required on NixOS, where the tools are
+# not runnable without pixi activation).
+install-hooks = '''
+prek install --hook-type pre-commit
+hooks=$(git rev-parse --git-path hooks)
+sed -i 's#"$PREK" hook-impl#pixi run -e lint prek hook-impl#' "$hooks/pre-commit"
+'''
+
+[environments]
+lint = { features = ["lint"] }

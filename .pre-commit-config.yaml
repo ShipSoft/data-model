@@ -1,4 +1,11 @@
+# Run with prek (https://github.com/j178/prek), a drop-in pre-commit replacement.
+# The hook tools are provided by the pixi `lint` environment (see pixi.toml), so
+# versions are tracked in pixi.lock and the hooks run identically everywhere.
+#
+#   pixi run install-hooks   # one-off: install the git hooks
+#   pixi run lint            # run all hooks on all files
 repos:
+  # prek runs these as native Rust builtins (no environment, fully portable).
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -9,35 +16,47 @@ repos:
       - id: check-added-large-files
       - id: check-merge-conflict
       - id: mixed-line-ending
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v22.1.5
+
+  # Tools below come from the pixi `lint` environment via language: system.
+  - repo: local
     hooks:
       - id: clang-format
+        name: clang-format
+        language: system
+        entry: clang-format -i
         types_or: [c++, c]
         exclude: LinkDef\.h
-  - repo: https://github.com/cpplint/cpplint
-    rev: "2.0.2"
-    hooks:
+
       - id: cpplint
+        name: cpplint
+        language: system
+        entry: cpplint
+        types: [c++]
         exclude: LinkDef\.h
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
-    hooks:
+
       - id: codespell
-        additional_dependencies: [tomli]
-  - repo: https://github.com/citation-file-format/cffconvert
-    rev: 054bda51dbe278b3e86f27c890e3f3ac877d616c
-    hooks:
+        name: codespell
+        language: system
+        entry: codespell
+        types: [text]
+        exclude: ^pixi\.lock$
+
       - id: validate-cff
-  - repo: https://github.com/fsfe/reuse-tool
-    rev: v6.2.0
-    hooks:
+        name: validate CITATION.cff
+        language: system
+        entry: cffconvert --validate
+        files: ^CITATION\.cff$
+        pass_filenames: false
+
       - id: reuse
-  - repo: https://github.com/BlankSpruce/gersemi
-    rev: 0.17.1
-    hooks:
+        name: reuse lint
+        language: system
+        entry: reuse lint
+        pass_filenames: false
+        always_run: true
+
       - id: gersemi
-ci:
-  autofix_prs: true
-  autoupdate_commit_msg: "chore(deps): update pre-commit hooks"
-  autofix_commit_msg: "style: pre-commit fixes"
+        name: gersemi
+        language: system
+        entry: gersemi -i
+        files: (\.cmake|CMakeLists\.txt)$
