@@ -12,14 +12,14 @@ target_sources(
     SHiPDataModel
     PUBLIC
         FILE_SET headers
-        TYPE HEADERS
-        BASE_DIRS include
-        FILES
-            include/SHiP/MCParticle.hpp
-            include/SHiP/SimHit.hpp
-            include/SHiP/SimParticle.hpp
-            include/SHiP/SimResult.hpp
-            include/SHiP/RecParticle.hpp
+            TYPE HEADERS
+            BASE_DIRS include
+            FILES
+                include/SHiP/MCParticle.hpp
+                include/SHiP/SimHit.hpp
+                include/SHiP/SimParticle.hpp
+                include/SHiP/SimResult.hpp
+                include/SHiP/RecParticle.hpp
 )
 target_link_libraries(SHiPDataModel PUBLIC ROOT::Core)
 set_target_properties(SHiPDataModel PROPERTIES LINKER_LANGUAGE CXX)
