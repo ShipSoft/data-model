@@ -2,6 +2,10 @@
 
 Event data model for the SHiP experiment, providing C++ data classes with ROOT dictionary support.
 
+## Documentation
+
+An [automatic class reference](https://shipsoft.github.io/data-model/) is built using Doxygen from comments in the C++ code.
+
 ## Data classes
 
 | Header | Class | Category |
