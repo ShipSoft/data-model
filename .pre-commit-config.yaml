@@ -60,3 +60,9 @@ repos:
         language: system
         entry: gersemi -i
         files: (\.cmake|CMakeLists\.txt)$
+
+      - id: commitizen
+        name: commitizen (conventional commits)
+        language: system
+        entry: cz check --commit-msg-file
+        stages: [commit-msg]
