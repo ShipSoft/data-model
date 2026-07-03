@@ -74,3 +74,8 @@ install(
         ${CMAKE_CURRENT_BINARY_DIR}/SHiPDataModelConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SHiPDataModel
 )
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

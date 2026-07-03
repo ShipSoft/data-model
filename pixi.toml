@@ -1,11 +1,26 @@
-# Lint-only pixi workspace. data-model is built as part of the downstream
-# frameworks; this manifest exists solely to provide the prek hook tools (see
-# .pre-commit-config.yaml) reproducibly, including on NixOS.
+# Pixi workspace for data-model. The default environment builds the library
+# standalone and runs its I/O round-trip tests; the lint environment provides
+# the prek hook tools (see .pre-commit-config.yaml) reproducibly, including on
+# NixOS. Downstream frameworks still build data-model as part of their own
+# stacks.
 [workspace]
 name = "data-model"
 description = "SHiP event data model"
 channels = ["https://prefix.dev/ship", "conda-forge"]
 platforms = ["linux-64"]
+
+[dependencies]
+cxx-compiler = "*"
+cmake = ">=3.21"
+ninja = "*"
+git = "*"
+root = ">=6.40"
+root_cxx_standard = "==23"
+
+[tasks]
+configure = "cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+build = { cmd = "cmake --build build -j", depends-on = ["configure"] }
+test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = ["build"] }
 
 [feature.lint.dependencies]
 prek = "*"
