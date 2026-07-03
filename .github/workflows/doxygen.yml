@@ -7,6 +7,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+concurrency:
+  group: doxygen-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
   docs:
     uses: ShipSoft/.github/.github/workflows/doxygen-pages.yml@main
