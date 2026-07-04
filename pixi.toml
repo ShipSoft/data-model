@@ -8,6 +8,30 @@ name = "data-model"
 description = "SHiP event data model"
 channels = ["https://prefix.dev/ship", "conda-forge"]
 platforms = ["linux-64"]
+preview = ["pixi-build"]
+requires-pixi = ">=0.68"
+
+# Lets downstream dev environments (aegir, ...) consume data-model from
+# source: `shipdatamodel = { path = "../data-model" }`. Mirrors
+# ship-conda-recipes/recipes/shipdatamodel (the release recipe); keep the
+# version and the host dependencies in lockstep with it.
+[package]
+name = "shipdatamodel"
+version = "0.1.0"
+
+[package.build]
+backend = { name = "pixi-build-cmake", version = "0.*" }
+
+[package.build.config]
+extra-args = [
+    "-DCMAKE_CXX_STANDARD=23",
+    "-DCMAKE_INSTALL_LIBDIR=lib",
+    "-DBUILD_TESTING=OFF",
+]
+
+[package.host-dependencies]
+root_base = "*"
+root_cxx_standard = "==23"
 
 [dependencies]
 cxx-compiler = "*"
