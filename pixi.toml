@@ -24,7 +24,6 @@ backend = { name = "pixi-build-cmake", version = "0.*" }
 
 [package.build.config]
 extra-args = [
-    "-DCMAKE_CXX_STANDARD=23",
     "-DCMAKE_INSTALL_LIBDIR=lib",
     "-DBUILD_TESTING=OFF",
 ]
