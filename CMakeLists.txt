@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(ROOT REQUIRED COMPONENTS Core RIO)
+find_package(mp-units 2.5 CONFIG REQUIRED)
 
 add_library(SHiPDataModel SHARED)
 target_sources(
@@ -23,6 +24,22 @@ target_sources(
 )
 target_link_libraries(SHiPDataModel PUBLIC ROOT::Core)
 set_target_properties(SHiPDataModel PROPERTIES LINKER_LANGUAGE CXX)
+
+# Canonical unit vocabulary (mp-units quantity types + views over the data
+# classes). Headers-only and deliberately separate from SHiPDataModel: the
+# quantity types must never enter the ROOT dictionary (ROOT cannot stream
+# them), and units-only consumers must not pay for a ROOT linkage.
+add_library(SHiPUnits INTERFACE)
+add_library(SHiP::SHiPUnits ALIAS SHiPUnits)
+target_sources(
+    SHiPUnits
+    INTERFACE
+        FILE_SET headers
+            TYPE HEADERS
+            BASE_DIRS include
+            FILES include/SHiP/Units.hpp include/SHiP/QuantityView.hpp
+)
+target_link_libraries(SHiPUnits INTERFACE mp-units::mp-units)
 
 root_generate_dictionary(
   G__SHiPDataModel
@@ -45,6 +62,7 @@ install(
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     FILE_SET headers
 )
+install(TARGETS SHiPUnits EXPORT SHiPDataModelTargets FILE_SET headers)
 install(
     FILES
         ${CMAKE_CURRENT_BINARY_DIR}/libSHiPDataModel_rdict.pcm

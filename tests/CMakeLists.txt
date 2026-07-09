@@ -18,3 +18,8 @@ target_link_libraries(
     PRIVATE ${link_dictionary} ROOT::Core ROOT::RIO ROOT::ROOTNTuple
 )
 add_test(NAME rntuple_io COMMAND test_rntuple_io)
+
+# Units and quantity views are headers-only: no dictionary, no ROOT.
+add_executable(test_units test_units.cpp)
+target_link_libraries(test_units PRIVATE SHiP::SHiPUnits)
+add_test(NAME units COMMAND test_units)

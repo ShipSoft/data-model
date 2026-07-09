@@ -16,6 +16,8 @@ ninja = "*"
 git = "*"
 root = ">=6.40"
 root_cxx_standard = "==23"
+# Required by the SHiP::SHiPUnits target (find_package(mp-units CONFIG)).
+mp-units = ">=2.5"
 
 [tasks]
 configure = "cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo"
