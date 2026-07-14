@@ -9,7 +9,9 @@
 
 #include "SHiP/MCParticle.hpp"
 #include "SHiP/QuantityView.hpp"
+#include "SHiP/RecParticle.hpp"
 #include "SHiP/SimHit.hpp"
+#include "SHiP/SimParticle.hpp"
 #include "SHiP/Units.hpp"
 
 namespace su = ship::units;
@@ -93,6 +95,42 @@ int main() {
              hitCopy.energyDeposit == hit.energyDeposit &&
              hitCopy.time == hit.time && hitCopy.pathLength == hit.pathLength,
          "SimHit view round-trip is bitwise");
+
+  SHiP::SimParticle sp;
+  sp.vertex = {0.0, 0.0, -100.0};
+  sp.endpoint = {1.0, 0.5, 500.0};
+  sp.momentum = {0.0, 0.0, 50.0};
+  sp.energy = 49.9;
+  sp.time = 0.0;
+  SHiP::SimParticle spCopy;
+  ship::view::setVertex(spCopy, ship::view::vertex(sp));
+  ship::view::setEndpoint(spCopy, ship::view::endpoint(sp));
+  ship::view::setMomentum(spCopy, ship::view::momentum(sp));
+  ship::view::setEnergy(spCopy, ship::view::energy(sp));
+  ship::view::setTime(spCopy, ship::view::time(sp));
+  expect(spCopy.vertex == sp.vertex && spCopy.endpoint == sp.endpoint &&
+             spCopy.momentum == sp.momentum && spCopy.energy == sp.energy &&
+             spCopy.time == sp.time,
+         "SimParticle view round-trip is bitwise");
+
+  SHiP::RecParticle rp;
+  rp.vertex = {0.1, 0.2, 0.3};
+  rp.endpoint = {1.0, 2.0, 3.0};
+  rp.momentum = {0.5, -0.3, 10.0};
+  rp.energy = 9.8;
+  rp.time = 1.1;
+  rp.ipPV = 0.012;
+  SHiP::RecParticle rpCopy;
+  ship::view::setVertex(rpCopy, ship::view::vertex(rp));
+  ship::view::setEndpoint(rpCopy, ship::view::endpoint(rp));
+  ship::view::setMomentum(rpCopy, ship::view::momentum(rp));
+  ship::view::setEnergy(rpCopy, ship::view::energy(rp));
+  ship::view::setTime(rpCopy, ship::view::time(rp));
+  ship::view::setIpPV(rpCopy, ship::view::ipPV(rp));
+  expect(rpCopy.vertex == rp.vertex && rpCopy.endpoint == rp.endpoint &&
+             rpCopy.momentum == rp.momentum && rpCopy.energy == rp.energy &&
+             rpCopy.time == rp.time && rpCopy.ipPV == rp.ipPV,
+         "RecParticle view round-trip is bitwise");
 
   // A deliberately non-canonical input converts, rather than reinterprets.
   auto const z = 1.5 * su::m;
