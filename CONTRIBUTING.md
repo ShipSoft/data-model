@@ -15,7 +15,7 @@ Thank you for your interest in contributing! As part of the SHiP Collaboration, 
 5. **Coding Standards**:
    - Follow the existing C++ style (enforced by `clang-format` and `cpplint`).
    - CMake files are formatted with `gersemi`.
-   - Ensure all files have the correct SPDX license headers (REUSE compliant).
+   - Ensure all files are covered by the repository's REUSE/SPDX metadata (see `REUSE.toml`), adding inline SPDX headers where appropriate.
 6. **Commits**: We follow [Conventional Commits](https://www.conventionalcommits.org/) (validated by `commitizen`). This helps in automated changelog generation.
 7. **Testing**: Build and run the tests inside the pixi environment:
    ```bash
