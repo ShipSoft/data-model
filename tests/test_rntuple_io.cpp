@@ -11,6 +11,7 @@
 #include "ROOT/RNTupleModel.hxx"
 #include "ROOT/RNTupleReader.hxx"
 #include "ROOT/RNTupleWriter.hxx"
+#include "SHiP/EventHeader.hpp"
 #include "SHiP/MCParticle.hpp"
 #include "SHiP/RecParticle.hpp"
 #include "SHiP/SimHit.hpp"
@@ -25,6 +26,7 @@ constexpr char const* kFileName = "test_rntuple_io_tmp.root";
 
 bool writeFile() {
   auto model = ROOT::RNTupleModel::Create();
+  auto eventHeader = model->MakeField<SHiP::EventHeader>("eventHeader");
   auto mcParticles =
       model->MakeField<std::vector<SHiP::MCParticle>>("mcParticles");
   auto simHits = model->MakeField<std::vector<SHiP::SimHit>>("simHits");
@@ -41,6 +43,7 @@ bool writeFile() {
     return false;
   }
   for (int entry = 0; entry < kEntries; ++entry) {
+    *eventHeader = SHiP::test::makeEventHeader(entry);
     *mcParticles = SHiP::test::makeMCParticles(entry);
     *simHits = SHiP::test::makeSimHits(entry);
     *simParticles = SHiP::test::makeSimParticles(entry);
@@ -64,6 +67,7 @@ bool readAndCompare() {
   }
 
   auto const& entry = reader->GetModel().GetDefaultEntry();
+  auto eventHeader = entry.GetPtr<SHiP::EventHeader>("eventHeader");
   auto mcParticles = entry.GetPtr<std::vector<SHiP::MCParticle>>("mcParticles");
   auto simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("simHits");
   auto simParticles =
@@ -76,6 +80,8 @@ bool readAndCompare() {
   for (int i = 0; i < kEntries; ++i) {
     reader->LoadEntry(i);
     std::string const suffix = " (entry " + std::to_string(i) + ")";
+    ok &= SHiP::test::check("EventHeader round-trip" + suffix,
+                            SHiP::test::makeEventHeader(i), *eventHeader);
     ok &= SHiP::test::check("MCParticle round-trip" + suffix,
                             SHiP::test::makeMCParticles(i), *mcParticles);
     ok &= SHiP::test::check("SimHit round-trip" + suffix,

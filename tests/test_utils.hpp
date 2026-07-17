@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "SHiP/EventHeader.hpp"
 #include "SHiP/MCParticle.hpp"
 #include "SHiP/RecParticle.hpp"
 #include "SHiP/SimHit.hpp"
@@ -12,6 +13,14 @@
 #include "SHiP/SimResult.hpp"
 
 namespace SHiP::test {
+
+/// Build an EventHeader with distinctive non-default values in every member.
+inline EventHeader makeEventHeader(int offset) {
+  EventHeader h;
+  h.weight = 0.125 + offset;
+  h.originalEventId = 7000 + offset;
+  return h;
+}
 
 /// Build MCParticles with distinctive non-default values in every member.
 inline std::vector<MCParticle> makeMCParticles(int offset) {
@@ -82,6 +91,10 @@ inline std::vector<RecParticle> makeRecParticles(int offset) {
 inline SimResult makeSimResult(int offset) {
   return {.hits = makeSimHits(offset + 5),
           .particles = makeSimParticles(offset + 5)};
+}
+
+inline bool equal(EventHeader const& a, EventHeader const& b) {
+  return a.weight == b.weight && a.originalEventId == b.originalEventId;
 }
 
 inline bool equal(MCParticle const& a, MCParticle const& b) {
