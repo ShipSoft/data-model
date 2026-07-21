@@ -20,7 +20,15 @@ target_sources(
                 include/SHiP/SimHit.hpp
                 include/SHiP/SimParticle.hpp
                 include/SHiP/SimResult.hpp
+                include/SHiP/RecHit.hpp
+                include/SHiP/TrackFitResult.hpp
                 include/SHiP/RecParticle.hpp
+                include/SHiP/detectors/UBTHit.hpp
+                include/SHiP/detectors/SBTHit.hpp
+                include/SHiP/detectors/StrawTubesHit.hpp
+                include/SHiP/detectors/CaloHit.hpp
+                include/SHiP/detectors/TimeDetHit.hpp
+                include/SHiP/detectors/detector_id.hpp
 )
 target_link_libraries(SHiPDataModel PUBLIC ROOT::Core)
 set_target_properties(SHiPDataModel PROPERTIES LINKER_LANGUAGE CXX)
@@ -47,7 +55,14 @@ root_generate_dictionary(
   SHiP/SimHit.hpp
   SHiP/SimParticle.hpp
   SHiP/SimResult.hpp
+  SHiP/RecHit.hpp
+  SHiP/TrackFitResult.hpp
   SHiP/RecParticle.hpp
+  SHiP/detectors/UBTHit.hpp
+  SHiP/detectors/SBTHit.hpp
+  SHiP/detectors/StrawTubesHit.hpp
+  SHiP/detectors/CaloHit.hpp
+  SHiP/detectors/TimeDetHit.hpp
   MODULE
   SHiPDataModel
   LINKDEF
@@ -60,7 +75,10 @@ install(
     TARGETS SHiPDataModel
     EXPORT SHiPDataModelTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FILE_SET headers
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FILE_SET headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 install(TARGETS SHiPUnits EXPORT SHiPDataModelTargets FILE_SET headers)
 install(

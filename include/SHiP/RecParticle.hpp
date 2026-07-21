@@ -2,7 +2,9 @@
 
 #include <array>
 #include <cstdint>
+#include <vector>
 
+#include "SHiP/RecHit.hpp"
 #include "SHiP/SimParticle.hpp"
 
 namespace SHiP {
@@ -15,8 +17,9 @@ struct RecParticle {
   std::array<double, 3> vertex{0, 0, 0};    ///< Production vertex [mm]
   std::array<double, 3> endpoint{0, 0, 0};  ///< End point [mm]
   std::array<double, 3> momentum{0, 0, 0};  ///< Initial momentum [GeV/c]
-  double energy{0};                         ///< Initial kinetic energy [GeV]
-  double time{0};                           ///< Production time [ns]
+  std::vector<RecHit> hits{};
+  double energy{0};  ///< Initial kinetic energy [GeV]
+  double time{0};    ///< Production time [ns]
   std::int32_t creatorProcess{0};
   double ipPV{0};  ///< IP wrt to the PV (at 0,0,0) [mm]
 };
