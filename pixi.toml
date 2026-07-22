@@ -29,7 +29,15 @@ extra-args = [
 ]
 
 [package.host-dependencies]
-root_base = "*"
+# Constrain to a C++23 ROOT build. pixi-build-cmake exact-pins the root_base
+# build it resolves here into shipdatamodel's run-export, and its host solve
+# does not honour the root_cxx_standard == "==23" below (it can pick a cxx20
+# build). An unconstrained root_base therefore leaks a cxx20 run-export that
+# conflicts with the C++23 stack (root_cxx_standard == "==23") in downstream
+# dev environments (aegir). Pinning the build string keeps the run-export
+# cxx23-compatible. Drop once pixi-build honours root_cxx_standard / uses
+# root_base's run_exports range.
+root_base = { version = "*", build = "cxx23_*" }
 root_cxx_standard = "==23"
 
 [dependencies]
