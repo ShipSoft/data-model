@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: If you use this software, please cite it as below.
 title: SHiP Data Model
-version: 0.2.0
-date-released: "2026-07-16"
+version: 0.3.0
+date-released: "2026-07-22"
 url: https://github.com/ShipSoft/data-model
 repository-code: https://github.com/ShipSoft/data-model
 type: software

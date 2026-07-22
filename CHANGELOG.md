@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-07-22
+
+### Features
+
+- Add reconstructed particle
+
+### Bug fixes
+
+- Pin host root_base to a C++23 ROOT build
+
 ## [0.2.0] - 2026-07-16
 
 ### Features
