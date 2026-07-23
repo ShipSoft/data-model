@@ -39,6 +39,12 @@ extra-args = [
 # root_base's run_exports range.
 root_base = { version = "*", build = "cxx23_*" }
 root_cxx_standard = "==23"
+# Needed at build time: CMakeLists.txt does find_package(mp-units 2.5 CONFIG
+# REQUIRED) for the SHiP::SHiPUnits target. Mirrors the release recipe's
+# host: (ship-conda-recipes/recipes/shipdatamodel); the workspace
+# [dependencies] entry below only covers this repo's own dev env, not the
+# pixi-build host environment.
+mp-units = ">=2.5"
 
 [dependencies]
 cxx-compiler = "*"
