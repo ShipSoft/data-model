@@ -8,6 +8,7 @@ namespace SHiP {
 /// Simulation hit from Geant4 sensitive detectors
 struct SimHit {
   std::int32_t detectorId{0};
+  std::int32_t geometryNodeId{0};
   std::int32_t trackId{0};
   std::int32_t pdgCode{0};
   std::array<double, 3> position{0, 0, 0};  ///< Hit position [mm]
