@@ -16,6 +16,7 @@ target_sources(
             TYPE HEADERS
             BASE_DIRS include
             FILES
+                include/SHiP/EventHeader.hpp
                 include/SHiP/MCParticle.hpp
                 include/SHiP/SimHit.hpp
                 include/SHiP/SimParticle.hpp
@@ -51,6 +52,7 @@ target_link_libraries(SHiPUnits INTERFACE mp-units::mp-units)
 
 root_generate_dictionary(
   G__SHiPDataModel
+  SHiP/EventHeader.hpp
   SHiP/MCParticle.hpp
   SHiP/SimHit.hpp
   SHiP/SimParticle.hpp

@@ -3,6 +3,9 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
+// Event metadata
+#pragma link C++ class SHiP::EventHeader+;
+
 // MC / generation
 #pragma link C++ class SHiP::MCParticle+;
 #pragma link C++ class std::vector<SHiP::MCParticle>+;

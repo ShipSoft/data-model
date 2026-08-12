@@ -1,6 +1,5 @@
 /// Round-trip test: write every dictionary class to an RNTuple, read it back
 /// and compare all members exactly. Returns non-zero on failure.
-
 #include <cstdio>
 #include <iostream>
 #include <memory>
@@ -11,20 +10,19 @@
 #include "ROOT/RNTupleModel.hxx"
 #include "ROOT/RNTupleReader.hxx"
 #include "ROOT/RNTupleWriter.hxx"
+#include "SHiP/EventHeader.hpp"
 #include "SHiP/MCParticle.hpp"
 #include "SHiP/RecParticle.hpp"
 #include "SHiP/SimHit.hpp"
 #include "SHiP/SimParticle.hpp"
 #include "SHiP/SimResult.hpp"
 #include "test_utils.hpp"
-
 namespace {
-
 constexpr int kEntries = 2;
 constexpr char const* kFileName = "test_rntuple_io_tmp.root";
-
 bool writeFile() {
   auto model = ROOT::RNTupleModel::Create();
+  auto eventHeader = model->MakeField<SHiP::EventHeader>("event_header");
   auto mcParticles =
       model->MakeField<std::vector<SHiP::MCParticle>>("mcParticles");
   auto simHits = model->MakeField<std::vector<SHiP::SimHit>>("simHits");
@@ -33,7 +31,6 @@ bool writeFile() {
   auto recParticles =
       model->MakeField<std::vector<SHiP::RecParticle>>("recParticles");
   auto simResult = model->MakeField<SHiP::SimResult>("simResult");
-
   auto writer =
       ROOT::RNTupleWriter::Recreate(std::move(model), "events", kFileName);
   if (!writer) {
@@ -41,6 +38,7 @@ bool writeFile() {
     return false;
   }
   for (int entry = 0; entry < kEntries; ++entry) {
+    *eventHeader = SHiP::EventHeader{0.125 + entry, 7000 + entry};
     *mcParticles = SHiP::test::makeMCParticles(entry);
     *simHits = SHiP::test::makeSimHits(entry);
     *simParticles = SHiP::test::makeSimParticles(entry);
@@ -50,7 +48,6 @@ bool writeFile() {
   }
   return true;
 }
-
 bool readAndCompare() {
   auto reader = ROOT::RNTupleReader::Open("events", kFileName);
   if (!reader) {
@@ -62,8 +59,8 @@ bool readAndCompare() {
               << reader->GetNEntries() << '\n';
     return false;
   }
-
   auto const& entry = reader->GetModel().GetDefaultEntry();
+  auto eventHeader = entry.GetPtr<SHiP::EventHeader>("event_header");
   auto mcParticles = entry.GetPtr<std::vector<SHiP::MCParticle>>("mcParticles");
   auto simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("simHits");
   auto simParticles =
@@ -71,11 +68,13 @@ bool readAndCompare() {
   auto recParticles =
       entry.GetPtr<std::vector<SHiP::RecParticle>>("recParticles");
   auto simResult = entry.GetPtr<SHiP::SimResult>("simResult");
-
   bool ok = true;
   for (int i = 0; i < kEntries; ++i) {
     reader->LoadEntry(i);
     std::string const suffix = " (entry " + std::to_string(i) + ")";
+    ok &=
+        SHiP::test::check("EventHeader round-trip" + suffix,
+                          SHiP::EventHeader{0.125 + i, 7000 + i}, *eventHeader);
     ok &= SHiP::test::check("MCParticle round-trip" + suffix,
                             SHiP::test::makeMCParticles(i), *mcParticles);
     ok &= SHiP::test::check("SimHit round-trip" + suffix,
@@ -89,13 +88,10 @@ bool readAndCompare() {
   }
   return ok;
 }
-
 }  // namespace
-
 int main() {
   bool ok = writeFile() && readAndCompare();
   std::remove(kFileName);
-
   std::cout << (ok ? "All RNTuple I/O tests passed"
                    : "RNTuple I/O tests FAILED")
             << '\n';

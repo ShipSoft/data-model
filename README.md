@@ -10,6 +10,7 @@ An [automatic class reference](https://shipsoft.github.io/data-model/) is built 
 
 | Header | Class | Category |
 |--------|-------|----------|
+| `SHiP/EventHeader.hpp` | `SHiP::EventHeader` | Event metadata |
 | `SHiP/MCParticle.hpp` | `SHiP::MCParticle` | MC / generation |
 | `SHiP/SimHit.hpp` | `SHiP::SimHit` | Simulation |
 | `SHiP/SimParticle.hpp` | `SHiP::SimParticle` | Simulation |

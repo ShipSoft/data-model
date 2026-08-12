@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 
+#include "SHiP/EventHeader.hpp"
 #include "SHiP/MCParticle.hpp"
 #include "SHiP/RecParticle.hpp"
 #include "SHiP/SimHit.hpp"
@@ -26,10 +27,10 @@ constexpr char const* kFileName = "test_ttree_io_tmp.root";
 bool checkDictionaries() {
   bool ok = true;
   for (auto const* name :
-       {"SHiP::MCParticle", "SHiP::SimHit", "SHiP::SimParticle",
-        "SHiP::SimResult", "SHiP::RecParticle", "std::vector<SHiP::MCParticle>",
-        "std::vector<SHiP::SimHit>", "std::vector<SHiP::SimParticle>",
-        "std::vector<SHiP::RecParticle>"}) {
+       {"SHiP::EventHeader", "SHiP::MCParticle", "SHiP::SimHit",
+        "SHiP::SimParticle", "SHiP::SimResult", "SHiP::RecParticle",
+        "std::vector<SHiP::MCParticle>", "std::vector<SHiP::SimHit>",
+        "std::vector<SHiP::SimParticle>", "std::vector<SHiP::RecParticle>"}) {
     if (TClass::GetClass(name) == nullptr) {
       std::cout << "dictionary for " << name
                 << ": FAIL (TClass::GetClass is null)\n";
@@ -49,12 +50,14 @@ bool writeFile() {
   }
   TTree tree("events", "SHiP data model I/O test");
 
+  SHiP::EventHeader eventHeader;
   std::vector<SHiP::MCParticle> mcParticles;
   std::vector<SHiP::SimHit> simHits;
   std::vector<SHiP::SimParticle> simParticles;
   std::vector<SHiP::RecParticle> recParticles;
   SHiP::SimResult simResult;
 
+  tree.Branch("event_header", &eventHeader);
   tree.Branch("mcParticles", &mcParticles);
   tree.Branch("simHits", &simHits);
   tree.Branch("simParticles", &simParticles);
@@ -62,6 +65,7 @@ bool writeFile() {
   tree.Branch("simResult", &simResult);
 
   for (int entry = 0; entry < kEntries; ++entry) {
+    eventHeader = SHiP::EventHeader{0.125 + entry, 7000 + entry};
     mcParticles = SHiP::test::makeMCParticles(entry);
     simHits = SHiP::test::makeSimHits(entry);
     simParticles = SHiP::test::makeSimParticles(entry);
@@ -90,12 +94,14 @@ bool readAndCompare() {
     return false;
   }
 
+  auto* eventHeader = new SHiP::EventHeader();
   auto* mcParticles = new std::vector<SHiP::MCParticle>();
   auto* simHits = new std::vector<SHiP::SimHit>();
   auto* simParticles = new std::vector<SHiP::SimParticle>();
   auto* recParticles = new std::vector<SHiP::RecParticle>();
   auto* simResult = new SHiP::SimResult();
 
+  tree->SetBranchAddress("event_header", &eventHeader);
   tree->SetBranchAddress("mcParticles", &mcParticles);
   tree->SetBranchAddress("simHits", &simHits);
   tree->SetBranchAddress("simParticles", &simParticles);
@@ -106,6 +112,9 @@ bool readAndCompare() {
   for (int entry = 0; entry < kEntries; ++entry) {
     tree->GetEntry(entry);
     std::string const suffix = " (entry " + std::to_string(entry) + ")";
+    ok &= SHiP::test::check("EventHeader round-trip" + suffix,
+                            SHiP::EventHeader{0.125 + entry, 7000 + entry},
+                            *eventHeader);
     ok &= SHiP::test::check("MCParticle round-trip" + suffix,
                             SHiP::test::makeMCParticles(entry), *mcParticles);
     ok &= SHiP::test::check("SimHit round-trip" + suffix,
@@ -119,6 +128,7 @@ bool readAndCompare() {
   }
 
   tree->ResetBranchAddresses();
+  delete eventHeader;
   delete mcParticles;
   delete simHits;
   delete simParticles;

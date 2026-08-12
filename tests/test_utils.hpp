@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "SHiP/EventHeader.hpp"
 #include "SHiP/MCParticle.hpp"
 #include "SHiP/RecParticle.hpp"
 #include "SHiP/SimHit.hpp"
@@ -83,6 +84,8 @@ inline SimResult makeSimResult(int offset) {
   return {.hits = makeSimHits(offset + 5),
           .particles = makeSimParticles(offset + 5)};
 }
+
+inline bool equal(EventHeader const& a, EventHeader const& b) { return a == b; }
 
 inline bool equal(MCParticle const& a, MCParticle const& b) {
   return a.pdgCode == b.pdgCode && a.vertex == b.vertex &&
