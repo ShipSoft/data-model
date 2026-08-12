@@ -38,6 +38,7 @@ inline std::vector<SimHit> makeSimHits(int offset) {
   for (int i = 0; i < 3; ++i) {
     SimHit h;
     h.detector_id = 1000 + 10 * i + offset;
+    h.geometry_node_id = 5000 + 100 * i + offset;
     h.track_id = 42 + i + offset;
     h.pdg_code = -13 + 2 * i;
     h.position = {10.5 + i + offset, -20.25 + i, 3000.75 + i};
