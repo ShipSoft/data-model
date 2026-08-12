@@ -23,10 +23,10 @@ namespace {
 
 // Neither class defines operator==, so compare member by member here.
 auto members(SHiP::TrackFitResult const& f) {
-  return std::tie(f.nMeas, f.fitStatus, f.chi2, f.ndf, f.qoverp, f.phi, f.theta,
-                  f.time, f.refLoc, f.inputMeasurementsX, f.inputMeasurementsY,
-                  f.fittedMeasurementsX, f.fittedMeasurementsY, f.residualsX,
-                  f.residualsY);
+  return std::tie(f.n_meas, f.fit_status, f.chi2, f.ndf, f.q_over_p, f.phi,
+                  f.theta, f.time, f.ref_loc, f.input_measurements_x,
+                  f.input_measurements_y, f.fitted_measurements_x,
+                  f.fitted_measurements_y, f.residuals_x, f.residuals_y);
 }
 
 bool same(std::vector<SHiP::TrackFitResult> const& a,
@@ -48,7 +48,7 @@ bool same(std::vector<SHiP::UBTHit> const& a,
     return false;
   }
   for (std::size_t i = 0; i < a.size(); ++i) {
-    if (!(a[i].recHit == b[i].recHit)) {
+    if (!(a[i].rec_hit == b[i].rec_hit)) {
       return false;
     }
   }
