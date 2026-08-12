@@ -57,7 +57,7 @@ bool writeFile() {
   std::vector<SHiP::RecParticle> recParticles;
   SHiP::SimResult simResult;
 
-  tree.Branch("eventHeader", &eventHeader);
+  tree.Branch("event_header", &eventHeader);
   tree.Branch("mcParticles", &mcParticles);
   tree.Branch("simHits", &simHits);
   tree.Branch("simParticles", &simParticles);
@@ -65,7 +65,7 @@ bool writeFile() {
   tree.Branch("simResult", &simResult);
 
   for (int entry = 0; entry < kEntries; ++entry) {
-    eventHeader = SHiP::test::makeEventHeader(entry);
+    eventHeader = SHiP::EventHeader{0.125 + entry, 7000 + entry};
     mcParticles = SHiP::test::makeMCParticles(entry);
     simHits = SHiP::test::makeSimHits(entry);
     simParticles = SHiP::test::makeSimParticles(entry);
@@ -101,7 +101,7 @@ bool readAndCompare() {
   auto* recParticles = new std::vector<SHiP::RecParticle>();
   auto* simResult = new SHiP::SimResult();
 
-  tree->SetBranchAddress("eventHeader", &eventHeader);
+  tree->SetBranchAddress("event_header", &eventHeader);
   tree->SetBranchAddress("mcParticles", &mcParticles);
   tree->SetBranchAddress("simHits", &simHits);
   tree->SetBranchAddress("simParticles", &simParticles);
@@ -113,7 +113,8 @@ bool readAndCompare() {
     tree->GetEntry(entry);
     std::string const suffix = " (entry " + std::to_string(entry) + ")";
     ok &= SHiP::test::check("EventHeader round-trip" + suffix,
-                            SHiP::test::makeEventHeader(entry), *eventHeader);
+                            SHiP::EventHeader{0.125 + entry, 7000 + entry},
+                            *eventHeader);
     ok &= SHiP::test::check("MCParticle round-trip" + suffix,
                             SHiP::test::makeMCParticles(entry), *mcParticles);
     ok &= SHiP::test::check("SimHit round-trip" + suffix,

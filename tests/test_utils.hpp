@@ -14,14 +14,6 @@
 
 namespace SHiP::test {
 
-/// Build an EventHeader with distinctive non-default values in every member.
-inline EventHeader makeEventHeader(int offset) {
-  EventHeader h;
-  h.weight = 0.125 + offset;
-  h.parentEventId = 7000 + offset;
-  return h;
-}
-
 /// Build MCParticles with distinctive non-default values in every member.
 inline std::vector<MCParticle> makeMCParticles(int offset) {
   std::vector<MCParticle> v;
@@ -93,9 +85,7 @@ inline SimResult makeSimResult(int offset) {
           .particles = makeSimParticles(offset + 5)};
 }
 
-inline bool equal(EventHeader const& a, EventHeader const& b) {
-  return a.weight == b.weight && a.parentEventId == b.parentEventId;
-}
+inline bool equal(EventHeader const& a, EventHeader const& b) { return a == b; }
 
 inline bool equal(MCParticle const& a, MCParticle const& b) {
   return a.pdgCode == b.pdgCode && a.vertex == b.vertex &&
