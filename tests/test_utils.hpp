@@ -18,7 +18,7 @@ namespace SHiP::test {
 inline EventHeader makeEventHeader(int offset) {
   EventHeader h;
   h.weight = 0.125 + offset;
-  h.originalEventId = 7000 + offset;
+  h.parentEventId = 7000 + offset;
   return h;
 }
 
@@ -94,7 +94,7 @@ inline SimResult makeSimResult(int offset) {
 }
 
 inline bool equal(EventHeader const& a, EventHeader const& b) {
-  return a.weight == b.weight && a.originalEventId == b.originalEventId;
+  return a.weight == b.weight && a.parentEventId == b.parentEventId;
 }
 
 inline bool equal(MCParticle const& a, MCParticle const& b) {
