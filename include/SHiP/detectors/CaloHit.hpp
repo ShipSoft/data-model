@@ -5,7 +5,7 @@ namespace SHiP {
 
 /// Hit reconstructed by the calorimeter
 struct CaloHit {
-  RecHit recHit;  ///< The reconstructed hit
+  RecHit rec_hit;  ///< The reconstructed hit
 };
 
 }  // namespace SHiP

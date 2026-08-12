@@ -5,7 +5,7 @@ namespace SHiP {
 
 /// Hit reconstructed by a layer of the straw tubes spectrometer
 struct StrawTubesHit {
-  RecHit recHit;  ///< The reconstructed hit
+  RecHit rec_hit;  ///< The reconstructed hit
 };
 
 }  // namespace SHiP

@@ -24,13 +24,13 @@ bool writeFile() {
   auto model = ROOT::RNTupleModel::Create();
   auto eventHeader = model->MakeField<SHiP::EventHeader>("event_header");
   auto mcParticles =
-      model->MakeField<std::vector<SHiP::MCParticle>>("mcParticles");
-  auto simHits = model->MakeField<std::vector<SHiP::SimHit>>("simHits");
+      model->MakeField<std::vector<SHiP::MCParticle>>("mc_particles");
+  auto simHits = model->MakeField<std::vector<SHiP::SimHit>>("sim_hits");
   auto simParticles =
-      model->MakeField<std::vector<SHiP::SimParticle>>("simParticles");
+      model->MakeField<std::vector<SHiP::SimParticle>>("sim_particles");
   auto recParticles =
-      model->MakeField<std::vector<SHiP::RecParticle>>("recParticles");
-  auto simResult = model->MakeField<SHiP::SimResult>("simResult");
+      model->MakeField<std::vector<SHiP::RecParticle>>("rec_particles");
+  auto simResult = model->MakeField<SHiP::SimResult>("sim_result");
   auto writer =
       ROOT::RNTupleWriter::Recreate(std::move(model), "events", kFileName);
   if (!writer) {
@@ -61,13 +61,14 @@ bool readAndCompare() {
   }
   auto const& entry = reader->GetModel().GetDefaultEntry();
   auto eventHeader = entry.GetPtr<SHiP::EventHeader>("event_header");
-  auto mcParticles = entry.GetPtr<std::vector<SHiP::MCParticle>>("mcParticles");
-  auto simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("simHits");
+  auto mcParticles =
+      entry.GetPtr<std::vector<SHiP::MCParticle>>("mc_particles");
+  auto simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("sim_hits");
   auto simParticles =
-      entry.GetPtr<std::vector<SHiP::SimParticle>>("simParticles");
+      entry.GetPtr<std::vector<SHiP::SimParticle>>("sim_particles");
   auto recParticles =
-      entry.GetPtr<std::vector<SHiP::RecParticle>>("recParticles");
-  auto simResult = entry.GetPtr<SHiP::SimResult>("simResult");
+      entry.GetPtr<std::vector<SHiP::RecParticle>>("rec_particles");
+  auto simResult = entry.GetPtr<SHiP::SimResult>("sim_result");
   bool ok = true;
   for (int i = 0; i < kEntries; ++i) {
     reader->LoadEntry(i);

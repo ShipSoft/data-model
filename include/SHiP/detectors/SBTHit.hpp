@@ -5,7 +5,7 @@ namespace SHiP {
 
 /// Hit reconstructed by the SBT (Surround Background Tagger)
 struct SBTHit {
-  RecHit recHit;  ///< The reconstructed hit
+  RecHit rec_hit;  ///< The reconstructed hit
 };
 
 }  // namespace SHiP

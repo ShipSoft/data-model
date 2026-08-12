@@ -11,7 +11,7 @@ struct EventHeader {
       -1};  ///< Originating event id, e.g. the muon
             ///< event that seeded this replica
             ///< (-1 = none). Event-level provenance,
-            ///< distinct from MCParticle::motherId,
+            ///< distinct from MCParticle::mother_id,
             ///< which links particles within an event.
 
   bool operator==(EventHeader const&) const = default;

@@ -58,11 +58,11 @@ bool writeFile() {
   SHiP::SimResult simResult;
 
   tree.Branch("event_header", &eventHeader);
-  tree.Branch("mcParticles", &mcParticles);
-  tree.Branch("simHits", &simHits);
-  tree.Branch("simParticles", &simParticles);
-  tree.Branch("recParticles", &recParticles);
-  tree.Branch("simResult", &simResult);
+  tree.Branch("mc_particles", &mcParticles);
+  tree.Branch("sim_hits", &simHits);
+  tree.Branch("sim_particles", &simParticles);
+  tree.Branch("rec_particles", &recParticles);
+  tree.Branch("sim_result", &simResult);
 
   for (int entry = 0; entry < kEntries; ++entry) {
     eventHeader = SHiP::EventHeader{0.125 + entry, 7000 + entry};
@@ -102,11 +102,11 @@ bool readAndCompare() {
   auto* simResult = new SHiP::SimResult();
 
   tree->SetBranchAddress("event_header", &eventHeader);
-  tree->SetBranchAddress("mcParticles", &mcParticles);
-  tree->SetBranchAddress("simHits", &simHits);
-  tree->SetBranchAddress("simParticles", &simParticles);
-  tree->SetBranchAddress("recParticles", &recParticles);
-  tree->SetBranchAddress("simResult", &simResult);
+  tree->SetBranchAddress("mc_particles", &mcParticles);
+  tree->SetBranchAddress("sim_hits", &simHits);
+  tree->SetBranchAddress("sim_particles", &simParticles);
+  tree->SetBranchAddress("rec_particles", &recParticles);
+  tree->SetBranchAddress("sim_result", &simResult);
 
   bool ok = true;
   for (int entry = 0; entry < kEntries; ++entry) {
