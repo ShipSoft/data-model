@@ -71,10 +71,10 @@ int main() {
   mc.energy = 40.001;
   mc.time = 5.5;
   SHiP::MCParticle copy;
-  ship::view::setVertex(copy, ship::view::vertex(mc));
-  ship::view::setMomentum(copy, ship::view::momentum(mc));
-  ship::view::setEnergy(copy, ship::view::energy(mc));
-  ship::view::setTime(copy, ship::view::time(mc));
+  ship::view::set_vertex(copy, ship::view::vertex(mc));
+  ship::view::set_momentum(copy, ship::view::momentum(mc));
+  ship::view::set_energy(copy, ship::view::energy(mc));
+  ship::view::set_time(copy, ship::view::time(mc));
   expect(copy.vertex == mc.vertex && copy.momentum == mc.momentum &&
              copy.energy == mc.energy && copy.time == mc.time,
          "MCParticle view round-trip is bitwise");
@@ -82,18 +82,18 @@ int main() {
   SHiP::SimHit hit;
   hit.position = {-0.5, 0.0, 12000.0};
   hit.momentum = {0.01, -0.02, 3.0};
-  hit.energyDeposit = 0.00123;
+  hit.energy_deposit = 0.00123;
   hit.time = 7.25;
-  hit.pathLength = 0.3;
+  hit.path_length = 0.3;
   SHiP::SimHit hitCopy;
-  ship::view::setPosition(hitCopy, ship::view::position(hit));
-  ship::view::setMomentum(hitCopy, ship::view::momentum(hit));
-  ship::view::setEnergyDeposit(hitCopy, ship::view::energyDeposit(hit));
-  ship::view::setTime(hitCopy, ship::view::time(hit));
-  ship::view::setPathLength(hitCopy, ship::view::pathLength(hit));
+  ship::view::set_position(hitCopy, ship::view::position(hit));
+  ship::view::set_momentum(hitCopy, ship::view::momentum(hit));
+  ship::view::set_energy_deposit(hitCopy, ship::view::energy_deposit(hit));
+  ship::view::set_time(hitCopy, ship::view::time(hit));
+  ship::view::set_path_length(hitCopy, ship::view::path_length(hit));
   expect(hitCopy.position == hit.position && hitCopy.momentum == hit.momentum &&
-             hitCopy.energyDeposit == hit.energyDeposit &&
-             hitCopy.time == hit.time && hitCopy.pathLength == hit.pathLength,
+             hitCopy.energy_deposit == hit.energy_deposit &&
+             hitCopy.time == hit.time && hitCopy.path_length == hit.path_length,
          "SimHit view round-trip is bitwise");
 
   SHiP::SimParticle sp;
@@ -103,11 +103,11 @@ int main() {
   sp.energy = 49.9;
   sp.time = 0.0;
   SHiP::SimParticle spCopy;
-  ship::view::setVertex(spCopy, ship::view::vertex(sp));
-  ship::view::setEndpoint(spCopy, ship::view::endpoint(sp));
-  ship::view::setMomentum(spCopy, ship::view::momentum(sp));
-  ship::view::setEnergy(spCopy, ship::view::energy(sp));
-  ship::view::setTime(spCopy, ship::view::time(sp));
+  ship::view::set_vertex(spCopy, ship::view::vertex(sp));
+  ship::view::set_endpoint(spCopy, ship::view::endpoint(sp));
+  ship::view::set_momentum(spCopy, ship::view::momentum(sp));
+  ship::view::set_energy(spCopy, ship::view::energy(sp));
+  ship::view::set_time(spCopy, ship::view::time(sp));
   expect(spCopy.vertex == sp.vertex && spCopy.endpoint == sp.endpoint &&
              spCopy.momentum == sp.momentum && spCopy.energy == sp.energy &&
              spCopy.time == sp.time,
@@ -119,17 +119,17 @@ int main() {
   rp.momentum = {0.5, -0.3, 10.0};
   rp.energy = 9.8;
   rp.time = 1.1;
-  rp.ipPV = 0.012;
+  rp.ip_pv = 0.012;
   SHiP::RecParticle rpCopy;
-  ship::view::setVertex(rpCopy, ship::view::vertex(rp));
-  ship::view::setEndpoint(rpCopy, ship::view::endpoint(rp));
-  ship::view::setMomentum(rpCopy, ship::view::momentum(rp));
-  ship::view::setEnergy(rpCopy, ship::view::energy(rp));
-  ship::view::setTime(rpCopy, ship::view::time(rp));
-  ship::view::setIpPV(rpCopy, ship::view::ipPV(rp));
+  ship::view::set_vertex(rpCopy, ship::view::vertex(rp));
+  ship::view::set_endpoint(rpCopy, ship::view::endpoint(rp));
+  ship::view::set_momentum(rpCopy, ship::view::momentum(rp));
+  ship::view::set_energy(rpCopy, ship::view::energy(rp));
+  ship::view::set_time(rpCopy, ship::view::time(rp));
+  ship::view::set_ip_pv(rpCopy, ship::view::ip_pv(rp));
   expect(rpCopy.vertex == rp.vertex && rpCopy.endpoint == rp.endpoint &&
              rpCopy.momentum == rp.momentum && rpCopy.energy == rp.energy &&
-             rpCopy.time == rp.time && rpCopy.ipPV == rp.ipPV,
+             rpCopy.time == rp.time && rpCopy.ip_pv == rp.ip_pv,
          "RecParticle view round-trip is bitwise");
 
   // A deliberately non-canonical input converts, rather than reinterprets.
