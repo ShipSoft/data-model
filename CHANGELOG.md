@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-08-12
+
+### Features
+
+- Add geometryNodeId to SimHit structure
+- *(data-model)* Add EventHeader for per-event weight and provenance (#17)
+
+### Bug fixes
+
+- Add mp-units to package host dependencies
+
+### Miscellaneous
+
+- Update pixi lock file
 ## [0.3.0] - 2026-07-22
 
 ### Features
@@ -11,7 +25,6 @@ All notable changes to this project will be documented in this file.
 ### Bug fixes
 
 - Pin host root_base to a C++23 ROOT build
-
 ## [0.2.0] - 2026-07-16
 
 ### Features
@@ -27,14 +40,12 @@ All notable changes to this project will be documented in this file.
 
 ### Documentation
 
-- List RecParticle in README data classes table
 - Link Doxygen API reference from README
 - Add CONTRIBUTING with prek hook setup
 - Align SPDX guidance with aggregate REUSE metadata
 
 ### Styling
 
-- Reorder RecParticle.hpp includes to satisfy cpplint
 - Reformat CMakeLists.txt with gersemi 0.27.7
 
 ### Testing
@@ -48,7 +59,6 @@ All notable changes to this project will be documented in this file.
 - Enable Renovate via shared preset
 - Build and test via shared pixi workflow
 - Add concurrency control and scheduled lock updates
-
 ## [0.1.0] - 2026-06-19
 
 ### Features
@@ -60,10 +70,12 @@ All notable changes to this project will be documented in this file.
 ### Documentation
 
 - Add data model hierarchy diagrams
+- List RecParticle in README data classes table
 
 ### Styling
 
 - Apply clang-format, gersemi and pre-commit fixes
+- Reorder RecParticle.hpp includes to satisfy cpplint
 
 ### Miscellaneous
 
