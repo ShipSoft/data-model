@@ -16,6 +16,8 @@ struct SimParticle {
   double energy{0};                         ///< Initial kinetic energy [GeV]
   double time{0};                           ///< Production time [ns]
   std::int32_t creatorProcess{0};
+
+  bool operator==(SimParticle const&) const = default;
 };
 
 }  // namespace SHiP

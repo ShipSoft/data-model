@@ -17,6 +17,8 @@ struct RecHit {
   double energyDeposit{0};                  ///< Energy deposited [GeV]
   double time{0};                           ///< Global time [ns]
   double pathLength{0};                     ///< Step length [mm]
+
+  bool operator==(RecHit const&) const = default;
 };
 
 inline RecHit fromSimHit(SimHit const& sp) {

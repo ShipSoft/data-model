@@ -22,6 +22,8 @@ struct RecParticle {
   double time{0};    ///< Production time [ns]
   std::int32_t creatorProcess{0};
   double ipPV{0};  ///< IP wrt to the PV (at 0,0,0) [mm]
+
+  bool operator==(RecParticle const&) const = default;
 };
 
 inline RecParticle fromSimParticle(SimParticle const& sp) {
