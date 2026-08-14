@@ -11,6 +11,8 @@ namespace SHiP {
 struct SimResult {
   std::vector<SimHit> hits;
   std::vector<SimParticle> particles;
+
+  bool operator==(SimResult const&) const = default;
 };
 
 }  // namespace SHiP

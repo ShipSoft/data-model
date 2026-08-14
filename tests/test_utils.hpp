@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <cstddef>
 #include <iostream>
 #include <string>
@@ -85,52 +86,14 @@ inline SimResult makeSimResult(int offset) {
           .particles = makeSimParticles(offset + 5)};
 }
 
-inline bool equal(EventHeader const& a, EventHeader const& b) { return a == b; }
-
-inline bool equal(MCParticle const& a, MCParticle const& b) {
-  return a.pdgCode == b.pdgCode && a.vertex == b.vertex &&
-         a.momentum == b.momentum && a.energy == b.energy && a.time == b.time &&
-         a.motherId == b.motherId && a.status == b.status;
-}
-
-inline bool equal(SimHit const& a, SimHit const& b) {
-  return a.detectorId == b.detectorId && a.trackId == b.trackId &&
-         a.pdgCode == b.pdgCode && a.position == b.position &&
-         a.momentum == b.momentum && a.energyDeposit == b.energyDeposit &&
-         a.time == b.time && a.pathLength == b.pathLength;
-}
-
-inline bool equal(SimParticle const& a, SimParticle const& b) {
-  return a.trackId == b.trackId && a.parentId == b.parentId &&
-         a.pdgCode == b.pdgCode && a.vertex == b.vertex &&
-         a.endpoint == b.endpoint && a.momentum == b.momentum &&
-         a.energy == b.energy && a.time == b.time &&
-         a.creatorProcess == b.creatorProcess;
-}
-
-inline bool equal(RecParticle const& a, RecParticle const& b) {
-  return a.trackId == b.trackId && a.parentId == b.parentId &&
-         a.pdgCode == b.pdgCode && a.vertex == b.vertex &&
-         a.endpoint == b.endpoint && a.momentum == b.momentum &&
-         a.energy == b.energy && a.time == b.time &&
-         a.creatorProcess == b.creatorProcess && a.ipPV == b.ipPV;
-}
-
+/// Default comparison used by check(): any type with operator== works as-is.
+/// A type without operator== can still opt in by defining its own
+/// equal(T const&, T const&) overload, which is preferred via ADL / overload
+/// resolution (a non-template overload beats this constrained template).
 template <typename T>
-bool equal(std::vector<T> const& a, std::vector<T> const& b) {
-  if (a.size() != b.size()) {
-    return false;
-  }
-  for (std::size_t i = 0; i < a.size(); ++i) {
-    if (!equal(a[i], b[i])) {
-      return false;
-    }
-  }
-  return true;
-}
-
-inline bool equal(SimResult const& a, SimResult const& b) {
-  return equal(a.hits, b.hits) && equal(a.particles, b.particles);
+  requires std::equality_comparable<T>
+bool equal(T const& a, T const& b) {
+  return a == b;
 }
 
 /// Compare expected vs. read-back values, reporting PASS/FAIL.

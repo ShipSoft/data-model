@@ -14,6 +14,8 @@ struct MCParticle {
   double time{0};                           ///< Production time [ns]
   std::int32_t motherId{-1};                ///< Index of mother (-1 = primary)
   std::int32_t status{1};                   ///< Status code (1 = stable)
+
+  bool operator==(MCParticle const&) const = default;
 };
 
 }  // namespace SHiP
