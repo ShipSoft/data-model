@@ -32,6 +32,10 @@ target_sources(
                 include/SHiP/detectors/detector_id.hpp
 )
 target_link_libraries(SHiPDataModel PUBLIC ROOT::Core)
+# Propagate the C++ standard to installed consumers: the ROOT dictionary is
+# built at C++23, so consumers streaming these classes must match it. This is
+# not carried by CMAKE_CXX_STANDARD, which does not export.
+target_compile_features(SHiPDataModel PUBLIC cxx_std_23)
 set_target_properties(SHiPDataModel PROPERTIES LINKER_LANGUAGE CXX)
 
 # Canonical unit vocabulary (mp-units quantity types + views over the data
@@ -49,6 +53,9 @@ target_sources(
             FILES include/SHiP/Units.hpp include/SHiP/QuantityView.hpp
 )
 target_link_libraries(SHiPUnits INTERFACE mp-units::mp-units)
+# Header-only and ROOT-free: C++20 is the true minimum (concepts, defaulted
+# comparisons), matching what mp-units already requires.
+target_compile_features(SHiPUnits INTERFACE cxx_std_20)
 
 root_generate_dictionary(
   G__SHiPDataModel
