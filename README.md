@@ -39,6 +39,15 @@ find_package(SHiPDataModel REQUIRED)
 target_link_libraries(your_target PRIVATE SHiP::SHiPDataModel)
 ```
 
+## Backward compatibility
+
+Files written by released versions must stay readable: CI reads a frozen
+reference RNTuple file per release (`tests/data/reference_v*.root`) with the
+current code, and a committed schema snapshot fails CI on any schema change
+until it is deliberately regenerated. See
+[`tests/data/README.md`](tests/data/README.md) for the policy and what to do
+when these tests fail.
+
 ## Dependencies
 
 - ROOT 6.36+ (Core, RIO)
