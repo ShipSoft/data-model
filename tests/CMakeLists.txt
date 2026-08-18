@@ -53,3 +53,37 @@ foreach(ref IN LISTS reference_files)
         )
     endif()
 endforeach()
+
+# The snapshot tool needs the list of dictionary classes; derive it from
+# LinkDef.h so newly linked classes enter the snapshot automatically.
+file(
+    STRINGS ${PROJECT_SOURCE_DIR}/include/SHiP/LinkDef.h
+    linkdef_lines
+    REGEX "pragma link C\\+\\+ class SHiP::"
+)
+set(dictionary_classes "")
+foreach(line IN LISTS linkdef_lines)
+    if(NOT line MATCHES "std::vector")
+        string(REGEX MATCH "SHiP::[A-Za-z0-9_]+" cls "${line}")
+        string(APPEND dictionary_classes "\"${cls}\",\n")
+    endif()
+endforeach()
+file(
+    CONFIGURE
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/dictionary_classes.inc
+    CONTENT "${dictionary_classes}"
+    @ONLY
+)
+
+add_executable(schema_snapshot schema_snapshot.cpp)
+target_include_directories(schema_snapshot PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(
+    schema_snapshot
+    PRIVATE ${link_dictionary} ROOT::Core ROOT::RIO ROOT::ROOTNTuple
+)
+add_test(
+    NAME schema_snapshot
+    COMMAND
+        schema_snapshot --check
+        ${CMAKE_CURRENT_SOURCE_DIR}/data/schema_snapshot.txt
+)

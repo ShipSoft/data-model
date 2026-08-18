@@ -1,0 +1,269 @@
+# TClass layout (version, checksum, data members)
+class SHiP::EventHeader version=-1 checksum=0xd65dd49a
+  double weight
+  long original_event_id
+class SHiP::MCParticle version=-1 checksum=0x1717705a
+  int pdgCode
+  array<double,3> vertex
+  array<double,3> momentum
+  double energy
+  double time
+  int motherId
+  int status
+class SHiP::SimHit version=-1 checksum=0xe91d6376
+  int detectorId
+  int geometryNodeId
+  int trackId
+  int pdgCode
+  array<double,3> position
+  array<double,3> momentum
+  double energyDeposit
+  double time
+  double pathLength
+class SHiP::SimParticle version=-1 checksum=0xf19644a0
+  int trackId
+  int parentId
+  int pdgCode
+  array<double,3> vertex
+  array<double,3> endpoint
+  array<double,3> momentum
+  double energy
+  double time
+  int creatorProcess
+class SHiP::SimResult version=-1 checksum=0xbb708e7a
+  vector<SHiP::SimHit> hits
+  vector<SHiP::SimParticle> particles
+class SHiP::RecHit version=-1 checksum=0xe0db3d09
+  int detectorId
+  int trackId
+  int pdgCode
+  array<double,3> position
+  array<double,3> momentum
+  double energyDeposit
+  double time
+  double pathLength
+class SHiP::UBTHit version=-1 checksum=0xf8add1b2
+  SHiP::RecHit recHit
+class SHiP::SBTHit version=-1 checksum=0x21f0011c
+  SHiP::RecHit recHit
+class SHiP::TimeDetHit version=-1 checksum=0xb309a35b
+  SHiP::RecHit recHit
+class SHiP::StrawTubesHit version=-1 checksum=0x2d7ed115
+  SHiP::RecHit recHit
+class SHiP::CaloHit version=-1 checksum=0xfc234ecc
+  SHiP::RecHit recHit
+class SHiP::TrackFitResult version=-1 checksum=0xd1ab3864
+  int nMeas
+  int fitStatus
+  double chi2
+  int ndf
+  double qoverp
+  double phi
+  double theta
+  double time
+  array<double,3> refLoc
+  vector<double> inputMeasurementsX
+  vector<double> inputMeasurementsY
+  vector<double> fittedMeasurementsX
+  vector<double> fittedMeasurementsY
+  vector<double> residualsX
+  vector<double> residualsY
+class SHiP::RecParticle version=-1 checksum=0xe90ee6a7
+  int trackId
+  int parentId
+  int pdgCode
+  array<double,3> vertex
+  array<double,3> endpoint
+  array<double,3> momentum
+  vector<SHiP::RecHit> hits
+  double energy
+  double time
+  int creatorProcess
+  double ipPV
+# RNTuple field tree (one top-level field per dictionary class)
+SHiP__EventHeader : SHiP::EventHeader (typever=4294967295, checksum=0xd65dd49a)
+  weight : double (typever=0)
+  original_event_id : std::int64_t (typever=0)
+SHiP__MCParticle : SHiP::MCParticle (typever=4294967295, checksum=0x1717705a)
+  pdgCode : std::int32_t (typever=0)
+  vertex : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  momentum : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  energy : double (typever=0)
+  time : double (typever=0)
+  motherId : std::int32_t (typever=0)
+  status : std::int32_t (typever=0)
+SHiP__SimHit : SHiP::SimHit (typever=4294967295, checksum=0xe91d6376)
+  detectorId : std::int32_t (typever=0)
+  geometryNodeId : std::int32_t (typever=0)
+  trackId : std::int32_t (typever=0)
+  pdgCode : std::int32_t (typever=0)
+  position : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  momentum : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  energyDeposit : double (typever=0)
+  time : double (typever=0)
+  pathLength : double (typever=0)
+SHiP__SimParticle : SHiP::SimParticle (typever=4294967295, checksum=0xf19644a0)
+  trackId : std::int32_t (typever=0)
+  parentId : std::int32_t (typever=0)
+  pdgCode : std::int32_t (typever=0)
+  vertex : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  endpoint : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  momentum : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  energy : double (typever=0)
+  time : double (typever=0)
+  creatorProcess : std::int32_t (typever=0)
+SHiP__SimResult : SHiP::SimResult (typever=4294967295, checksum=0xbb708e7a)
+  hits : std::vector<SHiP::SimHit> (typever=0)
+    _0 : SHiP::SimHit (typever=4294967295, checksum=0xe91d6376)
+      detectorId : std::int32_t (typever=0)
+      geometryNodeId : std::int32_t (typever=0)
+      trackId : std::int32_t (typever=0)
+      pdgCode : std::int32_t (typever=0)
+      position : std::array<double,3> (typever=0)
+        _0 : double (typever=0)
+      momentum : std::array<double,3> (typever=0)
+        _0 : double (typever=0)
+      energyDeposit : double (typever=0)
+      time : double (typever=0)
+      pathLength : double (typever=0)
+  particles : std::vector<SHiP::SimParticle> (typever=0)
+    _0 : SHiP::SimParticle (typever=4294967295, checksum=0xf19644a0)
+      trackId : std::int32_t (typever=0)
+      parentId : std::int32_t (typever=0)
+      pdgCode : std::int32_t (typever=0)
+      vertex : std::array<double,3> (typever=0)
+        _0 : double (typever=0)
+      endpoint : std::array<double,3> (typever=0)
+        _0 : double (typever=0)
+      momentum : std::array<double,3> (typever=0)
+        _0 : double (typever=0)
+      energy : double (typever=0)
+      time : double (typever=0)
+      creatorProcess : std::int32_t (typever=0)
+SHiP__RecHit : SHiP::RecHit (typever=4294967295, checksum=0xe0db3d09)
+  detectorId : std::int32_t (typever=0)
+  trackId : std::int32_t (typever=0)
+  pdgCode : std::int32_t (typever=0)
+  position : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  momentum : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  energyDeposit : double (typever=0)
+  time : double (typever=0)
+  pathLength : double (typever=0)
+SHiP__UBTHit : SHiP::UBTHit (typever=4294967295, checksum=0xf8add1b2)
+  recHit : SHiP::RecHit (typever=4294967295, checksum=0xe0db3d09)
+    detectorId : std::int32_t (typever=0)
+    trackId : std::int32_t (typever=0)
+    pdgCode : std::int32_t (typever=0)
+    position : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    momentum : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    energyDeposit : double (typever=0)
+    time : double (typever=0)
+    pathLength : double (typever=0)
+SHiP__SBTHit : SHiP::SBTHit (typever=4294967295, checksum=0x21f0011c)
+  recHit : SHiP::RecHit (typever=4294967295, checksum=0xe0db3d09)
+    detectorId : std::int32_t (typever=0)
+    trackId : std::int32_t (typever=0)
+    pdgCode : std::int32_t (typever=0)
+    position : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    momentum : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    energyDeposit : double (typever=0)
+    time : double (typever=0)
+    pathLength : double (typever=0)
+SHiP__TimeDetHit : SHiP::TimeDetHit (typever=4294967295, checksum=0xb309a35b)
+  recHit : SHiP::RecHit (typever=4294967295, checksum=0xe0db3d09)
+    detectorId : std::int32_t (typever=0)
+    trackId : std::int32_t (typever=0)
+    pdgCode : std::int32_t (typever=0)
+    position : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    momentum : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    energyDeposit : double (typever=0)
+    time : double (typever=0)
+    pathLength : double (typever=0)
+SHiP__StrawTubesHit : SHiP::StrawTubesHit (typever=4294967295, checksum=0x2d7ed115)
+  recHit : SHiP::RecHit (typever=4294967295, checksum=0xe0db3d09)
+    detectorId : std::int32_t (typever=0)
+    trackId : std::int32_t (typever=0)
+    pdgCode : std::int32_t (typever=0)
+    position : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    momentum : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    energyDeposit : double (typever=0)
+    time : double (typever=0)
+    pathLength : double (typever=0)
+SHiP__CaloHit : SHiP::CaloHit (typever=4294967295, checksum=0xfc234ecc)
+  recHit : SHiP::RecHit (typever=4294967295, checksum=0xe0db3d09)
+    detectorId : std::int32_t (typever=0)
+    trackId : std::int32_t (typever=0)
+    pdgCode : std::int32_t (typever=0)
+    position : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    momentum : std::array<double,3> (typever=0)
+      _0 : double (typever=0)
+    energyDeposit : double (typever=0)
+    time : double (typever=0)
+    pathLength : double (typever=0)
+SHiP__TrackFitResult : SHiP::TrackFitResult (typever=4294967295, checksum=0xd1ab3864)
+  nMeas : std::int32_t (typever=0)
+  fitStatus : std::int32_t (typever=0)
+  chi2 : double (typever=0)
+  ndf : std::int32_t (typever=0)
+  qoverp : double (typever=0)
+  phi : double (typever=0)
+  theta : double (typever=0)
+  time : double (typever=0)
+  refLoc : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  inputMeasurementsX : std::vector<double> (typever=0)
+    _0 : double (typever=0)
+  inputMeasurementsY : std::vector<double> (typever=0)
+    _0 : double (typever=0)
+  fittedMeasurementsX : std::vector<double> (typever=0)
+    _0 : double (typever=0)
+  fittedMeasurementsY : std::vector<double> (typever=0)
+    _0 : double (typever=0)
+  residualsX : std::vector<double> (typever=0)
+    _0 : double (typever=0)
+  residualsY : std::vector<double> (typever=0)
+    _0 : double (typever=0)
+SHiP__RecParticle : SHiP::RecParticle (typever=4294967295, checksum=0xe90ee6a7)
+  trackId : std::int32_t (typever=0)
+  parentId : std::int32_t (typever=0)
+  pdgCode : std::int32_t (typever=0)
+  vertex : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  endpoint : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  momentum : std::array<double,3> (typever=0)
+    _0 : double (typever=0)
+  hits : std::vector<SHiP::RecHit> (typever=0)
+    _0 : SHiP::RecHit (typever=4294967295, checksum=0xe0db3d09)
+      detectorId : std::int32_t (typever=0)
+      trackId : std::int32_t (typever=0)
+      pdgCode : std::int32_t (typever=0)
+      position : std::array<double,3> (typever=0)
+        _0 : double (typever=0)
+      momentum : std::array<double,3> (typever=0)
+        _0 : double (typever=0)
+      energyDeposit : double (typever=0)
+      time : double (typever=0)
+      pathLength : double (typever=0)
+  energy : double (typever=0)
+  time : double (typever=0)
+  creatorProcess : std::int32_t (typever=0)
+  ipPV : double (typever=0)
