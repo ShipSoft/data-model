@@ -63,6 +63,7 @@ test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = ["buil
 # Deliberate regeneration of the schema-change gates; run these (and commit
 # the results) in the same PR as an intentional schema change. See
 # tests/data/README.md.
+update-schema-snapshot = { cmd = "build/tests/schema_snapshot --update tests/data/schema_snapshot.txt", depends-on = ["build"] }
 update-reference-head = { cmd = "build/tests/write_reference tests/data/reference_head.root", depends-on = ["build"] }
 
 [feature.lint.dependencies]
