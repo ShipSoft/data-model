@@ -22,7 +22,8 @@ Thank you for your interest in contributing! As part of the SHiP Collaboration, 
    pixi run test
    ```
    During iteration, `pixi run build` rebuilds incrementally without re-running ctest.
-8. **Submission**: Open a Pull Request against the `main` branch. Ensure the CI passes.
+8. **Schema changes**: The persistent schema is guarded by the backward-compatibility suite (see `tests/data/README.md`). If the `schema_snapshot` test fails after an intentional change, regenerate the gates in the same PR with `pixi run update-schema-snapshot` and `pixi run update-reference-head`; if a `compat_read_v*` test fails, your change breaks reading of existing data — make it compatible or mark the commit as a breaking change and update the reader expectations. The snapshot may also legitimately change on ROOT version bumps (type-name normalization); regenerate it in the lock-update PR after reviewing the diff. Never modify the frozen `tests/data/reference_v*.root` files.
+9. **Submission**: Open a Pull Request against the `main` branch. Ensure the CI passes.
 
 ## Licensing
 
