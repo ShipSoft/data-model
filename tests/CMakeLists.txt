@@ -31,3 +31,25 @@ target_link_libraries(
     write_reference
     PRIVATE ${link_dictionary} ROOT::Core ROOT::RIO ROOT::ROOTNTuple
 )
+
+add_executable(test_read_reference test_read_reference.cpp)
+target_link_libraries(
+    test_read_reference
+    PRIVATE ${link_dictionary} ROOT::Core ROOT::RIO ROOT::ROOTNTuple
+)
+
+# One ctest test per committed reference file, for clear failure attribution.
+# CONFIGURE_DEPENDS: a file added at release time is picked up on reconfigure.
+file(
+    GLOB reference_files
+    CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/data/reference_*.root"
+)
+foreach(ref IN LISTS reference_files)
+    if(ref MATCHES "reference_(v[0-9]+\\.[0-9]+\\.[0-9]+|head)\\.root$")
+        add_test(
+            NAME compat_read_${CMAKE_MATCH_1}
+            COMMAND test_read_reference ${ref} ${CMAKE_MATCH_1}
+        )
+    endif()
+endforeach()
