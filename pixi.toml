@@ -60,6 +60,10 @@ mp-units = ">=2.5"
 configure = "cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 build = { cmd = "cmake --build build -j", depends-on = ["configure"] }
 test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = ["build"] }
+# Deliberate regeneration of the schema-change gates; run these (and commit
+# the results) in the same PR as an intentional schema change. See
+# tests/data/README.md.
+update-reference-head = { cmd = "build/tests/write_reference tests/data/reference_head.root", depends-on = ["build"] }
 
 [feature.lint.dependencies]
 prek = "*"
