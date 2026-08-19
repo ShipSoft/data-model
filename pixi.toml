@@ -57,7 +57,10 @@ root_cxx_standard = "==23"
 mp-units = ">=2.5"
 
 [tasks]
-configure = "cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+# BUILD_TESTING is pinned on: this is the build directory the compat suite
+# and scripts/release.sh drive, and passing -D here also resets a cache left
+# at OFF by a packaging-style configure.
+configure = "cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=ON"
 build = { cmd = "cmake --build build -j", depends-on = ["configure"] }
 test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = ["build"] }
 # Deliberate regeneration of the schema-change gates; run these (and commit
