@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
   auto maskSimHits = [&](std::vector<SHiP::SimHit>& hits) {
     if (version < kV040) {
       for (auto& h : hits) {
-        h.geometryNodeId = 0;
+        h.geometry_node_id = 0;
       }
     }
   };

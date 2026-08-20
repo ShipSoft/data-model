@@ -34,12 +34,12 @@ std::vector<Particle> makeMCParticles(int offset) {
   std::vector<Particle> v;
   for (int i = 0; i < 3; ++i) {
     Particle p;
-    p.pdgCode = 11 + 100 * i + offset;
+    p.pdg_code = 11 + 100 * i + offset;
     p.vertex = {1.5 + i + offset, -2.25 + i, 3.75 + i};
     p.momentum = {0.125 + i, -0.25 + i, 40.5 + i + offset};
     p.energy = 40.625 + i + offset;
     p.time = 0.375 + i;
-    p.motherId = i - 1;
+    p.mother_id = i - 1;
     p.status = 1 + i + offset;
     v.push_back(p);
   }
@@ -51,16 +51,16 @@ std::vector<Hit> makeSimHits(int offset) {
   std::vector<Hit> v;
   for (int i = 0; i < 3; ++i) {
     Hit h;
-    h.detectorId = 1000 + 10 * i + offset;
-    h.trackId = 42 + i + offset;
-    h.pdgCode = -13 + 2 * i;
+    h.detector_id = 1000 + 10 * i + offset;
+    h.track_id = 42 + i + offset;
+    h.pdg_code = -13 + 2 * i;
     h.position = {10.5 + i + offset, -20.25 + i, 3000.75 + i};
     h.momentum = {1.125 + i, -2.25 + i, 30.5 + i + offset};
-    h.energyDeposit = 0.0625 + i + offset;
+    h.energy_deposit = 0.0625 + i + offset;
     h.time = 25.375 + i;
-    h.pathLength = 0.5 + i + offset;
-    if constexpr (requires { h.geometryNodeId; }) {  // added in v0.4.0
-      h.geometryNodeId = 900 + 7 * i + offset;
+    h.path_length = 0.5 + i + offset;
+    if constexpr (requires { h.geometry_node_id; }) {  // added in v0.4.0
+      h.geometry_node_id = 900 + 7 * i + offset;
     }
     v.push_back(h);
   }
@@ -72,15 +72,15 @@ std::vector<Particle> makeSimParticles(int offset) {
   std::vector<Particle> v;
   for (int i = 0; i < 3; ++i) {
     Particle p;
-    p.trackId = 7 + i + offset;
-    p.parentId = 6 + i;
-    p.pdgCode = 211 - 2 * i + offset;
+    p.track_id = 7 + i + offset;
+    p.parent_id = 6 + i;
+    p.pdg_code = 211 - 2 * i + offset;
     p.vertex = {0.5 + i + offset, -1.25 + i, 2.75 + i};
     p.endpoint = {100.5 + i, -200.25 + i + offset, 5000.75 + i};
     p.momentum = {3.125 + i, -4.25 + i, 50.5 + i + offset};
     p.energy = 51.625 + i + offset;
     p.time = 12.375 + i;
-    p.creatorProcess = 2 + i + offset;
+    p.creator_process = 2 + i + offset;
     v.push_back(p);
   }
   return v;
@@ -91,28 +91,28 @@ std::vector<Particle> makeRecParticles(int offset) {
   std::vector<Particle> v;
   for (auto const& sp : makeSimParticles(offset)) {
     Particle p;
-    p.trackId = sp.trackId;
-    p.parentId = sp.parentId;
-    p.pdgCode = sp.pdgCode;
+    p.track_id = sp.track_id;
+    p.parent_id = sp.parent_id;
+    p.pdg_code = sp.pdg_code;
     p.vertex = sp.vertex;
     p.endpoint = sp.endpoint;
     p.momentum = sp.momentum;
     p.energy = sp.energy;
     p.time = sp.time;
-    p.creatorProcess = sp.creatorProcess;
-    p.ipPV = 0.875 + sp.trackId;
+    p.creator_process = sp.creator_process;
+    p.ip_pv = 0.875 + sp.track_id;
     if constexpr (requires { p.hits; }) {  // added in v0.3.0
       using HitType = typename decltype(Particle{}.hits)::value_type;
       for (auto const& sh : makeSimHits(offset + 2)) {
         HitType rh;
-        rh.detectorId = sh.detectorId;
-        rh.trackId = sh.trackId;
-        rh.pdgCode = sh.pdgCode;
+        rh.detector_id = sh.detector_id;
+        rh.track_id = sh.track_id;
+        rh.pdg_code = sh.pdg_code;
         rh.position = sh.position;
         rh.momentum = sh.momentum;
-        rh.energyDeposit = sh.energyDeposit;
+        rh.energy_deposit = sh.energy_deposit;
         rh.time = sh.time;
-        rh.pathLength = sh.pathLength;
+        rh.path_length = sh.path_length;
         p.hits.push_back(rh);
       }
     }

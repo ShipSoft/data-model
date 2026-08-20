@@ -58,13 +58,26 @@ Each file is an RNTuple named `events` with 2 entries and top-level fields
   `reference_head.root` are out of sync — run `pixi run
   update-reference-head` (plus the snapshot) in this PR.
 
+## Known issue: field renames vs ROOT 6.40 RNTuple
+
+The snake_case field renames are covered by I/O customization rules in
+`include/SHiP/LinkDef.h`, validated end-to-end on the TTree path. ROOT
+6.40.02 however misapplies rules with multiple same-typed source members
+when reading **RNTuple** data (staging offsets collapse per type), so the
+`compat_read_v0.1.0`–`v0.4.0` tests are **expected to fail** until a fixed
+ROOT is deployed. They deliberately assert the true values: the moment a
+fixed ROOT lands in `pixi.lock`, they turn green with no further changes.
+Do not mask them to the corrupted values. (The wrappers' `recHit` →
+`rec_hit` rename is not rule-covered — nested-object rule sources crash
+ROOT 6.40 — no wrapper data has been persisted to date.)
+
 ## Value recipe
 
 Expected values are defined in `tests/reference_values.hpp` and are part of
 the contract (a future non-C++ reader can check against the same formulas).
 For members that existed at v0.1.0 they equal the `SHiP::test::make*`
 generators in `tests/test_utils.hpp`; members added later have their own
-formulas there (e.g. `SimHit::geometryNodeId = 900 + 7*i + offset`,
+formulas there (e.g. `SimHit::geometry_node_id = 900 + 7*i + offset`,
 `RecParticle::hits` filled from `makeSimHits(offset + 2)`). Per entry
 `e` (0-based): field offsets are `e` for the top-level collections and
 `e + 5` inside `simResult`; each collection has 3 elements. A reference file
