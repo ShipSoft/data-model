@@ -62,14 +62,22 @@ Each file is an RNTuple named `events` with 2 entries and top-level fields
 
 The snake_case field renames are covered by I/O customization rules in
 `include/SHiP/LinkDef.h`, validated end-to-end on the TTree path. ROOT
-6.40.02 however misapplies rules with multiple same-typed source members
-when reading **RNTuple** data (staging offsets collapse per type), so the
-`compat_read_v0.1.0`–`v0.4.0` tests are **expected to fail** until a fixed
-ROOT is deployed. They deliberately assert the true values: the moment a
-fixed ROOT lands in `pixi.lock`, they turn green with no further changes.
-Do not mask them to the corrupted values. (The wrappers' `recHit` →
-`rec_hit` rename is not rule-covered — nested-object rule sources crash
-ROOT 6.40 — no wrapper data has been persisted to date.)
+6.40.02 however misapplies rules when reading **RNTuple** data written by
+*unversioned* classes ([root-project/root#23146]). Per the workaround
+proposed there, all classes now carry an explicit `ClassDefNV` version
+(bump it on any layout change!) and readers open files through `TFile`
+before attaching the `RNTupleReader` — this makes the rules work for all
+data written from v0.5.0 on. The pre-v0.5.0 reference files were written
+by the then-unversioned classes and still cannot be rule-read (ROOT aborts
+on an internal assertion), so the `compat_read_v0.1.0`–`v0.4.0` tests are
+**expected to fail** until ROOT supports reading unversioned data into
+versioned classes. They deliberately assert the true values: with such a
+ROOT in `pixi.lock`, they turn green with no further changes. Do not mask
+them. (The wrappers' `recHit` → `rec_hit` rename is not rule-covered —
+nested-object rule sources crash ROOT 6.40 — no wrapper data has been
+persisted to date.)
+
+[root-project/root#23146]: https://github.com/root-project/root/issues/23146
 
 ## Value recipe
 

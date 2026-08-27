@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "Rtypes.h"
 #include "SHiP/RecHit.hpp"
 #include "SHiP/SimParticle.hpp"
 
@@ -24,6 +25,9 @@ struct RecParticle {
   double ip_pv{0};  ///< IP wrt to the PV (at 0,0,0) [mm]
 
   bool operator==(RecParticle const&) const = default;
+  // Explicit class version: required for RNTuple I/O rules
+  // (root-project/root#23146); bump on any layout change.
+  ClassDefNV(RecParticle, 2);
 };
 
 inline RecParticle fromSimParticle(SimParticle const& sp) {

@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#include "Rtypes.h"
+
 namespace SHiP {
 
 /// Per-event metadata — one record per event
@@ -15,6 +17,9 @@ struct EventHeader {
             ///< which links particles within an event.
 
   bool operator==(EventHeader const&) const = default;
+  // Explicit class version: required for RNTuple I/O rules
+  // (root-project/root#23146); bump on any layout change.
+  ClassDefNV(EventHeader, 2);
 };
 
 }  // namespace SHiP

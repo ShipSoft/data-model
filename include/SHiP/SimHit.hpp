@@ -3,6 +3,8 @@
 #include <array>
 #include <cstdint>
 
+#include "Rtypes.h"
+
 namespace SHiP {
 
 /// Simulation hit from Geant4 sensitive detectors
@@ -18,6 +20,10 @@ struct SimHit {
   double path_length{0};                    ///< Step length [mm]
 
   bool operator==(SimHit const&) const = default;
+
+  // Explicit class version: required for RNTuple I/O rules
+  // (root-project/root#23146); bump on any layout change.
+  ClassDefNV(SimHit, 2);
 };
 
 }  // namespace SHiP

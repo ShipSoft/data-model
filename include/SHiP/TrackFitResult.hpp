@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 
+#include "Rtypes.h"
+
 namespace SHiP {
 
 /// Track fit result
@@ -23,5 +25,9 @@ struct TrackFitResult {
   std::vector<double> fitted_measurements_y{};
   std::vector<double> residuals_x{};
   std::vector<double> residuals_y{};
+
+  // Explicit class version: required for RNTuple I/O rules
+  // (root-project/root#23146); bump on any layout change.
+  ClassDefNV(TrackFitResult, 2);
 };
 }  // namespace SHiP

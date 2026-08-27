@@ -9,19 +9,23 @@
 // the checksums of the historical class layouts (TClass::GetCheckSum, taken
 // from tests/data/schema_snapshot.txt as of v0.4.0 and from the frozen
 // reference files for earlier layouts) so they are only considered for
-// matching on-disk data; version matching cannot be used because these
-// unversioned structs all report class version -1. If a class layout gains
-// another era, append its checksum to the rule list — the compat suite
-// (tests/data/README.md) fails if a rule misses an era covered by a frozen
-// reference file.
+// matching on-disk data; version matching cannot be used because the
+// pre-v0.5.0 structs were unversioned and report class version -1. If a
+// class layout gains another era, append its checksum to the rule list —
+// the compat suite (tests/data/README.md) fails if a rule misses an era
+// covered by a frozen reference file.
 //
-// KNOWN ISSUE: ROOT 6.40.02 applies these rules correctly when reading
-// TTree data, but its RNTuple rule application collapses the on-file
-// staging offsets per member type (every renamed member of a given type
-// receives the value of the first source member of that type). Until a
-// fixed ROOT is deployed, the compat_read_v* tests are therefore EXPECTED
-// to fail; they assert the true values so the fix is detected the moment
-// it arrives. Do not "fix" the tests to match the corrupted values.
+// KNOWN ISSUE (root-project/root#23146): ROOT 6.40.02 applies these rules
+// correctly when reading TTree data, but misapplies them when reading
+// RNTuple data written by UNVERSIONED classes. Per the workaround proposed
+// upstream, all classes now carry an explicit ClassDefNV version and
+// readers must open files through TFile before attaching the
+// RNTupleReader; rules then work for all data written from v0.5.0 on.
+// Data written by the unversioned pre-v0.5.0 classes still cannot be
+// rule-read (ROOT aborts on an internal assertion), so the compat_read_v*
+// tests are EXPECTED to fail until ROOT supports reading unversioned data
+// into versioned classes. They assert the true values so the fix is
+// detected the moment it arrives; do not "fix" the tests.
 
 // Event metadata
 #pragma link C++ class SHiP::EventHeader+;

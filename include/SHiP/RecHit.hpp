@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdint>
 
+#include "Rtypes.h"
 #include "SHiP/SimHit.hpp"
 
 namespace SHiP {
@@ -19,6 +20,9 @@ struct RecHit {
   double path_length{0};                    ///< Step length [mm]
 
   bool operator==(RecHit const&) const = default;
+  // Explicit class version: required for RNTuple I/O rules
+  // (root-project/root#23146); bump on any layout change.
+  ClassDefNV(RecHit, 2);
 };
 
 inline RecHit fromSimHit(SimHit const& sp) {

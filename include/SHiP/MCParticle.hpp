@@ -3,6 +3,8 @@
 #include <array>
 #include <cstdint>
 
+#include "Rtypes.h"
+
 namespace SHiP {
 
 /// Monte Carlo particle — input to simulation
@@ -16,6 +18,9 @@ struct MCParticle {
   std::int32_t status{1};                   ///< Status code (1 = stable)
 
   bool operator==(MCParticle const&) const = default;
+  // Explicit class version: required for RNTuple I/O rules
+  // (root-project/root#23146); bump on any layout change.
+  ClassDefNV(MCParticle, 2);
 };
 
 }  // namespace SHiP
