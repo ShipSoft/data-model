@@ -72,7 +72,7 @@ update-reference-head = { cmd = "build/tests/write_reference tests/data/referenc
 [feature.lint.dependencies]
 prek = "*"
 python = ">=3.11"
-clang-format = "22.*"
+clang-format = "23.*"
 codespell = "*"
 reuse = "*"
 cffconvert = "*"
