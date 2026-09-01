@@ -4,6 +4,7 @@
 /// (members that did not exist on disk must read back default-initialized).
 /// See tests/data/README.md for the compatibility policy.
 #include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -18,6 +19,7 @@
 #include "SHiP/SimHit.hpp"
 #include "SHiP/SimParticle.hpp"
 #include "SHiP/SimResult.hpp"
+#include "TError.h"
 #include "TFile.h"
 #include "reference_values.hpp"
 #include "test_utils.hpp"
@@ -81,6 +83,19 @@ int main(int argc, char** argv) {
     std::cerr << "FAIL: cannot parse version '" << versionLabel << "'\n";
     return 64;
   }
+
+  // ROOT 6.40 aborts on a Fatal assertion (RFieldMeta.cxx) when reading the
+  // unversioned pre-v0.5.0 files into the now-versioned classes
+  // (root-project/root#23146); report it as a regular test failure instead
+  // of a core dump.
+  SetErrorHandler(
+      +[](int level, Bool_t, char const* location, char const* message) {
+        DefaultErrorHandler(level, kFALSE, location, message);
+        if (level >= kFatal) {
+          std::cout << "FAIL: fatal ROOT error (see message above)\n";
+          std::exit(1);
+        }
+      });
 
   // Open the file through TFile first so its streamer infos become known to
   // ROOT — required for I/O customization rules to find the on-disk layouts
@@ -149,7 +164,7 @@ int main(int argc, char** argv) {
   auto maskSimHits = [&](std::vector<SHiP::SimHit>& hits) {
     if (version < kV040) {
       for (auto& h : hits) {
-        h.geometryNodeId = 0;
+        h.geometry_node_id = 0;
       }
     }
   };
