@@ -34,6 +34,16 @@ Each file is an RNTuple named `events` with 2 entries and top-level fields
 `event_header` (v0.4.0+), `mcParticles`, `simHits`, `simParticles`,
 `recParticles`, `simResult`.
 
+Since v0.5.0 every persistent class carries an explicit version, declared in
+`include/SHiP/LinkDef.h` as `options=version(N)` (required for RNTuple I/O
+customization rules, [root-project/root#23146]) — bump it together with any
+layout change; the `schema_snapshot` test records versions, so forgetting is
+visible in the diff. Numbering starts at 2, because rootcling already emits 1
+for classes without `ClassDef` and `TClass` reports that back as -1. Files
+from v0.1.0–v0.4.0 were written by unversioned classes.
+
+[root-project/root#23146]: https://github.com/root-project/root/issues/23146
+
 ## When a compat test fails in your PR
 
 - `schema_snapshot` fails, `compat_read_*` pass: you changed the persistent
