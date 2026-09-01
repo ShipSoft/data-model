@@ -10,6 +10,7 @@
 #include <string_view>
 #include <vector>
 
+#include "ROOT/RNTuple.hxx"
 #include "ROOT/RNTupleReader.hxx"
 #include "SHiP/EventHeader.hpp"
 #include "SHiP/MCParticle.hpp"
@@ -17,6 +18,7 @@
 #include "SHiP/SimHit.hpp"
 #include "SHiP/SimParticle.hpp"
 #include "SHiP/SimResult.hpp"
+#include "TFile.h"
 #include "reference_values.hpp"
 #include "test_utils.hpp"
 
@@ -79,11 +81,24 @@ int main(int argc, char** argv) {
     return 64;
   }
 
-  // Open WITHOUT an imposed model: the model is built from the on-disk
+  // Open the file through TFile first so its streamer infos become known to
+  // ROOT — required for I/O customization rules to find the on-disk layouts
+  // (workaround from root-project/root#23146) — then attach the reader to
+  // the anchor. No imposed model: the model is built from the on-disk
   // descriptor and class fields are reconstructed from the current
   // dictionary, so automatic schema evolution maps on-disk members by name
   // and default-initializes members missing on disk.
-  auto reader = ROOT::RNTupleReader::Open("events", file);
+  std::unique_ptr<TFile> rootFile{TFile::Open(file.c_str())};
+  if (!rootFile || rootFile->IsZombie()) {
+    std::cout << "FAIL: cannot open file " << file << '\n';
+    return 1;
+  }
+  std::unique_ptr<ROOT::RNTuple> anchor{rootFile->Get<ROOT::RNTuple>("events")};
+  if (!anchor) {
+    std::cout << "FAIL: no RNTuple 'events' in " << file << '\n';
+    return 1;
+  }
+  auto reader = ROOT::RNTupleReader::Open(*anchor);
   if (!reader) {
     std::cout << "FAIL: cannot open RNTuple 'events' in " << file << '\n';
     return 1;
