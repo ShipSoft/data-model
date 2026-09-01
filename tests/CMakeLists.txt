@@ -59,7 +59,7 @@ endforeach()
 file(
     STRINGS ${PROJECT_SOURCE_DIR}/include/SHiP/LinkDef.h
     linkdef_lines
-    REGEX "pragma link C\\+\\+ class SHiP::"
+    REGEX "pragma link C\\+\\+ .*class SHiP::"
 )
 set(dictionary_classes "")
 foreach(line IN LISTS linkdef_lines)
