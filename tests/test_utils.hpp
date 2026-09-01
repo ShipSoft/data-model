@@ -20,12 +20,12 @@ inline std::vector<MCParticle> makeMCParticles(int offset) {
   std::vector<MCParticle> v;
   for (int i = 0; i < 3; ++i) {
     MCParticle p;
-    p.pdgCode = 11 + 100 * i + offset;
+    p.pdg_code = 11 + 100 * i + offset;
     p.vertex = {1.5 + i + offset, -2.25 + i, 3.75 + i};
     p.momentum = {0.125 + i, -0.25 + i, 40.5 + i + offset};
     p.energy = 40.625 + i + offset;
     p.time = 0.375 + i;
-    p.motherId = i - 1;
+    p.mother_id = i - 1;
     p.status = 1 + i + offset;
     v.push_back(p);
   }
@@ -37,14 +37,15 @@ inline std::vector<SimHit> makeSimHits(int offset) {
   std::vector<SimHit> v;
   for (int i = 0; i < 3; ++i) {
     SimHit h;
-    h.detectorId = 1000 + 10 * i + offset;
-    h.trackId = 42 + i + offset;
-    h.pdgCode = -13 + 2 * i;
+    h.detector_id = 1000 + 10 * i + offset;
+    h.geometry_node_id = 5000 + 100 * i + offset;
+    h.track_id = 42 + i + offset;
+    h.pdg_code = -13 + 2 * i;
     h.position = {10.5 + i + offset, -20.25 + i, 3000.75 + i};
     h.momentum = {1.125 + i, -2.25 + i, 30.5 + i + offset};
-    h.energyDeposit = 0.0625 + i + offset;
+    h.energy_deposit = 0.0625 + i + offset;
     h.time = 25.375 + i;
-    h.pathLength = 0.5 + i + offset;
+    h.path_length = 0.5 + i + offset;
     v.push_back(h);
   }
   return v;
@@ -55,15 +56,15 @@ inline std::vector<SimParticle> makeSimParticles(int offset) {
   std::vector<SimParticle> v;
   for (int i = 0; i < 3; ++i) {
     SimParticle p;
-    p.trackId = 7 + i + offset;
-    p.parentId = 6 + i;
-    p.pdgCode = 211 - 2 * i + offset;
+    p.track_id = 7 + i + offset;
+    p.parent_id = 6 + i;
+    p.pdg_code = 211 - 2 * i + offset;
     p.vertex = {0.5 + i + offset, -1.25 + i, 2.75 + i};
     p.endpoint = {100.5 + i, -200.25 + i + offset, 5000.75 + i};
     p.momentum = {3.125 + i, -4.25 + i, 50.5 + i + offset};
     p.energy = 51.625 + i + offset;
     p.time = 12.375 + i;
-    p.creatorProcess = 2 + i + offset;
+    p.creator_process = 2 + i + offset;
     v.push_back(p);
   }
   return v;
@@ -74,7 +75,7 @@ inline std::vector<RecParticle> makeRecParticles(int offset) {
   std::vector<RecParticle> v;
   for (auto const& sp : makeSimParticles(offset)) {
     RecParticle p = fromSimParticle(sp);
-    p.ipPV = 0.875 + p.trackId;
+    p.ip_pv = 0.875 + p.track_id;
     v.push_back(p);
   }
   return v;
