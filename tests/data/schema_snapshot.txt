@@ -2,13 +2,14 @@
 class SHiP::EventHeader version=2 checksum=0xd65dd49a
   double weight
   long original_event_id
-class SHiP::MCParticle version=2 checksum=0x1717705a
+class SHiP::MCParticle version=3 checksum=0x5d816b3e
   int pdgCode
   array<double,3> vertex
   array<double,3> momentum
   double energy
   double time
   int motherId
+  vector<int> mothers
   int status
 class SHiP::SimHit version=2 checksum=0xe91d6376
   int detectorId
@@ -84,7 +85,7 @@ class SHiP::RecParticle version=2 checksum=0xe90ee6a7
 SHiP__EventHeader : SHiP::EventHeader (typever=2, checksum=0xd65dd49a)
   weight : double (typever=0)
   original_event_id : std::int64_t (typever=0)
-SHiP__MCParticle : SHiP::MCParticle (typever=2, checksum=0x1717705a)
+SHiP__MCParticle : SHiP::MCParticle (typever=3, checksum=0x5d816b3e)
   pdgCode : std::int32_t (typever=0)
   vertex : std::array<double,3> (typever=0)
     _0 : double (typever=0)
@@ -93,6 +94,8 @@ SHiP__MCParticle : SHiP::MCParticle (typever=2, checksum=0x1717705a)
   energy : double (typever=0)
   time : double (typever=0)
   motherId : std::int32_t (typever=0)
+  mothers : std::vector<std::int32_t> (typever=0)
+    _0 : std::int32_t (typever=0)
   status : std::int32_t (typever=0)
 SHiP__SimHit : SHiP::SimHit (typever=2, checksum=0xe91d6376)
   detectorId : std::int32_t (typever=0)
