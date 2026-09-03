@@ -40,6 +40,11 @@ std::vector<Particle> makeMCParticles(int offset) {
     p.energy = 40.625 + i + offset;
     p.time = 0.375 + i;
     p.motherId = i - 1;
+    if constexpr (requires { p.mothers; }) {  // added in v0.5.0
+      // First element equals motherId, exercising the documented invariant;
+      // the second gives a multi-mother entry to round-trip.
+      p.mothers = {i - 1, 300 + 5 * i + offset};
+    }
     p.status = 1 + i + offset;
     v.push_back(p);
   }
