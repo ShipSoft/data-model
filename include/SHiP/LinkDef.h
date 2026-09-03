@@ -20,7 +20,7 @@
 #pragma link C++ options=version(2) class SHiP::EventHeader+;
 
 // MC / generation
-#pragma link C++ options=version(2) class SHiP::MCParticle+;
+#pragma link C++ options=version(3) class SHiP::MCParticle+;
 #pragma link C++ class std::vector<SHiP::MCParticle>+;
 
 // Simulation

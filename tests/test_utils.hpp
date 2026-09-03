@@ -26,6 +26,7 @@ inline std::vector<MCParticle> makeMCParticles(int offset) {
     p.energy = 40.625 + i + offset;
     p.time = 0.375 + i;
     p.motherId = i - 1;
+    p.mothers = {i - 1, 300 + 5 * i + offset};
     p.status = 1 + i + offset;
     v.push_back(p);
   }

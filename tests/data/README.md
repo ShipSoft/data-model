@@ -75,6 +75,8 @@ the contract (a future non-C++ reader can check against the same formulas).
 For members that existed at v0.1.0 they equal the `SHiP::test::make*`
 generators in `tests/test_utils.hpp`; members added later have their own
 formulas there (e.g. `SimHit::geometryNodeId = 900 + 7*i + offset`,
+`MCParticle::mothers = {i - 1, 300 + 5*i + offset}` — whose first element
+equals `motherId`, as the documented invariant requires —
 `RecParticle::hits` filled from `makeSimHits(offset + 2)`). Per entry
 `e` (0-based): field offsets are `e` for the top-level collections and
 `e + 5` inside `simResult`; each collection has 3 elements. A reference file
