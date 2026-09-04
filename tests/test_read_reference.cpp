@@ -173,6 +173,12 @@ int main(int argc, char** argv) {
     maskMCParticles(expectedMCParticles);
     ok &= SHiP::test::check("MCParticle" + suffix, expectedMCParticles,
                             *mcParticles);
+    // Files older than v0.5.0 have no `mothers` field, so they read back with
+    // an empty list beside a valid motherId: consistent, but not populated.
+    bool const mothersOk = version < kV050
+                               ? SHiP::mothersAreConsistent(*mcParticles)
+                               : SHiP::mothersArePopulated(*mcParticles);
+    ok &= SHiP::test::check("MCParticle mothers" + suffix, true, mothersOk);
 
     auto expectedSimHits = SHiP::ref::makeSimHits(i);
     maskSimHits(expectedSimHits);
