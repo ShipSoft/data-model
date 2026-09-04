@@ -86,3 +86,9 @@ without a mother has an empty list rather than a `-1` in it —
 written by version V contains values for exactly the members existing in V;
 newer members read back default-initialized and are masked accordingly in
 `test_read_reference.cpp`.
+
+The mother-index invariants the `MCParticle` recipe encodes are machine-checked
+rather than merely asserted here: `SHiP::mothersAreConsistent` (declared beside
+the struct in `include/SHiP/MCParticle.hpp`) is exercised against both recipes
+by the `mc_mothers` test and against every file this suite reads, so a future
+recipe change cannot quietly contradict them.
