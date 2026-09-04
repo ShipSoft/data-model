@@ -24,6 +24,12 @@ add_executable(test_units test_units.cpp)
 target_link_libraries(test_units PRIVATE SHiP::SHiPUnits)
 add_test(NAME units COMMAND test_units)
 
+# The mother-index invariants are pure header logic: no dictionary, no ROOT.
+# SHiP::SHiPUnits is linked for the include/ search path it carries.
+add_executable(test_mc_mothers test_mc_mothers.cpp)
+target_link_libraries(test_mc_mothers PRIVATE SHiP::SHiPUnits)
+add_test(NAME mc_mothers COMMAND test_mc_mothers)
+
 # --- Backward-compatibility suite (see data/README.md) ---
 
 add_executable(write_reference write_reference.cpp)

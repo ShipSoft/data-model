@@ -75,9 +75,20 @@ the contract (a future non-C++ reader can check against the same formulas).
 For members that existed at v0.1.0 they equal the `SHiP::test::make*`
 generators in `tests/test_utils.hpp`; members added later have their own
 formulas there (e.g. `SimHit::geometryNodeId = 900 + 7*i + offset`,
+`MCParticle::mothers = {}` for `i == 0` and `{i - 1, (i + 1) % 3}` otherwise
+— its entries are indices into this same 3-element collection, so unlike the
+other members they carry no `offset`; the recipe encodes the documented
+invariant, namely that `mothers[0]` equals `motherId` and that an entry
+without a mother has an empty list rather than a `-1` in it —
 `RecParticle::hits` filled from `makeSimHits(offset + 2)`). Per entry
 `e` (0-based): field offsets are `e` for the top-level collections and
 `e + 5` inside `simResult`; each collection has 3 elements. A reference file
 written by version V contains values for exactly the members existing in V;
 newer members read back default-initialized and are masked accordingly in
 `test_read_reference.cpp`.
+
+The mother-index invariants the `MCParticle` recipe encodes are machine-checked
+rather than merely asserted here: `SHiP::mothersAreConsistent` (declared beside
+the struct in `include/SHiP/MCParticle.hpp`) is exercised against both recipes
+by the `mc_mothers` test and against every file this suite reads, so a future
+recipe change cannot quietly contradict them.

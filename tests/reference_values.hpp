@@ -40,6 +40,14 @@ std::vector<Particle> makeMCParticles(int offset) {
     p.energy = 40.625 + i + offset;
     p.time = 0.375 + i;
     p.motherId = i - 1;
+    if constexpr (requires { p.mothers; }) {  // added in v0.5.0
+      // Indices refer to this same 3-element collection. Entry 0 has no mother,
+      // so its list stays empty and motherId stays -1; later entries lead with
+      // motherId and add a second in-range index for the multi-mother case.
+      if (i > 0) {
+        p.mothers = {i - 1, (i + 1) % 3};
+      }
+    }
     p.status = 1 + i + offset;
     v.push_back(p);
   }

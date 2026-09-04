@@ -26,6 +26,12 @@ inline std::vector<MCParticle> makeMCParticles(int offset) {
     p.energy = 40.625 + i + offset;
     p.time = 0.375 + i;
     p.motherId = i - 1;
+    // Mother indices point into this same 3-element collection: entry 0 has no
+    // mother, so its list stays empty; later entries lead with motherId and add
+    // a second, distinct in-range index to exercise the multi-mother case.
+    if (i > 0) {
+      p.mothers = {i - 1, (i + 1) % 3};
+    }
     p.status = 1 + i + offset;
     v.push_back(p);
   }
