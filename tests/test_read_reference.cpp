@@ -50,6 +50,7 @@ struct Version {
 
 constexpr Version kV030{0, 3, 0};
 constexpr Version kV040{0, 4, 0};
+constexpr Version kV050{0, 5, 0};
 
 bool parseVersion(std::string_view arg, Version& out) {
   if (arg == "head") {
@@ -138,6 +139,13 @@ int main(int argc, char** argv) {
 
   // Mask table: one entry per "member M introduced in version X" — members
   // that did not exist in the writing version must read back as defaults.
+  auto maskMCParticles = [&](std::vector<SHiP::MCParticle>& particles) {
+    if (version < kV050) {
+      for (auto& p : particles) {
+        p.mothers.clear();
+      }
+    }
+  };
   auto maskSimHits = [&](std::vector<SHiP::SimHit>& hits) {
     if (version < kV040) {
       for (auto& h : hits) {
@@ -161,8 +169,16 @@ int main(int argc, char** argv) {
       ok &= SHiP::test::check("EventHeader" + suffix,
                               SHiP::ref::makeEventHeader(i), *eventHeader);
     }
-    ok &= SHiP::test::check("MCParticle" + suffix,
-                            SHiP::ref::makeMCParticles(i), *mcParticles);
+    auto expectedMCParticles = SHiP::ref::makeMCParticles(i);
+    maskMCParticles(expectedMCParticles);
+    ok &= SHiP::test::check("MCParticle" + suffix, expectedMCParticles,
+                            *mcParticles);
+    // Files older than v0.5.0 have no `mothers` field, so they read back with
+    // an empty list beside a valid motherId: consistent, but not populated.
+    bool const mothersOk = version < kV050
+                               ? SHiP::mothersAreConsistent(*mcParticles)
+                               : SHiP::mothersArePopulated(*mcParticles);
+    ok &= SHiP::test::check("MCParticle mothers" + suffix, true, mothersOk);
 
     auto expectedSimHits = SHiP::ref::makeSimHits(i);
     maskSimHits(expectedSimHits);
