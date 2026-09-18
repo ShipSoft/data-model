@@ -27,13 +27,6 @@ repos:
         types_or: [c++, c]
         exclude: LinkDef\.h
 
-      - id: cpplint
-        name: cpplint
-        language: system
-        entry: cpplint
-        types: [c++]
-        exclude: LinkDef\.h
-
       - id: codespell
         name: codespell
         language: system
