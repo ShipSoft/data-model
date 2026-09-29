@@ -67,6 +67,9 @@ version 4 for `MCParticle`.
   commit `!`/`BREAKING CHANGE` (major version bump) and adjust the
   expectations in `tests/test_read_reference.cpp` (masking table) — never by
   editing the frozen files.
+- `compat_read_v0.1.0`–`v0.4.0` fail: these four are marked `WILL_FAIL`
+  (see the known issue below), so ctest reports them as failing only when
+  they *pass*. Read it as good news about ROOT, and drop the marking.
 - `compat_read_head` fails but frozen versions pass: the current schema and
   `reference_head.root` are out of sync — run `pixi run
   update-reference-head` (plus the snapshot) in this PR.
@@ -74,20 +77,37 @@ version 4 for `MCParticle`.
 ## Known issue: field renames vs ROOT 6.40 RNTuple
 
 The snake_case field renames are covered by I/O customization rules in
-`include/SHiP/LinkDef.h`, validated end-to-end on the TTree path. ROOT
-6.40.02 however misapplies rules when reading **RNTuple** data written by
+`include/SHiP/LinkDef.h`, validated end-to-end on the TTree path. ROOT 6.40
+however misapplies rules when reading **RNTuple** data written by
 *unversioned* classes ([root-project/root#23146]). Per the workaround
 proposed there, all classes carry an explicit version (see above) and
-readers open files through `TFile` before attaching the `RNTupleReader` —
-this makes the rules work for all data written from v0.5.0 on. The
-pre-v0.5.0 reference files were written by the then-unversioned classes and
-still cannot be rule-read (ROOT aborts on an internal assertion), so the
-`compat_read_v0.1.0`–`v0.4.0` tests are **expected to fail** until ROOT
-supports reading unversioned data into versioned classes. They deliberately
-assert the true values: with such a ROOT in `pixi.lock`, they turn green
-with no further changes. Do not mask them. (The wrappers' `recHit` →
-`rec_hit` rename is not rule-covered — nested-object rule sources crash ROOT
-6.40 — no wrapper data has been persisted to date.)
+readers open files through `TFile` before attaching the `RNTupleReader`, so
+the rules work for everything written from v0.5.0 on: `compat_read_v0.5.0`
+and `compat_read_head` pass.
+
+The pre-v0.5.0 reference files were written by the then-unversioned classes
+and still cannot be rule-read: ROOT aborts on an internal assertion in
+`RFieldMeta.cxx`. `compat_read_v0.1.0`–`v0.4.0` therefore carry the ctest
+`WILL_FAIL` property, set in `tests/CMakeLists.txt` for every reference file
+below v0.5.0. They still run and still assert the true values; ctest only
+inverts the verdict.
+
+Two consequences worth knowing:
+
+- The day a ROOT carrying [root-project/root#23196] reaches `pixi.lock`,
+  those four tests start **reporting as FAILED**, because `WILL_FAIL` does
+  not tolerate a pass. That is the signal to drop the `WILL_FAIL` block and
+  this section, not a regression.
+- Until then, a genuine regression in one of those four reads is hidden.
+  `compat_read_v0.5.0` and `compat_read_head` exercise the same reader and
+  the same rules and are not marked, so the exposure is limited to the
+  unversioned-file path itself.
+
+The wrappers' `recHit` → `rec_hit` rename is not rule-covered at all:
+nested-object rule sources crash ROOT 6.40, and no wrapper data has been
+persisted to date.
+
+[root-project/root#23196]: https://github.com/root-project/root/pull/23196
 
 ## Value recipe
 
