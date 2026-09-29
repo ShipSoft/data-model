@@ -30,6 +30,13 @@ add_executable(test_mc_mothers test_mc_mothers.cpp)
 target_link_libraries(test_mc_mothers PRIVATE SHiP::SHiPUnits)
 add_test(NAME mc_mothers COMMAND test_mc_mothers)
 
+# Every public header, compiled once on its own. There is no test to run: the
+# build either succeeds or the header does not stand alone. It also puts the
+# headers no other test includes into compile_commands.json, which is the only
+# way clang-tidy reaches them - see the comment in headers_compile.cpp.
+add_library(headers_compile OBJECT headers_compile.cpp)
+target_link_libraries(headers_compile PRIVATE SHiPDataModel SHiP::SHiPUnits)
+
 # --- Backward-compatibility suite (see data/README.md) ---
 
 add_executable(write_reference write_reference.cpp)
