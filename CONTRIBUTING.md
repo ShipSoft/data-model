@@ -29,6 +29,12 @@ Thank you for your interest in contributing! As part of the SHiP Collaboration, 
      command of their own; CI reaches them through the sources that include them.
      After touching a header, run the whole tree with `pixi run clang-tidy` or
      leave it to CI.
+   - Names in `include/SHiP/` follow the C++ Core Guidelines NL.10 convention:
+     `snake_case` for members, functions and parameters, `CamelCase` for types.
+     `include/SHiP/.clang-tidy` enforces this via
+     `readability-identifier-naming`; it applies to the public headers only, so
+     `tests/` keeps its `camelBack` locals and helpers. Add a new public header
+     to `tests/headers_compile.cpp`, or clang-tidy never sees it.
    - CMake files are formatted with `gersemi`.
    - Ensure all files are covered by the repository's REUSE/SPDX metadata (see `REUSE.toml`), adding inline SPDX headers where appropriate.
 6. **Commits**: We follow [Conventional Commits](https://www.conventionalcommits.org/) (validated by `commitizen`). This helps in automated changelog generation.

@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: CERN for the benefit of the SHiP Collaboration
+# SPDX-License-Identifier: LGPL-3.0-or-later
+#
+# Layered on top of the synced .clang-tidy at the repository root, which
+# config-sync owns. This file is ours.
+#
+# The root config enables readability-identifier-naming but configures nothing,
+# which leaves the check silent and invites a repository to opt in once it has a
+# convention worth enforcing. This is that opt-in, for the public headers only:
+# names declared here are the downstream API, and C++ Core Guidelines NL.10
+# spells them snake_case. tests/ keeps its own camelBack style, which works
+# because the check reads the configuration of the file a name is declared in,
+# not of the translation unit (GetConfigPerFile, on by default).
+#
+# Six options are deliberately left unset:
+#
+#   NamespaceCase          SHiP and ship are two different namespaces in this
+#                          tree, and no single style covers both.
+#   GlobalConstantCase     Units.hpp spells its constants as the physics
+#   ConstexprVariableCase  symbols they are - MeV, GeV_per_c2, mm_per_c - which
+#                          match no clang-tidy style. ConstexprVariableCase has
+#                          to stay unset too, because findStyleKind tests it
+#                          before any linkage-based category and would pull
+#                          every other constant into the same bucket.
+#   LocalVariableCase      Nothing in include/ declares a local.
+#   MethodCase             The structs are plain data; the only member
+#   PrivateMemberCase      functions are defaulted operator==.
+#
+# EnumCase is lower_case for detector_id, which is named after its header and is
+# the one type here that is not CamelCase. EnumConstantCase carries no k prefix,
+# matching UpstreamTagger and its neighbours.
+InheritParentConfig: true
+
+CheckOptions:
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.TypeAliasCase: CamelCase
+  readability-identifier-naming.EnumCase: lower_case
+  readability-identifier-naming.EnumConstantCase: CamelCase
+  readability-identifier-naming.MemberCase: lower_case
+  readability-identifier-naming.PublicMemberCase: lower_case
+  readability-identifier-naming.FunctionCase: lower_case
+  readability-identifier-naming.ParameterCase: lower_case
+  readability-identifier-naming.TemplateParameterCase: CamelCase
+  readability-identifier-naming.ConceptCase: CamelCase
+  readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
