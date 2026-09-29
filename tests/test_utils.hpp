@@ -80,7 +80,7 @@ inline std::vector<SimParticle> makeSimParticles(int offset) {
 inline std::vector<RecParticle> makeRecParticles(int offset) {
   std::vector<RecParticle> v;
   for (auto const& sp : makeSimParticles(offset)) {
-    RecParticle p = fromSimParticle(sp);
+    RecParticle p = from_sim_particle(sp);
     p.ip_pv = 0.875 + p.track_id;
     v.push_back(p);
   }

@@ -16,17 +16,17 @@ namespace ship::view {
 
 // --- MCParticle -----------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> vertex(SHiP::MCParticle const& p) {
-  return vecOf<Length>(p.vertex);
+  return vec_of<Length>(p.vertex);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::MCParticle const& p) {
-  return vecOf<Momentum>(p.momentum);
+  return vec_of<Momentum>(p.momentum);
 }
 /// Total energy.
 [[nodiscard]] inline Energy energy(SHiP::MCParticle const& p) {
-  return quantityOf<Energy>(p.energy);
+  return quantity_of<Energy>(p.energy);
 }
 [[nodiscard]] inline Time time(SHiP::MCParticle const& p) {
-  return quantityOf<Time>(p.time);
+  return quantity_of<Time>(p.time);
 }
 inline void set_vertex(SHiP::MCParticle& p, Vec3<Length> const& v) {
   p.vertex = raw(v);
@@ -39,19 +39,19 @@ inline void set_time(SHiP::MCParticle& p, Time t) { p.time = raw(t); }
 
 // --- SimHit ---------------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> position(SHiP::SimHit const& h) {
-  return vecOf<Length>(h.position);
+  return vec_of<Length>(h.position);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::SimHit const& h) {
-  return vecOf<Momentum>(h.momentum);
+  return vec_of<Momentum>(h.momentum);
 }
 [[nodiscard]] inline Energy energy_deposit(SHiP::SimHit const& h) {
-  return quantityOf<Energy>(h.energy_deposit);
+  return quantity_of<Energy>(h.energy_deposit);
 }
 [[nodiscard]] inline Time time(SHiP::SimHit const& h) {
-  return quantityOf<Time>(h.time);
+  return quantity_of<Time>(h.time);
 }
 [[nodiscard]] inline Length path_length(SHiP::SimHit const& h) {
-  return quantityOf<Length>(h.path_length);
+  return quantity_of<Length>(h.path_length);
 }
 inline void set_position(SHiP::SimHit& h, Vec3<Length> const& v) {
   h.position = raw(v);
@@ -69,20 +69,20 @@ inline void set_path_length(SHiP::SimHit& h, Length l) {
 
 // --- SimParticle ----------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> vertex(SHiP::SimParticle const& p) {
-  return vecOf<Length>(p.vertex);
+  return vec_of<Length>(p.vertex);
 }
 [[nodiscard]] inline Vec3<Length> endpoint(SHiP::SimParticle const& p) {
-  return vecOf<Length>(p.endpoint);
+  return vec_of<Length>(p.endpoint);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::SimParticle const& p) {
-  return vecOf<Momentum>(p.momentum);
+  return vec_of<Momentum>(p.momentum);
 }
 /// Initial kinetic energy.
 [[nodiscard]] inline Energy energy(SHiP::SimParticle const& p) {
-  return quantityOf<Energy>(p.energy);
+  return quantity_of<Energy>(p.energy);
 }
 [[nodiscard]] inline Time time(SHiP::SimParticle const& p) {
-  return quantityOf<Time>(p.time);
+  return quantity_of<Time>(p.time);
 }
 inline void set_vertex(SHiP::SimParticle& p, Vec3<Length> const& v) {
   p.vertex = raw(v);
@@ -98,24 +98,24 @@ inline void set_time(SHiP::SimParticle& p, Time t) { p.time = raw(t); }
 
 // --- RecParticle ----------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> vertex(SHiP::RecParticle const& p) {
-  return vecOf<Length>(p.vertex);
+  return vec_of<Length>(p.vertex);
 }
 [[nodiscard]] inline Vec3<Length> endpoint(SHiP::RecParticle const& p) {
-  return vecOf<Length>(p.endpoint);
+  return vec_of<Length>(p.endpoint);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::RecParticle const& p) {
-  return vecOf<Momentum>(p.momentum);
+  return vec_of<Momentum>(p.momentum);
 }
 /// Initial kinetic energy.
 [[nodiscard]] inline Energy energy(SHiP::RecParticle const& p) {
-  return quantityOf<Energy>(p.energy);
+  return quantity_of<Energy>(p.energy);
 }
 [[nodiscard]] inline Time time(SHiP::RecParticle const& p) {
-  return quantityOf<Time>(p.time);
+  return quantity_of<Time>(p.time);
 }
 /// Impact parameter wrt the primary vertex.
 [[nodiscard]] inline Length ip_pv(SHiP::RecParticle const& p) {
-  return quantityOf<Length>(p.ip_pv);
+  return quantity_of<Length>(p.ip_pv);
 }
 inline void set_vertex(SHiP::RecParticle& p, Vec3<Length> const& v) {
   p.vertex = raw(v);

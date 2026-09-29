@@ -34,7 +34,7 @@ bool rejects(std::string const& what, Mutate mutate) {
   auto v = makeValid();
   mutate(v);
   return SHiP::test::check("rejects " + what, false,
-                           SHiP::mothersAreConsistent(v));
+                           SHiP::mothers_are_consistent(v));
 }
 
 }  // namespace
@@ -44,7 +44,7 @@ int main() {
 
   // The baseline must pass, or every negative case below is vacuous.
   ok &= SHiP::test::check("accepts a valid collection", true,
-                          SHiP::mothersArePopulated(makeValid()));
+                          SHiP::mothers_are_populated(makeValid()));
 
   // Both canonical recipes satisfy the contract, at every offset the suite
   // uses: entries for the two top-level entries and the +5 simResult shift.
@@ -52,10 +52,10 @@ int main() {
     std::string const suffix = " (offset " + std::to_string(offset) + ")";
     ok &= SHiP::test::check(
         "test_utils recipe" + suffix, true,
-        SHiP::mothersArePopulated(SHiP::test::makeMCParticles(offset)));
+        SHiP::mothers_are_populated(SHiP::test::makeMCParticles(offset)));
     ok &= SHiP::test::check(
         "reference_values recipe" + suffix, true,
-        SHiP::mothersArePopulated(SHiP::ref::makeMCParticles(offset)));
+        SHiP::mothers_are_populated(SHiP::ref::makeMCParticles(offset)));
   }
 
   // One violation per documented rule.
@@ -85,9 +85,9 @@ int main() {
     p.mothers.clear();
   }
   ok &= SHiP::test::check("accepts legacy empty mothers", true,
-                          SHiP::mothersAreConsistent(legacy));
+                          SHiP::mothers_are_consistent(legacy));
   ok &= SHiP::test::check("legacy mothers are not populated", false,
-                          SHiP::mothersArePopulated(legacy));
+                          SHiP::mothers_are_populated(legacy));
 
   std::cout << (ok ? "All MCParticle mother invariant tests passed"
                    : "MCParticle mother invariant tests FAILED")

@@ -57,12 +57,12 @@ int main() {
   expect((1.0 * su::s).numerical_value_in(su::ns) == 1e9,
          "s -> ns is exactly 1e9");
 
-  // vecOf/raw round-trip must be bitwise (storage unit == quantity unit).
+  // vec_of/raw round-trip must be bitwise (storage unit == quantity unit).
   std::array<double, 3> const v{1.0000000000000002, -2.5e-17, 3.9e12};
-  expect(ship::raw(ship::vecOf<ship::Length>(v)) == v,
-         "Length vecOf/raw round-trip is bitwise");
-  expect(ship::raw(ship::vecOf<ship::Momentum>(v)) == v,
-         "Momentum vecOf/raw round-trip is bitwise");
+  expect(ship::raw(ship::vec_of<ship::Length>(v)) == v,
+         "Length vec_of/raw round-trip is bitwise");
+  expect(ship::raw(ship::vec_of<ship::Momentum>(v)) == v,
+         "Momentum vec_of/raw round-trip is bitwise");
 
   // Quantity views round-trip the PODs bitwise.
   SHiP::MCParticle mc;

@@ -191,8 +191,8 @@ int main(int argc, char** argv) {
     // Files older than v0.5.0 have no `mothers` field, so they read back with
     // an empty list beside a valid motherId: consistent, but not populated.
     bool const mothersOk = version < kV050
-                               ? SHiP::mothersAreConsistent(*mcParticles)
-                               : SHiP::mothersArePopulated(*mcParticles);
+                               ? SHiP::mothers_are_consistent(*mcParticles)
+                               : SHiP::mothers_are_populated(*mcParticles);
     ok &= SHiP::test::check("MCParticle mothers" + suffix, true, mothersOk);
 
     auto expectedSimHits = SHiP::ref::makeSimHits(i);

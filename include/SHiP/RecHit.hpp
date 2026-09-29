@@ -21,7 +21,7 @@ struct RecHit {
   bool operator==(RecHit const&) const = default;
 };
 
-inline RecHit fromSimHit(SimHit const& sp) {
+inline RecHit from_sim_hit(SimHit const& sp) {
   return {.detector_id = sp.detector_id,
           .track_id = sp.track_id,
           .pdg_code = sp.pdg_code,
