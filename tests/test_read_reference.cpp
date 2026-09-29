@@ -86,8 +86,9 @@ int main(int argc, char** argv) {
 
   // ROOT 6.40 aborts on a Fatal assertion (RFieldMeta.cxx) when reading the
   // unversioned pre-v0.5.0 files into the now-versioned classes
-  // (root-project/root#23146); report it as a regular test failure instead
-  // of a core dump.
+  // (root-project/root#23146); exit cleanly instead of dumping core. The
+  // ctest WILL_FAIL property on those four tests needs an ordinary non-zero
+  // exit status to invert, which an abort does not give it.
   SetErrorHandler(
       +[](int level, Bool_t, char const* location, char const* message) {
         DefaultErrorHandler(level, kFALSE, location, message);
