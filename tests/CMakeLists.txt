@@ -116,18 +116,47 @@ set_tests_properties(
 
 # The snapshot tool needs the list of dictionary classes; derive it from
 # LinkDef.h so newly linked classes enter the snapshot automatically.
+#
+# Both regexes match on pragma structure rather than on the namespace, so a
+# namespace rename does not need a matching edit here. Selecting the lines and
+# extracting the name are separate steps on purpose: a `pragma link` line that
+# the extraction cannot parse is a hard error rather than an empty entry, so a
+# future change to how classes are spelled in LinkDef.h surfaces here instead
+# of as a puzzling dictionary miss further down.
+#
+# The long-term fix is to stop parsing LinkDef.h from CMake at all and
+# enumerate the dictionary at runtime from gROOT->GetListOfClasses(), filtered
+# by declaring library.
 file(
     STRINGS ${PROJECT_SOURCE_DIR}/include/SHiP/LinkDef.h
     linkdef_lines
-    REGEX "pragma link C\\+\\+ .*class SHiP::"
+    REGEX "^ *#pragma link C\\+\\+ .*class "
 )
 set(dictionary_classes "")
+set(dictionary_class_count 0)
 foreach(line IN LISTS linkdef_lines)
-    if(NOT line MATCHES "std::vector")
-        string(REGEX MATCH "SHiP::[A-Za-z0-9_]+" cls "${line}")
-        string(APPEND dictionary_classes "\"${cls}\",\n")
+    if(NOT line MATCHES "class +([^+;]+)\\+?;")
+        message(
+            FATAL_ERROR
+            "cannot extract a class name from this LinkDef.h line: ${line}"
+        )
     endif()
+    string(STRIP "${CMAKE_MATCH_1}" cls)
+    # Template instantiations are dictionary entries, but the snapshot
+    # enumerates the classes themselves, which it reaches as members.
+    if(cls MATCHES "<")
+        continue()
+    endif()
+    string(APPEND dictionary_classes "\"${cls}\",\n")
+    math(EXPR dictionary_class_count "${dictionary_class_count} + 1")
 endforeach()
+if(dictionary_class_count EQUAL 0)
+    message(
+        FATAL_ERROR
+        "no classes parsed from include/SHiP/LinkDef.h; the parser above and "
+        "LinkDef.h have drifted apart"
+    )
+endif()
 file(
     CONFIGURE
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/dictionary_classes.inc
