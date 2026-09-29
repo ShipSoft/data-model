@@ -31,8 +31,8 @@ namespace SHiP {
 ///     `mother_id` alone and never appears in the list;
 ///   - a non-empty `mothers` starts with `mother_id`;
 ///   - the elements of `mothers` are distinct, and none of them is `i`.
-/// mothersAreConsistent() checks exactly this; mothersArePopulated() adds the
-/// requirement that current-schema data actually fill the list. Mothers are
+/// mothers_are_consistent() checks exactly this; mothers_are_populated() adds
+/// the requirement that current-schema data actually fill the list. Mothers are
 /// deliberately *not* required to precede their daughters: a producer that
 /// filters a generator record and remaps indices may reorder it.
 ///
@@ -63,9 +63,9 @@ struct MCParticle {
 ///
 /// An empty `mothers` is always accepted: it means either that the entry has
 /// no mothers, or that the data was written before v0.5.0, when the field did
-/// not exist. Use mothersArePopulated() to additionally require the list on
+/// not exist. Use mothers_are_populated() to additionally require the list on
 /// current-schema data.
-inline bool mothersAreConsistent(std::vector<MCParticle> const& particles) {
+inline bool mothers_are_consistent(std::vector<MCParticle> const& particles) {
   auto const size = static_cast<std::int32_t>(particles.size());
   for (std::int32_t i = 0; i < size; ++i) {
     auto const& mothers = particles[i].mothers;
@@ -92,19 +92,19 @@ inline bool mothersAreConsistent(std::vector<MCParticle> const& particles) {
   return true;
 }
 
-/// True when, on top of mothersAreConsistent(), every entry that has a mother
+/// True when, on top of mothers_are_consistent(), every entry that has a mother
 /// carries the full list — `mother_id >= 0` implies a non-empty `mothers`.
 ///
 /// Only current-schema data can satisfy this: files written before v0.5.0 have
 /// no `mothers` field at all, so they read back with an empty list next to a
 /// perfectly valid `mother_id`.
-inline bool mothersArePopulated(std::vector<MCParticle> const& particles) {
+inline bool mothers_are_populated(std::vector<MCParticle> const& particles) {
   for (auto const& p : particles) {
     if (p.mother_id >= 0 && p.mothers.empty()) {
       return false;
     }
   }
-  return mothersAreConsistent(particles);
+  return mothers_are_consistent(particles);
 }
 
 }  // namespace SHiP

@@ -118,7 +118,7 @@ bool readAndCompare() {
     ok &= SHiP::test::check("MCParticle round-trip" + suffix,
                             SHiP::test::makeMCParticles(entry), *mcParticles);
     ok &= SHiP::test::check("MCParticle mothers" + suffix, true,
-                            SHiP::mothersArePopulated(*mcParticles));
+                            SHiP::mothers_are_populated(*mcParticles));
     ok &= SHiP::test::check("SimHit round-trip" + suffix,
                             SHiP::test::makeSimHits(entry), *simHits);
     ok &= SHiP::test::check("SimParticle round-trip" + suffix,
