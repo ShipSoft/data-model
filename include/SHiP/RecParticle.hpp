@@ -26,7 +26,7 @@ struct RecParticle {
   bool operator==(RecParticle const&) const = default;
 };
 
-inline RecParticle fromSimParticle(SimParticle const& sp) {
+inline RecParticle from_sim_particle(SimParticle const& sp) {
   return {
       .track_id = sp.track_id,
       .parent_id = sp.parent_id,
