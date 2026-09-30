@@ -16,116 +16,118 @@ namespace ship::view {
 
 // --- MCParticle -----------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> vertex(SHiP::MCParticle const& p) {
-  return vecOf<Length>(p.vertex);
+  return vec_of<Length>(p.vertex);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::MCParticle const& p) {
-  return vecOf<Momentum>(p.momentum);
+  return vec_of<Momentum>(p.momentum);
 }
 /// Total energy.
 [[nodiscard]] inline Energy energy(SHiP::MCParticle const& p) {
-  return quantityOf<Energy>(p.energy);
+  return quantity_of<Energy>(p.energy);
 }
 [[nodiscard]] inline Time time(SHiP::MCParticle const& p) {
-  return quantityOf<Time>(p.time);
+  return quantity_of<Time>(p.time);
 }
-inline void setVertex(SHiP::MCParticle& p, Vec3<Length> const& v) {
+inline void set_vertex(SHiP::MCParticle& p, Vec3<Length> const& v) {
   p.vertex = raw(v);
 }
-inline void setMomentum(SHiP::MCParticle& p, Vec3<Momentum> const& v) {
+inline void set_momentum(SHiP::MCParticle& p, Vec3<Momentum> const& v) {
   p.momentum = raw(v);
 }
-inline void setEnergy(SHiP::MCParticle& p, Energy e) { p.energy = raw(e); }
-inline void setTime(SHiP::MCParticle& p, Time t) { p.time = raw(t); }
+inline void set_energy(SHiP::MCParticle& p, Energy e) { p.energy = raw(e); }
+inline void set_time(SHiP::MCParticle& p, Time t) { p.time = raw(t); }
 
 // --- SimHit ---------------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> position(SHiP::SimHit const& h) {
-  return vecOf<Length>(h.position);
+  return vec_of<Length>(h.position);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::SimHit const& h) {
-  return vecOf<Momentum>(h.momentum);
+  return vec_of<Momentum>(h.momentum);
 }
-[[nodiscard]] inline Energy energyDeposit(SHiP::SimHit const& h) {
-  return quantityOf<Energy>(h.energyDeposit);
+[[nodiscard]] inline Energy energy_deposit(SHiP::SimHit const& h) {
+  return quantity_of<Energy>(h.energy_deposit);
 }
 [[nodiscard]] inline Time time(SHiP::SimHit const& h) {
-  return quantityOf<Time>(h.time);
+  return quantity_of<Time>(h.time);
 }
-[[nodiscard]] inline Length pathLength(SHiP::SimHit const& h) {
-  return quantityOf<Length>(h.pathLength);
+[[nodiscard]] inline Length path_length(SHiP::SimHit const& h) {
+  return quantity_of<Length>(h.path_length);
 }
-inline void setPosition(SHiP::SimHit& h, Vec3<Length> const& v) {
+inline void set_position(SHiP::SimHit& h, Vec3<Length> const& v) {
   h.position = raw(v);
 }
-inline void setMomentum(SHiP::SimHit& h, Vec3<Momentum> const& v) {
+inline void set_momentum(SHiP::SimHit& h, Vec3<Momentum> const& v) {
   h.momentum = raw(v);
 }
-inline void setEnergyDeposit(SHiP::SimHit& h, Energy e) {
-  h.energyDeposit = raw(e);
+inline void set_energy_deposit(SHiP::SimHit& h, Energy e) {
+  h.energy_deposit = raw(e);
 }
-inline void setTime(SHiP::SimHit& h, Time t) { h.time = raw(t); }
-inline void setPathLength(SHiP::SimHit& h, Length l) { h.pathLength = raw(l); }
+inline void set_time(SHiP::SimHit& h, Time t) { h.time = raw(t); }
+inline void set_path_length(SHiP::SimHit& h, Length l) {
+  h.path_length = raw(l);
+}
 
 // --- SimParticle ----------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> vertex(SHiP::SimParticle const& p) {
-  return vecOf<Length>(p.vertex);
+  return vec_of<Length>(p.vertex);
 }
 [[nodiscard]] inline Vec3<Length> endpoint(SHiP::SimParticle const& p) {
-  return vecOf<Length>(p.endpoint);
+  return vec_of<Length>(p.endpoint);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::SimParticle const& p) {
-  return vecOf<Momentum>(p.momentum);
+  return vec_of<Momentum>(p.momentum);
 }
 /// Initial kinetic energy.
 [[nodiscard]] inline Energy energy(SHiP::SimParticle const& p) {
-  return quantityOf<Energy>(p.energy);
+  return quantity_of<Energy>(p.energy);
 }
 [[nodiscard]] inline Time time(SHiP::SimParticle const& p) {
-  return quantityOf<Time>(p.time);
+  return quantity_of<Time>(p.time);
 }
-inline void setVertex(SHiP::SimParticle& p, Vec3<Length> const& v) {
+inline void set_vertex(SHiP::SimParticle& p, Vec3<Length> const& v) {
   p.vertex = raw(v);
 }
-inline void setEndpoint(SHiP::SimParticle& p, Vec3<Length> const& v) {
+inline void set_endpoint(SHiP::SimParticle& p, Vec3<Length> const& v) {
   p.endpoint = raw(v);
 }
-inline void setMomentum(SHiP::SimParticle& p, Vec3<Momentum> const& v) {
+inline void set_momentum(SHiP::SimParticle& p, Vec3<Momentum> const& v) {
   p.momentum = raw(v);
 }
-inline void setEnergy(SHiP::SimParticle& p, Energy e) { p.energy = raw(e); }
-inline void setTime(SHiP::SimParticle& p, Time t) { p.time = raw(t); }
+inline void set_energy(SHiP::SimParticle& p, Energy e) { p.energy = raw(e); }
+inline void set_time(SHiP::SimParticle& p, Time t) { p.time = raw(t); }
 
 // --- RecParticle ----------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> vertex(SHiP::RecParticle const& p) {
-  return vecOf<Length>(p.vertex);
+  return vec_of<Length>(p.vertex);
 }
 [[nodiscard]] inline Vec3<Length> endpoint(SHiP::RecParticle const& p) {
-  return vecOf<Length>(p.endpoint);
+  return vec_of<Length>(p.endpoint);
 }
 [[nodiscard]] inline Vec3<Momentum> momentum(SHiP::RecParticle const& p) {
-  return vecOf<Momentum>(p.momentum);
+  return vec_of<Momentum>(p.momentum);
 }
 /// Initial kinetic energy.
 [[nodiscard]] inline Energy energy(SHiP::RecParticle const& p) {
-  return quantityOf<Energy>(p.energy);
+  return quantity_of<Energy>(p.energy);
 }
 [[nodiscard]] inline Time time(SHiP::RecParticle const& p) {
-  return quantityOf<Time>(p.time);
+  return quantity_of<Time>(p.time);
 }
 /// Impact parameter wrt the primary vertex.
-[[nodiscard]] inline Length ipPV(SHiP::RecParticle const& p) {
-  return quantityOf<Length>(p.ipPV);
+[[nodiscard]] inline Length ip_pv(SHiP::RecParticle const& p) {
+  return quantity_of<Length>(p.ip_pv);
 }
-inline void setVertex(SHiP::RecParticle& p, Vec3<Length> const& v) {
+inline void set_vertex(SHiP::RecParticle& p, Vec3<Length> const& v) {
   p.vertex = raw(v);
 }
-inline void setEndpoint(SHiP::RecParticle& p, Vec3<Length> const& v) {
+inline void set_endpoint(SHiP::RecParticle& p, Vec3<Length> const& v) {
   p.endpoint = raw(v);
 }
-inline void setMomentum(SHiP::RecParticle& p, Vec3<Momentum> const& v) {
+inline void set_momentum(SHiP::RecParticle& p, Vec3<Momentum> const& v) {
   p.momentum = raw(v);
 }
-inline void setEnergy(SHiP::RecParticle& p, Energy e) { p.energy = raw(e); }
-inline void setTime(SHiP::RecParticle& p, Time t) { p.time = raw(t); }
-inline void setIpPV(SHiP::RecParticle& p, Length l) { p.ipPV = raw(l); }
+inline void set_energy(SHiP::RecParticle& p, Energy e) { p.energy = raw(e); }
+inline void set_time(SHiP::RecParticle& p, Time t) { p.time = raw(t); }
+inline void set_ip_pv(SHiP::RecParticle& p, Length l) { p.ip_pv = raw(l); }
 
 }  // namespace ship::view

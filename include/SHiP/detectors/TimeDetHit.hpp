@@ -5,7 +5,7 @@ namespace SHiP {
 
 /// Hit reconstructed by the timing detector
 struct TimeDetHit {
-  RecHit recHit;  ///< The reconstructed hit
+  RecHit rec_hit;  ///< The reconstructed hit
 };
 
 }  // namespace SHiP

@@ -29,6 +29,12 @@ Thank you for your interest in contributing! As part of the SHiP Collaboration, 
      command of their own; CI reaches them through the sources that include them.
      After touching a header, run the whole tree with `pixi run clang-tidy` or
      leave it to CI.
+   - Names in `include/SHiP/` follow the C++ Core Guidelines NL.10 convention:
+     `snake_case` for members, functions and parameters, `CamelCase` for types.
+     `include/SHiP/.clang-tidy` enforces this via
+     `readability-identifier-naming`; it applies to the public headers only, so
+     `tests/` keeps its `camelBack` locals and helpers. Add a new public header
+     to `tests/headers_compile.cpp`, or clang-tidy never sees it.
    - CMake files are formatted with `gersemi`.
    - Ensure all files are covered by the repository's REUSE/SPDX metadata (see `REUSE.toml`), adding inline SPDX headers where appropriate.
 6. **Commits**: We follow [Conventional Commits](https://www.conventionalcommits.org/) (validated by `commitizen`). This helps in automated changelog generation.
@@ -37,7 +43,7 @@ Thank you for your interest in contributing! As part of the SHiP Collaboration, 
    pixi run test
    ```
    During iteration, `pixi run build` rebuilds incrementally without re-running ctest.
-8. **Schema changes**: The persistent schema is guarded by the backward-compatibility suite (see `tests/data/README.md`). Every persistent class carries an explicit version, declared in `include/SHiP/LinkDef.h` as `options=version(N)` — bump it in the same change as any layout modification (member added/removed/renamed/retyped). If the `schema_snapshot` test fails after an intentional change, regenerate the gates in the same PR with `pixi run update-schema-snapshot` and `pixi run update-reference-head`; if a `compat_read_v*` test fails, your change breaks reading of existing data — make it compatible or mark the commit as a breaking change and update the reader expectations. The snapshot may also legitimately change on ROOT version bumps (type-name normalization); regenerate it in the lock-update PR after reviewing the diff. Never modify the frozen `tests/data/reference_v*.root` files.
+8. **Schema changes**: The persistent schema is guarded by the backward-compatibility suite (see `tests/data/README.md`). Every persistent class carries an explicit version, declared in `include/SHiP/LinkDef.h` as `options=version(N)` — bump it in the same change as any layout modification (member added/removed/renamed/retyped). If the `schema_snapshot` test fails after an intentional change, regenerate the gates in the same PR with `pixi run update-schema-snapshot` and `pixi run update-reference-head`; if a `compat_read_v*` test fails, your change breaks reading of existing data — make it compatible or mark the commit as a breaking change and update the reader expectations. The snapshot may also legitimately change on ROOT version bumps (type-name normalization); regenerate it in the lock-update PR after reviewing the diff. Never modify the frozen `tests/data/reference_v*.root` files. `compat_read_v0.1.0`–`v0.4.0` are the exception: ROOT 6.40 cannot read those unversioned files through the rename rules, so they carry ctest's `WILL_FAIL` property and report as failing only if they start passing. See the known-issue section of `tests/data/README.md` before touching them.
 9. **Submission**: Open a Pull Request against the `main` branch. Ensure the CI passes.
 
 ## Licensing

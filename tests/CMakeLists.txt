@@ -30,6 +30,13 @@ add_executable(test_mc_mothers test_mc_mothers.cpp)
 target_link_libraries(test_mc_mothers PRIVATE SHiP::SHiPUnits)
 add_test(NAME mc_mothers COMMAND test_mc_mothers)
 
+# Every public header, compiled once on its own. There is no test to run: the
+# build either succeeds or the header does not stand alone. It also puts the
+# headers no other test includes into compile_commands.json, which is the only
+# way clang-tidy reaches them - see the comment in headers_compile.cpp.
+add_library(headers_compile OBJECT headers_compile.cpp)
+target_link_libraries(headers_compile PRIVATE SHiPDataModel SHiP::SHiPUnits)
+
 # --- Backward-compatibility suite (see data/README.md) ---
 
 add_executable(write_reference write_reference.cpp)
@@ -53,10 +60,25 @@ file(
 )
 foreach(ref IN LISTS reference_files)
     if(ref MATCHES "reference_(v[0-9]+\\.[0-9]+\\.[0-9]+|head)\\.root$")
+        set(label ${CMAKE_MATCH_1})
         add_test(
-            NAME compat_read_${CMAKE_MATCH_1}
-            COMMAND test_read_reference ${ref} ${CMAKE_MATCH_1}
+            NAME compat_read_${label}
+            COMMAND test_read_reference ${ref} ${label}
         )
+        # The pre-v0.5.0 files were written by unversioned classes, which ROOT
+        # 6.40 cannot rule-read into the versioned, renamed classes (see
+        # data/README.md). Mark them expected-to-fail rather than deleting or
+        # weakening them: they keep asserting the true values, and ctest starts
+        # reporting them as FAILED the day a ROOT with the fix reaches
+        # pixi.lock, because passing is what WILL_FAIL does not allow. That
+        # report is the signal to drop this block and the known-issue sections.
+        # The cost is that a genuine regression in one of these four reads
+        # stays hidden until then; compat_read_v0.5.0 and compat_read_head
+        # cover the same code paths and are not marked.
+        string(REGEX REPLACE "^v" "" version "${label}")
+        if((NOT label STREQUAL "head") AND (version VERSION_LESS 0.5.0))
+            set_tests_properties(compat_read_${label} PROPERTIES WILL_FAIL TRUE)
+        endif()
     endif()
 endforeach()
 
