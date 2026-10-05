@@ -24,6 +24,14 @@
 #include "SHiP/EventHeader.hpp"
 #define SHIP_REF_HAS_EVENT_HEADER 1
 #endif
+#if __has_include("SHiP/TrackFitResult.hpp")
+#include "SHiP/TrackFitResult.hpp"
+#define SHIP_REF_HAS_TRACK_FIT_RESULT 1
+#endif
+#if __has_include("SHiP/detectors/UBTHit.hpp")
+#include "SHiP/detectors/UBTHit.hpp"
+#define SHIP_REF_HAS_UBT_HIT 1
+#endif
 
 namespace SHiP::ref {
 
@@ -144,6 +152,59 @@ Header makeEventHeader(int entry) {
   h.weight = 0.125 + entry;
   h.original_event_id = 7000 + entry;
   return h;
+}
+#endif
+
+#ifdef SHIP_REF_HAS_TRACK_FIT_RESULT
+template <typename Fit = SHiP::TrackFitResult>
+std::vector<Fit> makeTrackFitResults(int offset) {
+  std::vector<Fit> v;
+  for (int i = 0; i < 3; ++i) {
+    Fit f;
+    f.nMeas = 4 + i + offset;
+    f.fitStatus = i % 2;
+    f.chi2 = 3.5 + i + offset;
+    f.ndf = 2 + i;
+    f.qoverp = -0.03125 * (1 + i + offset);
+    f.phi = 0.25 + i;
+    f.theta = 0.0625 + i + offset;
+    f.time = 17.375 + i;
+    f.refLoc = {1.25 + i + offset, -3.5 + i, 2500.75 + i};
+    // The vectors differ in length between members and between elements, so a
+    // swapped or truncated vector cannot pass for the right one.
+    for (int m = 0; m < 2 + i; ++m) {
+      f.inputMeasurementsX.push_back(10.5 + m + offset);
+      f.inputMeasurementsY.push_back(-10.25 + m);
+      f.fittedMeasurementsX.push_back(10.625 + m + offset);
+      f.fittedMeasurementsY.push_back(-10.125 + m);
+    }
+    for (int m = 0; m < 1 + i; ++m) {
+      f.residualsX.push_back(-0.125 + m);
+      f.residualsY.push_back(0.0625 * (m + 1) + offset);
+    }
+    v.push_back(f);
+  }
+  return v;
+}
+#endif
+
+#ifdef SHIP_REF_HAS_UBT_HIT
+template <typename Wrapper = SHiP::UBTHit>
+std::vector<Wrapper> makeUBTHits(int offset) {
+  std::vector<Wrapper> v;
+  for (auto const& sh : makeSimHits(offset + 3)) {
+    Wrapper w;
+    w.recHit.detectorId = sh.detectorId;
+    w.recHit.trackId = sh.trackId;
+    w.recHit.pdgCode = sh.pdgCode;
+    w.recHit.position = sh.position;
+    w.recHit.momentum = sh.momentum;
+    w.recHit.energyDeposit = sh.energyDeposit;
+    w.recHit.time = sh.time;
+    w.recHit.pathLength = sh.pathLength;
+    v.push_back(w);
+  }
+  return v;
 }
 #endif
 

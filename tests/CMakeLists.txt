@@ -60,6 +60,28 @@ foreach(ref IN LISTS reference_files)
     endif()
 endforeach()
 
+# The reconstruction fixture: TrackFitResult and a detector wrapper, which the
+# reference files above do not carry. One test per RNTuple in the file.
+add_executable(write_reco_fixture write_reco_fixture.cpp)
+target_link_libraries(
+    write_reco_fixture
+    PRIVATE ${link_dictionary} ROOT::Core ROOT::RIO ROOT::ROOTNTuple
+)
+
+add_executable(test_read_reco_fixture test_read_reco_fixture.cpp)
+target_link_libraries(
+    test_read_reco_fixture
+    PRIVATE ${link_dictionary} ROOT::Core ROOT::RIO ROOT::ROOTNTuple
+)
+
+set(reco_fixture ${CMAKE_CURRENT_SOURCE_DIR}/data/reco_fixture_v0.5.0.root)
+foreach(ntuple IN ITEMS trackfits wrappers)
+    add_test(
+        NAME compat_read_reco_${ntuple}_v0.5.0
+        COMMAND test_read_reco_fixture ${reco_fixture} ${ntuple}
+    )
+endforeach()
+
 # The snapshot tool needs the list of dictionary classes; derive it from
 # LinkDef.h so newly linked classes enter the snapshot automatically.
 file(
