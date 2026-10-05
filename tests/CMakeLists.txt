@@ -103,6 +103,15 @@ foreach(ntuple IN ITEMS trackfits wrappers)
         COMMAND test_read_reco_fixture ${reco_fixture} ${ntuple}
     )
 endforeach()
+# The wrappers' recHit -> rec_hit rename has no I/O rule, only one that stops
+# the read with a Fatal error (see include/SHiP/LinkDef.h). Require that exact
+# message: a read that silently returns default rec_hits must still fail here.
+set_tests_properties(
+    compat_read_reco_wrappers_v0.5.0
+    PROPERTIES
+        PASS_REGULAR_EXPRESSION
+            "Fatal in <SHiP::UBTHit>: camelCase recHit data \\(data-model <= v0\\.5\\.0\\) cannot be read into rec_hit"
+)
 
 # The snapshot tool needs the list of dictionary classes; derive it from
 # LinkDef.h so newly linked classes enter the snapshot automatically.

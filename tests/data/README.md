@@ -119,9 +119,12 @@ Two consequences worth knowing:
   the same rules and are not marked, so the exposure is limited to the
   unversioned-file path itself.
 
-The wrappers' `recHit` → `rec_hit` rename is not rule-covered at all:
-nested-object rule sources crash ROOT 6.40, and no wrapper data has been
-persisted to date.
+The wrappers' `recHit` → `rec_hit` rename has no mapping, because
+nested-object rule sources crash ROOT 6.40. No wrapper data has been
+persisted to date. So that any such data fails loudly rather than reading
+back as a default `rec_hit`, each wrapper has a rule scoped to its camelCase
+checksum that stops the read with a `Fatal` error.
+`compat_read_reco_wrappers_v0.5.0` passes only if that message appears.
 
 [root-project/root#23196]: https://github.com/root-project/root/pull/23196
 
