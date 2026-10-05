@@ -28,11 +28,26 @@ model. Two independent safety nets are exercised by ctest (part of
   not the historical ROOT versions.
 - `reference_head.root` — tracks `main`; asserts "current code reads the
   current schema". Regenerated in the same PR as any event-model change.
+- `reco_fixture_v0.5.0.root` — frozen like the release files, see
+  [Reconstruction fixture](#reconstruction-fixture).
 - `schema_snapshot.txt` — committed schema dump, see above.
 
-Each file is an RNTuple named `events` with 2 entries and top-level fields
-`event_header` (v0.4.0+), `mcParticles`, `simHits`, `simParticles`,
-`recParticles`, `simResult`.
+Each reference file is an RNTuple named `events` with 2 entries and
+top-level fields `event_header` (v0.4.0+), `mcParticles`, `simHits`,
+`simParticles`, `recParticles`, `simResult`.
+
+### Reconstruction fixture
+
+The reference files don't contain `TrackFitResult` or any detector wrapper,
+so nothing in them reads those classes back. `reco_fixture_v0.5.0.root`
+covers them for the v0.5.0 layout. It holds two RNTuples with 2 entries
+each: `trackfits`, with a `trackFitResults` field, and `wrappers`, with a
+`ubtHits` field (`UBTHit` stands in for all five wrappers, which share one
+shape). `tests/write_reco_fixture.cpp` wrote it against the v0.5.0 headers
+through `scripts/backfill_reference_files.sh`. It is frozen like the
+reference files. `compat_read_reco_trackfits_v0.5.0` and
+`compat_read_reco_wrappers_v0.5.0` read one RNTuple each, so a failure in
+one class cannot hide the result for the other.
 
 Since v0.5.0 every persistent class carries an explicit version, declared in
 `include/SHiP/LinkDef.h` as `options=version(N)` (required for RNTuple I/O
