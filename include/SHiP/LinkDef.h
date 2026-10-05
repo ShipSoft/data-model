@@ -18,31 +18,36 @@
 // no member renamed, keep their v0.5.0 layout and checksum, and stay at 2.
 //
 // The `#pragma read` rules below keep files written before the snake_case
-// field renames (data-model <= v0.5.0) fully readable: each rule maps an
-// on-disk camelCase member to its renamed in-memory member. The rules are
-// scoped to the checksums of the historical class layouts
-// (TClass::GetCheckSum, taken from tests/data/schema_snapshot.txt as of
-// v0.5.0 and from the frozen reference files for earlier layouts) so they
-// are only considered for matching on-disk data; version matching cannot
-// be used because the pre-v0.5.0 structs were unversioned and report class
-// version -1. Checksums do not depend on the class version, so one list of
-// checksums per class covers every camelCase era of it, unversioned and
-// versioned alike. If a class layout gains another era, append its checksum
-// to the rule list -- the compat suite (tests/data/README.md) fails if a
-// rule misses an era covered by a frozen reference file.
+// field renames (data-model <= v0.5.0) readable: each rule maps an on-disk
+// camelCase member to its renamed in-memory member. The rules are scoped
+// to the checksums of the historical class layouts (TClass::GetCheckSum,
+// taken from tests/data/schema_snapshot.txt as of v0.5.0 and from the
+// frozen reference files for earlier layouts) so they are only considered
+// for matching on-disk data; version matching cannot be used because the
+// pre-v0.5.0 structs were unversioned and report class version -1.
+// Checksums do not depend on the class version, so one list of checksums
+// per class covers every camelCase era of it, unversioned and versioned
+// alike. If a class layout gains another era, append its checksum to the
+// rule list. The compat suite (tests/data/README.md) catches a wrong or
+// missing checksum only for layouts it can currently read: the v0.5.0
+// ones, through compat_read_v0.5.0 and the reco fixture. The pre-v0.5.0
+// checksums (MCParticle 0x1717705a, SimHit 0xcd9e29be, RecParticle
+// 0x7abee759) are checked only by the WILL_FAIL tests described below, so
+// a mistake in them stays hidden until those tests can pass.
 //
-// KNOWN ISSUE (root-project/root#23146): ROOT 6.40 applies these rules
-// correctly when reading TTree data, but misapplies them when reading
-// RNTuple data written by UNVERSIONED classes. Per the workaround proposed
-// upstream, all classes carry an explicit version (above) and readers must
-// open files through TFile before attaching the RNTupleReader; rules then
-// work for all data written from v0.5.0 on. Data written by the
-// unversioned pre-v0.5.0 classes still cannot be rule-read: ROOT aborts on
-// an internal assertion in RFieldMeta.cxx. The compat_read_v0.1.0..v0.4.0
-// tests are therefore marked WILL_FAIL in tests/CMakeLists.txt. They still
-// run and still assert the true values, so ctest flips them to FAILED the
-// moment a ROOT with the fix (root-project/root#23196) lands in pixi.lock.
-// Do not "fix" those tests; remove the WILL_FAIL block instead.
+// KNOWN ISSUE (root-project/root#23146): ROOT 6.40 misapplies these rules
+// when reading RNTuple data written by UNVERSIONED classes. Per the
+// workaround proposed upstream, all classes carry an explicit version
+// (above) and readers must open files through TFile before attaching the
+// RNTupleReader; rules then work for all data written from v0.5.0 on.
+// Data written by the unversioned pre-v0.5.0 classes still cannot be
+// rule-read: ROOT aborts on an internal assertion in RFieldMeta.cxx. The
+// compat_read_v0.1.0..v0.4.0 tests are therefore marked WILL_FAIL in
+// tests/CMakeLists.txt. They still run and still assert the true values,
+// so ctest flips them to FAILED the moment a ROOT with the fix
+// (root-project/root#23196) lands in pixi.lock. Do not "fix" those tests;
+// remove the WILL_FAIL block instead. The test suite reads RNTuple only;
+// no test covers reading camelCase data through TTree.
 
 #ifdef __CLING__
 #pragma link off all globals;
