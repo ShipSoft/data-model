@@ -77,21 +77,31 @@
 #pragma link C++ class std::vector<SHiP::RecHit>+;
 // RecHit layout eras: v0.3.0-v0.5.0 = 3772464393 (0xe0db3d09)
 #pragma read sourceClass="SHiP::RecHit" targetClass="SHiP::RecHit" checksum="[3772464393]" source="std::int32_t detectorId; std::int32_t trackId; std::int32_t pdgCode; double energyDeposit; double pathLength" target="detector_id,track_id,pdg_code,energy_deposit,path_length" code="{ detector_id = onfile.detectorId; track_id = onfile.trackId; pdg_code = onfile.pdgCode; energy_deposit = onfile.energyDeposit; path_length = onfile.pathLength; }"
-// The detector wrappers' recHit -> rec_hit rename is deliberately NOT
-// covered by a rule: an object-typed rule source (SHiP::RecHit recHit)
-// whose class itself has rules triggers a double free in ROOT 6.40.02
-// (TTree path; nested staging). No wrapper data has been persisted so far.
-// Add the rules once ROOT handles nested-object rule sources.
+// The detector wrappers' recHit -> rec_hit rename cannot be mapped: an
+// object-typed rule source (SHiP::RecHit recHit) whose class itself has
+// rules triggers a double free in ROOT 6.40.02 (TTree path; nested
+// staging). No wrapper data has been persisted so far, but without a rule
+// any that turns up would read back as a default-initialised rec_hit with
+// no error. Each wrapper instead gets a rule with no source and no target,
+// scoped to its camelCase checksum (v0.3.0-v0.5.0, unchanged since the
+// wrappers were added), that stops the read with a Fatal error.
+// compat_read_reco_wrappers_v0.5.0 checks for that message. Replace these
+// rules with real mappings once ROOT handles nested-object rule sources.
 #pragma link C++ options=version(3) class SHiP::UBTHit+;
 #pragma link C++ class std::vector<SHiP::UBTHit>+;
+#pragma read sourceClass="SHiP::UBTHit" targetClass="SHiP::UBTHit" checksum="[4172140978]" source="" target="" code="{ Fatal(\"SHiP::UBTHit\", \"camelCase recHit data (data-model <= v0.5.0) cannot be read into rec_hit\"); }"
 #pragma link C++ options=version(3) class SHiP::SBTHit+;
 #pragma link C++ class std::vector<SHiP::SBTHit>+;
+#pragma read sourceClass="SHiP::SBTHit" targetClass="SHiP::SBTHit" checksum="[569377052]" source="" target="" code="{ Fatal(\"SHiP::SBTHit\", \"camelCase recHit data (data-model <= v0.5.0) cannot be read into rec_hit\"); }"
 #pragma link C++ options=version(3) class SHiP::TimeDetHit+;
 #pragma link C++ class std::vector<SHiP::TimeDetHit>+;
+#pragma read sourceClass="SHiP::TimeDetHit" targetClass="SHiP::TimeDetHit" checksum="[3003753307]" source="" target="" code="{ Fatal(\"SHiP::TimeDetHit\", \"camelCase recHit data (data-model <= v0.5.0) cannot be read into rec_hit\"); }"
 #pragma link C++ options=version(3) class SHiP::StrawTubesHit+;
 #pragma link C++ class std::vector<SHiP::StrawTubesHit>+;
+#pragma read sourceClass="SHiP::StrawTubesHit" targetClass="SHiP::StrawTubesHit" checksum="[763285781]" source="" target="" code="{ Fatal(\"SHiP::StrawTubesHit\", \"camelCase recHit data (data-model <= v0.5.0) cannot be read into rec_hit\"); }"
 #pragma link C++ options=version(3) class SHiP::CaloHit+;
 #pragma link C++ class std::vector<SHiP::CaloHit>+;
+#pragma read sourceClass="SHiP::CaloHit" targetClass="SHiP::CaloHit" checksum="[4230172364]" source="" target="" code="{ Fatal(\"SHiP::CaloHit\", \"camelCase recHit data (data-model <= v0.5.0) cannot be read into rec_hit\"); }"
 
 // Reconstruction
 #pragma link C++ options=version(3) class SHiP::TrackFitResult+;
