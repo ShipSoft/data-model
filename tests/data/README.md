@@ -93,13 +93,14 @@ every class with a renamed member, and version 4 for `MCParticle`.
 ## Known issue: field renames vs ROOT 6.40 RNTuple
 
 The snake_case field renames are covered by I/O customization rules in
-`include/SHiP/LinkDef.h`, validated end-to-end on the TTree path. ROOT 6.40
-however misapplies rules when reading **RNTuple** data written by
+`include/SHiP/LinkDef.h`. The suite reads RNTuple only, so the rules are not
+tested on the TTree path. ROOT 6.40 misapplies rules when reading
+**RNTuple** data written by
 *unversioned* classes ([root-project/root#23146]). Per the workaround
 proposed there, all classes carry an explicit version (see above) and
 readers open files through `TFile` before attaching the `RNTupleReader`, so
-the rules work for everything written from v0.5.0 on: `compat_read_v0.5.0`
-and `compat_read_head` pass.
+the rules work for everything written from v0.5.0 on: `compat_read_v0.5.0`,
+`compat_read_reco_trackfits_v0.5.0` and `compat_read_head` pass.
 
 The pre-v0.5.0 reference files were written by the then-unversioned classes
 and still cannot be rule-read: ROOT aborts on an internal assertion in
@@ -115,9 +116,11 @@ Two consequences worth knowing:
   not tolerate a pass. That is the signal to drop the `WILL_FAIL` block and
   this section, not a regression.
 - Until then, a genuine regression in one of those four reads is hidden.
-  `compat_read_v0.5.0` and `compat_read_head` exercise the same reader and
-  the same rules and are not marked, so the exposure is limited to the
-  unversioned-file path itself.
+  `compat_read_v0.5.0` and `compat_read_head` use the same reader and the
+  same rules and are not marked, but the rules also list the checksums of
+  the pre-v0.5.0 layouts (`MCParticle`, `SimHit` and `RecParticle` each have
+  one), and only the four marked tests read data with those checksums. A
+  wrong checksum there goes unnoticed until the tests can pass.
 
 The wrappers' `recHit` → `rec_hit` rename has no mapping, because
 nested-object rule sources crash ROOT 6.40. No wrapper data has been

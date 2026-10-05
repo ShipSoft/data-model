@@ -73,8 +73,9 @@ foreach(ref IN LISTS reference_files)
         # pixi.lock, because passing is what WILL_FAIL does not allow. That
         # report is the signal to drop this block and the known-issue sections.
         # The cost is that a genuine regression in one of these four reads
-        # stays hidden until then; compat_read_v0.5.0 and compat_read_head
-        # cover the same code paths and are not marked.
+        # stays hidden until then. compat_read_v0.5.0 and compat_read_head
+        # use the same reader and rules and are not marked, but nothing else
+        # reads the pre-v0.5.0 layout checksums listed in the rules.
         string(REGEX REPLACE "^v" "" version "${label}")
         if((NOT label STREQUAL "head") AND (version VERSION_LESS 0.5.0))
             set_tests_properties(compat_read_${label} PROPERTIES WILL_FAIL TRUE)
