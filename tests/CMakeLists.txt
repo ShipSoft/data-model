@@ -21,13 +21,13 @@ add_test(NAME rntuple_io COMMAND test_rntuple_io)
 
 # Units and quantity views are headers-only: no dictionary, no ROOT.
 add_executable(test_units test_units.cpp)
-target_link_libraries(test_units PRIVATE SHiP::SHiPUnits)
+target_link_libraries(test_units PRIVATE SHiP::Units)
 add_test(NAME units COMMAND test_units)
 
 # The mother-index invariants are pure header logic: no dictionary, no ROOT.
-# SHiP::SHiPUnits is linked for the include/ search path it carries.
+# SHiP::Units is linked for the include/ search path it carries.
 add_executable(test_mc_mothers test_mc_mothers.cpp)
-target_link_libraries(test_mc_mothers PRIVATE SHiP::SHiPUnits)
+target_link_libraries(test_mc_mothers PRIVATE SHiP::Units)
 add_test(NAME mc_mothers COMMAND test_mc_mothers)
 
 # Every public header, compiled once on its own. There is no test to run: the
@@ -35,7 +35,7 @@ add_test(NAME mc_mothers COMMAND test_mc_mothers)
 # headers no other test includes into compile_commands.json, which is the only
 # way clang-tidy reaches them - see the comment in headers_compile.cpp.
 add_library(headers_compile OBJECT headers_compile.cpp)
-target_link_libraries(headers_compile PRIVATE SHiPDataModel SHiP::SHiPUnits)
+target_link_libraries(headers_compile PRIVATE SHiPDataModel SHiP::Units)
 
 # --- Backward-compatibility suite (see data/README.md) ---
 
