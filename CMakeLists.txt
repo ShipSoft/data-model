@@ -9,6 +9,8 @@ find_package(ROOT REQUIRED COMPONENTS Core RIO)
 find_package(mp-units 2.5 CONFIG REQUIRED)
 
 add_library(SHiPDataModel SHARED)
+set_target_properties(SHiPDataModel PROPERTIES EXPORT_NAME DataModel)
+add_library(SHiP::DataModel ALIAS SHiPDataModel)
 target_sources(
     SHiPDataModel
     PUBLIC
@@ -43,7 +45,8 @@ set_target_properties(SHiPDataModel PROPERTIES LINKER_LANGUAGE CXX)
 # quantity types must never enter the ROOT dictionary (ROOT cannot stream
 # them), and units-only consumers must not pay for a ROOT linkage.
 add_library(SHiPUnits INTERFACE)
-add_library(SHiP::SHiPUnits ALIAS SHiPUnits)
+set_target_properties(SHiPUnits PROPERTIES EXPORT_NAME Units)
+add_library(SHiP::Units ALIAS SHiPUnits)
 target_sources(
     SHiPUnits
     INTERFACE
