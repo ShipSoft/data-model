@@ -12,7 +12,7 @@
 /// mp-units members); these free functions convert to and from the canonical
 /// quantity types so computation code never touches an implicit unit. All
 /// conversions are bitwise (the storage unit is the quantity's unit).
-namespace ship::view {
+namespace SHiP::view {
 
 // --- MCParticle -----------------------------------------------------------
 [[nodiscard]] inline Vec3<Length> vertex(SHiP::MCParticle const& p) {
@@ -130,4 +130,4 @@ inline void set_energy(SHiP::RecParticle& p, Energy e) { p.energy = raw(e); }
 inline void set_time(SHiP::RecParticle& p, Time t) { p.time = raw(t); }
 inline void set_ip_pv(SHiP::RecParticle& p, Length l) { p.ip_pv = raw(l); }
 
-}  // namespace ship::view
+}  // namespace SHiP::view

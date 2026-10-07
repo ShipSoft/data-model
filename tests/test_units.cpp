@@ -14,7 +14,7 @@
 #include "SHiP/SimParticle.hpp"
 #include "SHiP/Units.hpp"
 
-namespace su = ship::units;
+namespace su = SHiP::units;
 
 namespace {
 
@@ -30,14 +30,14 @@ void expect(bool ok, std::string const& what) {
 // Energy and momentum have different dimensions: mixing them must not compile.
 template <typename E, typename P>
 concept AddsWithMomentum = requires(E e, P p) { e + p; };
-static_assert(!AddsWithMomentum<ship::Energy, ship::Momentum>,
+static_assert(!AddsWithMomentum<SHiP::Energy, SHiP::Momentum>,
               "energy + momentum must be a compile error");
-static_assert(AddsWithMomentum<ship::Energy, ship::Energy>);
+static_assert(AddsWithMomentum<SHiP::Energy, SHiP::Energy>);
 
 // Canonical types store in the canonical units (no hidden conversion).
-static_assert(ship::Length::unit == su::mm);
-static_assert(ship::Time::unit == su::ns);
-static_assert(ship::Energy::unit == su::GeV);
+static_assert(SHiP::Length::unit == su::mm);
+static_assert(SHiP::Time::unit == su::ns);
+static_assert(SHiP::Energy::unit == su::GeV);
 
 }  // namespace
 
@@ -59,9 +59,9 @@ int main() {
 
   // vec_of/raw round-trip must be bitwise (storage unit == quantity unit).
   std::array<double, 3> const v{1.0000000000000002, -2.5e-17, 3.9e12};
-  expect(ship::raw(ship::vec_of<ship::Length>(v)) == v,
+  expect(SHiP::raw(SHiP::vec_of<SHiP::Length>(v)) == v,
          "Length vec_of/raw round-trip is bitwise");
-  expect(ship::raw(ship::vec_of<ship::Momentum>(v)) == v,
+  expect(SHiP::raw(SHiP::vec_of<SHiP::Momentum>(v)) == v,
          "Momentum vec_of/raw round-trip is bitwise");
 
   // Quantity views round-trip the PODs bitwise.
@@ -71,10 +71,10 @@ int main() {
   mc.energy = 40.001;
   mc.time = 5.5;
   SHiP::MCParticle copy;
-  ship::view::set_vertex(copy, ship::view::vertex(mc));
-  ship::view::set_momentum(copy, ship::view::momentum(mc));
-  ship::view::set_energy(copy, ship::view::energy(mc));
-  ship::view::set_time(copy, ship::view::time(mc));
+  SHiP::view::set_vertex(copy, SHiP::view::vertex(mc));
+  SHiP::view::set_momentum(copy, SHiP::view::momentum(mc));
+  SHiP::view::set_energy(copy, SHiP::view::energy(mc));
+  SHiP::view::set_time(copy, SHiP::view::time(mc));
   expect(copy.vertex == mc.vertex && copy.momentum == mc.momentum &&
              copy.energy == mc.energy && copy.time == mc.time,
          "MCParticle view round-trip is bitwise");
@@ -86,11 +86,11 @@ int main() {
   hit.time = 7.25;
   hit.path_length = 0.3;
   SHiP::SimHit hitCopy;
-  ship::view::set_position(hitCopy, ship::view::position(hit));
-  ship::view::set_momentum(hitCopy, ship::view::momentum(hit));
-  ship::view::set_energy_deposit(hitCopy, ship::view::energy_deposit(hit));
-  ship::view::set_time(hitCopy, ship::view::time(hit));
-  ship::view::set_path_length(hitCopy, ship::view::path_length(hit));
+  SHiP::view::set_position(hitCopy, SHiP::view::position(hit));
+  SHiP::view::set_momentum(hitCopy, SHiP::view::momentum(hit));
+  SHiP::view::set_energy_deposit(hitCopy, SHiP::view::energy_deposit(hit));
+  SHiP::view::set_time(hitCopy, SHiP::view::time(hit));
+  SHiP::view::set_path_length(hitCopy, SHiP::view::path_length(hit));
   expect(hitCopy.position == hit.position && hitCopy.momentum == hit.momentum &&
              hitCopy.energy_deposit == hit.energy_deposit &&
              hitCopy.time == hit.time && hitCopy.path_length == hit.path_length,
@@ -103,11 +103,11 @@ int main() {
   sp.energy = 49.9;
   sp.time = 0.0;
   SHiP::SimParticle spCopy;
-  ship::view::set_vertex(spCopy, ship::view::vertex(sp));
-  ship::view::set_endpoint(spCopy, ship::view::endpoint(sp));
-  ship::view::set_momentum(spCopy, ship::view::momentum(sp));
-  ship::view::set_energy(spCopy, ship::view::energy(sp));
-  ship::view::set_time(spCopy, ship::view::time(sp));
+  SHiP::view::set_vertex(spCopy, SHiP::view::vertex(sp));
+  SHiP::view::set_endpoint(spCopy, SHiP::view::endpoint(sp));
+  SHiP::view::set_momentum(spCopy, SHiP::view::momentum(sp));
+  SHiP::view::set_energy(spCopy, SHiP::view::energy(sp));
+  SHiP::view::set_time(spCopy, SHiP::view::time(sp));
   expect(spCopy.vertex == sp.vertex && spCopy.endpoint == sp.endpoint &&
              spCopy.momentum == sp.momentum && spCopy.energy == sp.energy &&
              spCopy.time == sp.time,
@@ -121,12 +121,12 @@ int main() {
   rp.time = 1.1;
   rp.ip_pv = 0.012;
   SHiP::RecParticle rpCopy;
-  ship::view::set_vertex(rpCopy, ship::view::vertex(rp));
-  ship::view::set_endpoint(rpCopy, ship::view::endpoint(rp));
-  ship::view::set_momentum(rpCopy, ship::view::momentum(rp));
-  ship::view::set_energy(rpCopy, ship::view::energy(rp));
-  ship::view::set_time(rpCopy, ship::view::time(rp));
-  ship::view::set_ip_pv(rpCopy, ship::view::ip_pv(rp));
+  SHiP::view::set_vertex(rpCopy, SHiP::view::vertex(rp));
+  SHiP::view::set_endpoint(rpCopy, SHiP::view::endpoint(rp));
+  SHiP::view::set_momentum(rpCopy, SHiP::view::momentum(rp));
+  SHiP::view::set_energy(rpCopy, SHiP::view::energy(rp));
+  SHiP::view::set_time(rpCopy, SHiP::view::time(rp));
+  SHiP::view::set_ip_pv(rpCopy, SHiP::view::ip_pv(rp));
   expect(rpCopy.vertex == rp.vertex && rpCopy.endpoint == rp.endpoint &&
              rpCopy.momentum == rp.momentum && rpCopy.energy == rp.energy &&
              rpCopy.time == rp.time && rpCopy.ip_pv == rp.ip_pv,
@@ -134,7 +134,7 @@ int main() {
 
   // A deliberately non-canonical input converts, rather than reinterprets.
   auto const z = 1.5 * su::m;
-  expect(ship::Length{z}.numerical_value_in(su::mm) == 1500.0,
+  expect(SHiP::Length{z}.numerical_value_in(su::mm) == 1500.0,
          "1.5 m stored as Length is 1500 mm");
 
   if (failures == 0) {

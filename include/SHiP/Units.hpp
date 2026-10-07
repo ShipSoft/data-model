@@ -12,10 +12,10 @@
 /// works with the quantity types below and converts at the boundaries (see
 /// SHiP/QuantityView.hpp).
 ///
-/// NEVER `using namespace ship::units` in a translation unit that includes
+/// NEVER `using namespace SHiP::units` in a translation unit that includes
 /// CLHEP or Geant4 headers: G4SystemOfUnits.hh injects global `mm`, `GeV`,
 /// `tesla`, ... that collide with these names. Always qualify.
-namespace ship {
+namespace SHiP {
 
 namespace units {
 
@@ -89,4 +89,21 @@ template <typename Q>
           v[2].numerical_value_in(Q::unit)};
 }
 
-}  // namespace ship
+}  // namespace SHiP
+
+// Transitional alias for the pre-0.6.0 spelling of this namespace, which was
+// `ship` while the data classes next door were already `SHiP`. Scheduled for
+// removal in 0.7.0; see CHANGELOG.md.
+//
+// A namespace alias cannot carry [[deprecated]], and Units.hpp reaches nearly
+// every downstream translation unit, so an unconditional #pragma message here
+// would warn on every build in the stack rather than on the uses that need
+// changing. The deprecation is recorded in the CHANGELOG instead.
+//
+// The alias serves code that only *reads* `ship::X`. It cannot help a
+// repository that reopens `namespace ship` to add its own names, because an
+// alias cannot be reopened; geometry_service and field_service do that, and
+// they move in their own release.
+#ifndef SHIP_NO_DEPRECATED_NAMESPACE_ALIAS
+namespace ship = SHiP;
+#endif

@@ -6,4 +6,23 @@ find_dependency(mp-units 2.5 CONFIG)
 
 include("${CMAKE_CURRENT_LIST_DIR}/SHiPDataModelTargets.cmake")
 
+# Transitional names for the stuttering pre-0.6.0 spellings, scheduled for
+# removal in 0.7.0. Plain INTERFACE IMPORTED targets rather than ALIAS, because
+# install(EXPORT) does not mark its imported targets GLOBAL and ALIAS refuses a
+# non-global one.
+foreach(_ship_old_new "SHiPDataModel;DataModel" "SHiPUnits;Units")
+    list(GET _ship_old_new 0 _ship_old)
+    list(GET _ship_old_new 1 _ship_new)
+    if(NOT TARGET SHiP::${_ship_old})
+        add_library(SHiP::${_ship_old} INTERFACE IMPORTED)
+        set_target_properties(
+            SHiP::${_ship_old}
+            PROPERTIES INTERFACE_LINK_LIBRARIES SHiP::${_ship_new}
+        )
+    endif()
+endforeach()
+unset(_ship_old_new)
+unset(_ship_old)
+unset(_ship_new)
+
 check_required_components(SHiPDataModel)

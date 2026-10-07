@@ -36,7 +36,7 @@ Downstream packages consume this via CMake:
 
 ```cmake
 find_package(SHiPDataModel REQUIRED)
-target_link_libraries(your_target PRIVATE SHiP::SHiPDataModel)
+target_link_libraries(your_target PRIVATE SHiP::DataModel)
 ```
 
 ## Backward compatibility
