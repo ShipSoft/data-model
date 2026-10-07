@@ -12,10 +12,8 @@
 # because the check reads the configuration of the file a name is declared in,
 # not of the translation unit (GetConfigPerFile, on by default).
 #
-# Six options are deliberately left unset:
+# Five options are deliberately left unset:
 #
-#   NamespaceCase          SHiP and ship are two different namespaces in this
-#                          tree, and no single style covers both.
 #   GlobalConstantCase     Units.hpp spells its constants as the physics
 #   ConstexprVariableCase  symbols they are - MeV, GeV_per_c2, mm_per_c - which
 #                          match no clang-tidy style. ConstexprVariableCase has
@@ -26,12 +24,19 @@
 #   MethodCase             The structs are plain data; the only member
 #   PrivateMemberCase      functions are defaulted operator==.
 #
+# NamespaceCase is lower_case with SHiP exempted: the top-level namespace is
+# spelled after the collaboration, and every namespace nested inside it is
+# lower_case. Before 0.6.0 this had to stay unset, because the unit vocabulary
+# in Units.hpp still lived in a separate `ship` namespace alongside it.
+#
 # EnumCase is lower_case for detector_id, which is named after its header and is
 # the one type here that is not CamelCase. EnumConstantCase carries no k prefix,
 # matching UpstreamTagger and its neighbours.
 InheritParentConfig: true
 
 CheckOptions:
+  readability-identifier-naming.NamespaceCase: lower_case
+  readability-identifier-naming.NamespaceIgnoredRegexp: '^SHiP$'
   readability-identifier-naming.ClassCase: CamelCase
   readability-identifier-naming.StructCase: CamelCase
   readability-identifier-naming.TypeAliasCase: CamelCase
