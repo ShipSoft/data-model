@@ -135,7 +135,7 @@ file(
 set(dictionary_classes "")
 set(dictionary_class_count 0)
 foreach(line IN LISTS linkdef_lines)
-    if(NOT line MATCHES "class +([^+;]+)\\+?;")
+    if(NOT line MATCHES "class +([^-!+;]+)[-!+]*;")
         message(
             FATAL_ERROR
             "cannot extract a class name from this LinkDef.h line: ${line}"
