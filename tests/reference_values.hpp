@@ -100,6 +100,9 @@ std::vector<Particle> makeMCParticles(int offset) {
       }
     }
     p.status = 1 + i + offset;
+    if constexpr (requires { p.weight; }) {  // added in v0.6.0
+      p.weight = 0.5 + (0.25 * i) + offset;
+    }
     v.push_back(p);
   }
   return v;
@@ -142,6 +145,9 @@ std::vector<Particle> makeSimParticles(int offset) {
     p.energy = 51.625 + i + offset;
     p.time = 12.375 + i;
     field::creator_process(p) = 2 + i + offset;
+    if constexpr (requires { p.weight; }) {  // added in v0.6.0
+      p.weight = 0.125 + (0.5 * i) + offset;
+    }
     v.push_back(p);
   }
   return v;
