@@ -1,15 +1,9 @@
 # TClass layout (version, checksum, data members)
-class SHiP::EventHeader version=3 checksum=0xa95503fd
+class SHiP::EventHeader version=2 checksum=0xd65dd49a
   double weight
   long original_event_id
-<<<<<<< HEAD
-  long aegir_event_id
-class SHiP::MCParticle version=3 checksum=0x5d816b3e
-  int pdgCode
-=======
 class SHiP::MCParticle version=4 checksum=0x8d1ef3c
   int pdg_code
->>>>>>> 2b04a1bdbb7c9fa623a6a232f9a7b87344a9a551
   array<double,3> vertex
   array<double,3> momentum
   double energy
@@ -88,17 +82,11 @@ class SHiP::RecParticle version=3 checksum=0xc908f3a0
   int creator_process
   double ip_pv
 # RNTuple field tree (one top-level field per dictionary class)
-SHiP__EventHeader : SHiP::EventHeader (typever=3, checksum=0xa95503fd)
+SHiP__EventHeader : SHiP::EventHeader (typever=2, checksum=0xd65dd49a)
   weight : double (typever=0)
   original_event_id : std::int64_t (typever=0)
-<<<<<<< HEAD
-  aegir_event_id : std::int64_t (typever=0)
-SHiP__MCParticle : SHiP::MCParticle (typever=3, checksum=0x5d816b3e)
-  pdgCode : std::int32_t (typever=0)
-=======
 SHiP__MCParticle : SHiP::MCParticle (typever=4, checksum=0x8d1ef3c)
   pdg_code : std::int32_t (typever=0)
->>>>>>> 2b04a1bdbb7c9fa623a6a232f9a7b87344a9a551
   vertex : std::array<double,3> (typever=0)
     _0 : double (typever=0)
   momentum : std::array<double,3> (typever=0)
