@@ -66,7 +66,7 @@ using Vec3 = std::array<Q, 3>;
 
 /// Wrap a raw scalar, interpreting it in Q's canonical unit (bitwise).
 template <typename Q>
-[[nodiscard]] constexpr Q quantityOf(double v) {
+[[nodiscard]] constexpr Q quantity_of(double v) {
   return v * Q::reference;
 }
 
@@ -78,7 +78,7 @@ template <typename Q>
 
 /// Wrap a raw 3-vector, interpreting it in Q's canonical unit (bitwise).
 template <typename Q>
-[[nodiscard]] constexpr Vec3<Q> vecOf(std::array<double, 3> const& v) {
+[[nodiscard]] constexpr Vec3<Q> vec_of(std::array<double, 3> const& v) {
   return {v[0] * Q::reference, v[1] * Q::reference, v[2] * Q::reference};
 }
 

@@ -78,6 +78,37 @@ root_generate_dictionary(
   include/SHiP/LinkDef.h
 )
 
+# Workaround for a rootcling bug seen with ROOT 6.40.04: when a selected header
+# includes <algorithm>, rootcling writes `#include "execution_defs.h"` into the
+# generated dictionary. It means libstdc++'s pstl/execution_defs.h, which sits a
+# directory below the C++ include root, so the bare name resolves against
+# nothing and compiling the dictionary fails. MCParticle.hpp is the header that
+# triggers it here, for the std::find in mothers_are_consistent.
+#
+# Putting the pstl directory on the include path makes the bare name resolve.
+# It goes on the dictionary object library rather than on SHiPDataModel so that
+# libstdc++'s internal headers stay out of reach of our own sources, which have
+# no business including them by basename.
+#
+# Whether rootcling emits the bad include varies between installations built
+# from the same pixi.lock, with the same compiler and the same flags, for
+# reasons we could not pin down, so this is keyed on the directory existing
+# rather than on a ROOT version. See root-project/root#23640; remove this once
+# rootcling emits a path that resolves.
+find_path(
+    SHIP_CXX_INCLUDE_ROOT
+    NAMES pstl/execution_defs.h
+    HINTS ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES}
+    NO_DEFAULT_PATH
+)
+mark_as_advanced(SHIP_CXX_INCLUDE_ROOT)
+if(SHIP_CXX_INCLUDE_ROOT AND TARGET G__SHiPDataModel)
+    target_include_directories(
+        G__SHiPDataModel
+        PRIVATE ${SHIP_CXX_INCLUDE_ROOT}/pstl
+    )
+endif()
+
 include(GNUInstallDirs)
 
 install(

@@ -8,20 +8,20 @@ namespace SHiP {
 
 /// Track fit result
 struct TrackFitResult {
-  std::int32_t nMeas{0};
-  std::int32_t fitStatus{1};  // 0 = success, 1 = failure
+  std::int32_t n_meas{0};
+  std::int32_t fit_status{1};  // 0 = success, 1 = failure
   double chi2{0};
   std::int32_t ndf{0};
-  double qoverp{0};
+  double q_over_p{0};
   double phi{0};
   double theta{0};
   double time{0};
-  std::array<double, 3> refLoc{0, 0, 0};
-  std::vector<double> inputMeasurementsX{};
-  std::vector<double> inputMeasurementsY{};
-  std::vector<double> fittedMeasurementsX{};
-  std::vector<double> fittedMeasurementsY{};
-  std::vector<double> residualsX{};
-  std::vector<double> residualsY{};
+  std::array<double, 3> ref_loc{0, 0, 0};
+  std::vector<double> input_measurements_x{};
+  std::vector<double> input_measurements_y{};
+  std::vector<double> fitted_measurements_x{};
+  std::vector<double> fitted_measurements_y{};
+  std::vector<double> residuals_x{};
+  std::vector<double> residuals_y{};
 };
 }  // namespace SHiP
