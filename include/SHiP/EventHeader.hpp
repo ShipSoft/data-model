@@ -8,12 +8,12 @@ namespace SHiP {
 struct EventHeader {
   double weight{1.0};  ///< Event weight (e.g. P_DIS / nReplicas)
   std::int64_t original_event_id{
-      -1};  ///< Originating event id, e.g. the muon
-            ///< event that seeded this replica
-            ///< (-1 = none). Event-level provenance,
-            ///< distinct from MCParticle::mother_id,
-            ///< which links particles within an event.
-
+      -1};                          ///< Originating event id, e.g. the muon
+                                    ///< event that seeded this replica
+                                    ///< (-1 = none). Event-level provenance,
+                                    ///< distinct from MCParticle::motherId,
+                                    ///< which links particles within an event.
+  std::int64_t aegir_event_id{-1};  // What is the ID of this event from aegir
   bool operator==(EventHeader const&) const = default;
 };
 
