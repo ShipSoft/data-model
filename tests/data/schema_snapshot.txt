@@ -1,7 +1,8 @@
 # TClass layout (version, checksum, data members)
-class SHiP::EventHeader version=2 checksum=0xd65dd49a
+class SHiP::EventHeader version=3 checksum=0xa95503fd
   double weight
   long original_event_id
+  long aegir_event_id
 class SHiP::MCParticle version=3 checksum=0x5d816b3e
   int pdgCode
   array<double,3> vertex
@@ -82,9 +83,10 @@ class SHiP::RecParticle version=2 checksum=0xe90ee6a7
   int creatorProcess
   double ipPV
 # RNTuple field tree (one top-level field per dictionary class)
-SHiP__EventHeader : SHiP::EventHeader (typever=2, checksum=0xd65dd49a)
+SHiP__EventHeader : SHiP::EventHeader (typever=3, checksum=0xa95503fd)
   weight : double (typever=0)
   original_event_id : std::int64_t (typever=0)
+  aegir_event_id : std::int64_t (typever=0)
 SHiP__MCParticle : SHiP::MCParticle (typever=3, checksum=0x5d816b3e)
   pdgCode : std::int32_t (typever=0)
   vertex : std::array<double,3> (typever=0)
