@@ -16,6 +16,8 @@
 // layout of every class with a renamed member, except MCParticle, which
 // takes 4 because 3 is already spent on it. EventHeader and SimResult had
 // no member renamed, keep their v0.5.0 layout and checksum, and stay at 2.
+// 5 for MCParticle and 4 for SimParticle = the snake_case layout plus
+// `weight`.
 //
 // The `#pragma read` rules below keep files written before the snake_case
 // field renames (data-model <= v0.5.0) readable: each rule maps an on-disk
@@ -58,7 +60,7 @@
 #pragma link C++ options=version(2) class SHiP::EventHeader+;
 
 // MC / generation
-#pragma link C++ options=version(4) class SHiP::MCParticle+;
+#pragma link C++ options=version(5) class SHiP::MCParticle+;
 #pragma link C++ class std::vector<SHiP::MCParticle>+;
 // MCParticle layout eras: v0.1.0-v0.4.0 = 387412058 (0x1717705a),
 //                         v0.5.0 (adds mothers) = 1568762686 (0x5d816b3e)
@@ -66,7 +68,7 @@
 
 // Simulation
 #pragma link C++ options=version(3) class SHiP::SimHit+;
-#pragma link C++ options=version(3) class SHiP::SimParticle+;
+#pragma link C++ options=version(4) class SHiP::SimParticle+;
 #pragma link C++ options=version(2) class SHiP::SimResult+;
 #pragma link C++ class std::vector<SHiP::SimHit>+;
 #pragma link C++ class std::vector<SHiP::SimParticle>+;
@@ -76,6 +78,14 @@
 #pragma read sourceClass="SHiP::SimHit" targetClass="SHiP::SimHit" checksum="[3911017334]" source="std::int32_t geometryNodeId" target="geometry_node_id" code="{ geometry_node_id = onfile.geometryNodeId; }"
 // SimParticle layout eras: v0.1.0-v0.5.0 = 4053157024 (0xf19644a0)
 #pragma read sourceClass="SHiP::SimParticle" targetClass="SHiP::SimParticle" checksum="[4053157024]" source="std::int32_t trackId; std::int32_t parentId; std::int32_t pdgCode; std::int32_t creatorProcess" target="track_id,parent_id,pdg_code,creator_process" code="{ track_id = onfile.trackId; parent_id = onfile.parentId; pdg_code = onfile.pdgCode; creator_process = onfile.creatorProcess; }"
+// KNOWN ISSUE: `weight` did not exist in that layout and should read back as
+// its default of 1, but reads back as 0. ROOT 6.40 takes a class without a
+// user-declared constructor and with only trivial members for trivially
+// constructible, ignoring default member initializers, and does not construct
+// such elements of a std::vector before reading them, so a member missing on
+// disk is left zero. SimParticle is such a class (MCParticle is not, through
+// `mothers`). Not worked around for now; a rule with source="" target="weight"
+// code="{ weight = 1.0; }" for the checksum above would set it.
 
 // Digitisation
 #pragma link C++ options=version(3) class SHiP::RecHit+;
