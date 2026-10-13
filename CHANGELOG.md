@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2026-10-13
+
+### Bug fixes
+
+- *(release)* Tag the release only after it lands on main
+- Keep files written before the field renames readable
+- Stop reads of camelCase detector-wrapper data with a Fatal error
+- *(tests)* Strip -/! LinkDef suffixes when extracting class names
+- *(build)* Put the pstl include directory on the dictionary target
+
+### Refactor
+
+- [**breaking**] Use snake_case for data-model field names
+- [**breaking**] Use snake_case for the free functions in the public headers
+- *(tests)* Derive dictionary classes without hardcoding the namespace
+- [**breaking**] Put the unit vocabulary in the SHiP namespace
+
+### Documentation
+
+- Say which rename rules the compat suite can actually check
+
+### Testing
+
+- Add a frozen v0.5.0 fixture for TrackFitResult and the wrappers
+- Cover SimHit::geometry_node_id in round-trip tests
+- Compile every public header standalone
+- Mark the pre-v0.5.0 compat reads as expected failures
+- Keep the reference recipe compiling against camelCase tags
+
+### Miscellaneous
+
+- Update pixi lock file
+- Enforce the header naming convention with clang-tidy
 ## [0.5.0] - 2026-09-29
 
 ### Features
