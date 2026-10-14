@@ -50,7 +50,8 @@ when these tests fail.
 
 ## Dependencies
 
-- ROOT 6.36+ (Core, RIO)
+- ROOT 6.40+ (Core, RIO), built with C++23 (`root_cxx_standard = "==23"` in
+  conda)
 
 ## Licence
 
