@@ -55,7 +55,7 @@
 #pragma link off all functions;
 
 // Event metadata
-#pragma link C++ options=version(2) class SHiP::EventHeader+;
+#pragma link C++ options=version(3) class SHiP::EventHeader+;
 
 // MC / generation
 #pragma link C++ options=version(4) class SHiP::MCParticle+;
