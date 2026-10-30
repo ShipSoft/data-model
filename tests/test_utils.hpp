@@ -33,6 +33,7 @@ inline std::vector<MCParticle> makeMCParticles(int offset) {
       p.mothers = {i - 1, (i + 1) % 3};
     }
     p.status = 1 + i + offset;
+    p.weight = 0.5 + (0.25 * i) + offset;
     v.push_back(p);
   }
   return v;
@@ -71,6 +72,7 @@ inline std::vector<SimParticle> makeSimParticles(int offset) {
     p.energy = 51.625 + i + offset;
     p.time = 12.375 + i;
     p.creator_process = 2 + i + offset;
+    p.weight = 0.125 + (0.5 * i) + offset;
     v.push_back(p);
   }
   return v;

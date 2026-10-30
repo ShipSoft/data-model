@@ -45,6 +45,13 @@ namespace SHiP {
 ///   - 3: a documentation entry
 ///   - 4: an incoming beam particle
 ///   - 11-200: an intermediate entry, generator-dependent classification
+///
+/// `weight` is the particle's own weight, on top of EventHeader::weight: the
+/// full weight of a particle is the product of the two. It is 1 unless the
+/// producer weights particles individually, e.g. FairShip muon-background
+/// samples, in which muons from boosted channels (vector meson -> mu mu,
+/// gamma -> mu mu, ...) carry 1/boost next to unboosted muons of weight 1 in
+/// the same event. Data written before the field existed reads back as 1.
 struct MCParticle {
   std::int32_t pdg_code{0};
   std::array<double, 3> vertex{0, 0, 0};    ///< Production vertex [mm]
@@ -54,6 +61,7 @@ struct MCParticle {
   std::int32_t mother_id{-1};               ///< First mother (-1 = none)
   std::vector<std::int32_t> mothers{};      ///< All mothers (see above)
   std::int32_t status{1};                   ///< HepMC status (see above)
+  double weight{1.0};  ///< Particle weight, times EventHeader::weight
 
   bool operator==(MCParticle const&) const = default;
 };
