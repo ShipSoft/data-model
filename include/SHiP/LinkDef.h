@@ -16,6 +16,8 @@
 // layout of every class with a renamed member, except MCParticle, which
 // takes 4 because 3 is already spent on it. EventHeader and SimResult had
 // no member renamed, keep their v0.5.0 layout and checksum, and stay at 2.
+// 5 for MCParticle and 4 for SimParticle = the snake_case layout plus
+// `weight`.
 //
 // The `#pragma read` rules below keep files written before the snake_case
 // field renames (data-model <= v0.5.0) readable: each rule maps an on-disk
@@ -58,15 +60,21 @@
 #pragma link C++ options=version(2) class SHiP::EventHeader+;
 
 // MC / generation
-#pragma link C++ options=version(4) class SHiP::MCParticle+;
+#pragma link C++ options=version(5) class SHiP::MCParticle+;
 #pragma link C++ class std::vector<SHiP::MCParticle>+;
 // MCParticle layout eras: v0.1.0-v0.4.0 = 387412058 (0x1717705a),
-//                         v0.5.0 (adds mothers) = 1568762686 (0x5d816b3e)
+//                         v0.5.0 (adds mothers) = 1568762686 (0x5d816b3e),
+//                         v0.6.0 (snake_case) = 147975996 (0x8d1ef3c)
 #pragma read sourceClass="SHiP::MCParticle" targetClass="SHiP::MCParticle" checksum="[387412058,1568762686]" source="std::int32_t pdgCode; std::int32_t motherId" target="pdg_code,mother_id" code="{ pdg_code = onfile.pdgCode; mother_id = onfile.motherId; }"
+// `weight` did not exist in any of these layouts and must read back as 1.
+// This rule sets it: ROOT reuses the elements of a std::vector it reads into
+// without constructing them again, so a member missing on disk would keep
+// whatever an element held before (a weight from an earlier entry or file).
+#pragma read sourceClass="SHiP::MCParticle" targetClass="SHiP::MCParticle" checksum="[387412058,1568762686,147975996]" source="" target="weight" code="{ weight = 1.0; }"
 
 // Simulation
 #pragma link C++ options=version(3) class SHiP::SimHit+;
-#pragma link C++ options=version(3) class SHiP::SimParticle+;
+#pragma link C++ options=version(4) class SHiP::SimParticle+;
 #pragma link C++ options=version(2) class SHiP::SimResult+;
 #pragma link C++ class std::vector<SHiP::SimHit>+;
 #pragma link C++ class std::vector<SHiP::SimParticle>+;
@@ -74,8 +82,17 @@
 //                     v0.4.0-v0.5.0 (adds geometryNodeId) = 3911017334 (0xe91d6376)
 #pragma read sourceClass="SHiP::SimHit" targetClass="SHiP::SimHit" checksum="[3449694654,3911017334]" source="std::int32_t detectorId; std::int32_t trackId; std::int32_t pdgCode; double energyDeposit; double pathLength" target="detector_id,track_id,pdg_code,energy_deposit,path_length" code="{ detector_id = onfile.detectorId; track_id = onfile.trackId; pdg_code = onfile.pdgCode; energy_deposit = onfile.energyDeposit; path_length = onfile.pathLength; }"
 #pragma read sourceClass="SHiP::SimHit" targetClass="SHiP::SimHit" checksum="[3911017334]" source="std::int32_t geometryNodeId" target="geometry_node_id" code="{ geometry_node_id = onfile.geometryNodeId; }"
-// SimParticle layout eras: v0.1.0-v0.5.0 = 4053157024 (0xf19644a0)
+// SimParticle layout eras: v0.1.0-v0.5.0 = 4053157024 (0xf19644a0),
+//                          v0.6.0 (snake_case) = 3174449066 (0xbd363faa)
 #pragma read sourceClass="SHiP::SimParticle" targetClass="SHiP::SimParticle" checksum="[4053157024]" source="std::int32_t trackId; std::int32_t parentId; std::int32_t pdgCode; std::int32_t creatorProcess" target="track_id,parent_id,pdg_code,creator_process" code="{ track_id = onfile.trackId; parent_id = onfile.parentId; pdg_code = onfile.pdgCode; creator_process = onfile.creatorProcess; }"
+// `weight` did not exist in either layout and must read back as 1. This rule
+// sets it: ROOT 6.40 takes SimParticle (no user-declared constructor, only
+// trivial members) for trivially constructible, ignoring default member
+// initializers, and does not construct the elements of a std::vector it reads,
+// so a member missing on disk is left 0 unless a rule sets it; reused elements
+// would keep their old value, as for MCParticle. A member added to
+// SimParticle later needs such a rule for every older checksum.
+#pragma read sourceClass="SHiP::SimParticle" targetClass="SHiP::SimParticle" checksum="[4053157024,3174449066]" source="" target="weight" code="{ weight = 1.0; }"
 
 // Digitisation
 #pragma link C++ options=version(3) class SHiP::RecHit+;
