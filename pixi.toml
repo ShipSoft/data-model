@@ -48,7 +48,7 @@ mp-units = ">=2.5"
 
 [dependencies]
 cxx-compiler = "*"
-cmake = ">=3.21"
+cmake = ">=3.24"
 ninja = "*"
 git = "*"
 root = ">=6.40"
