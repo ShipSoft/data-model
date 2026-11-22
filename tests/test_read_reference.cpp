@@ -50,13 +50,13 @@ struct Version {
   }
 };
 
-constexpr Version kV030{0, 3, 0};
-constexpr Version kV040{0, 4, 0};
-constexpr Version kV050{0, 5, 0};
+constexpr Version kV030{.major = 0, .minor = 3, .patch = 0};
+constexpr Version kV040{.major = 0, .minor = 4, .patch = 0};
+constexpr Version kV050{.major = 0, .minor = 5, .patch = 0};
 
 bool parseVersion(std::string_view arg, Version& out) {
   if (arg == "head") {
-    out = Version{0, 0, 0, true};
+    out = Version{.major = 0, .minor = 0, .patch = 0, .head = true};
     return true;
   }
   int major = 0;
@@ -65,13 +65,13 @@ bool parseVersion(std::string_view arg, Version& out) {
   if (std::sscanf(arg.data(), "v%d.%d.%d", &major, &minor, &patch) != 3) {
     return false;
   }
-  out = Version{major, minor, patch};
+  out = Version{.major = major, .minor = minor, .patch = patch};
   return true;
 }
 
 }  // namespace
 
-int main(int argc, char** argv) {
+int main(int argc, char* const* argv) {
   if (argc != 3) {
     std::cerr << "usage: test_read_reference <reference.root> <version|head>\n";
     return 64;
@@ -110,7 +110,8 @@ int main(int argc, char** argv) {
     std::cout << "FAIL: cannot open file " << file << '\n';
     return 1;
   }
-  std::unique_ptr<ROOT::RNTuple> anchor{rootFile->Get<ROOT::RNTuple>("events")};
+  std::unique_ptr<ROOT::RNTuple> const anchor{
+      rootFile->Get<ROOT::RNTuple>("events")};
   if (!anchor) {
     std::cout << "FAIL: no RNTuple 'events' in " << file << '\n';
     return 1;
@@ -145,31 +146,32 @@ int main(int argc, char** argv) {
   if (hasEventHeader) {
     eventHeader = entry.GetPtr<SHiP::EventHeader>("event_header");
   }
-  auto mcParticles = entry.GetPtr<std::vector<SHiP::MCParticle>>("mcParticles");
-  auto simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("simHits");
-  auto simParticles =
+  auto const mcParticles =
+      entry.GetPtr<std::vector<SHiP::MCParticle>>("mcParticles");
+  auto const simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("simHits");
+  auto const simParticles =
       entry.GetPtr<std::vector<SHiP::SimParticle>>("simParticles");
-  auto recParticles =
+  auto const recParticles =
       entry.GetPtr<std::vector<SHiP::RecParticle>>("recParticles");
-  auto simResult = entry.GetPtr<SHiP::SimResult>("simResult");
+  auto const simResult = entry.GetPtr<SHiP::SimResult>("simResult");
 
   // Mask table: one entry per "member M introduced in version X" — members
   // that did not exist in the writing version must read back as defaults.
-  auto maskMCParticles = [&](std::vector<SHiP::MCParticle>& particles) {
+  auto const maskMCParticles = [&](std::vector<SHiP::MCParticle>& particles) {
     if (version < kV050) {
       for (auto& p : particles) {
         p.mothers.clear();
       }
     }
   };
-  auto maskSimHits = [&](std::vector<SHiP::SimHit>& hits) {
+  auto const maskSimHits = [&](std::vector<SHiP::SimHit>& hits) {
     if (version < kV040) {
       for (auto& h : hits) {
         h.geometry_node_id = 0;
       }
     }
   };
-  auto maskRecParticles = [&](std::vector<SHiP::RecParticle>& particles) {
+  auto const maskRecParticles = [&](std::vector<SHiP::RecParticle>& particles) {
     if (version < kV030) {
       for (auto& p : particles) {
         p.hits.clear();

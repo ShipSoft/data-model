@@ -85,7 +85,7 @@ std::vector<Particle> makeMCParticles(int offset) {
   std::vector<Particle> v;
   for (int i = 0; i < 3; ++i) {
     Particle p;
-    field::pdg_code(p) = 11 + 100 * i + offset;
+    field::pdg_code(p) = 11 + (100 * i) + offset;
     p.vertex = {1.5 + i + offset, -2.25 + i, 3.75 + i};
     p.momentum = {0.125 + i, -0.25 + i, 40.5 + i + offset};
     p.energy = 40.625 + i + offset;
@@ -110,9 +110,9 @@ std::vector<Hit> makeSimHits(int offset) {
   std::vector<Hit> v;
   for (int i = 0; i < 3; ++i) {
     Hit h;
-    field::detector_id(h) = 1000 + 10 * i + offset;
+    field::detector_id(h) = 1000 + (10 * i) + offset;
     field::track_id(h) = 42 + i + offset;
-    field::pdg_code(h) = -13 + 2 * i;
+    field::pdg_code(h) = -13 + (2 * i);
     h.position = {10.5 + i + offset, -20.25 + i, 3000.75 + i};
     h.momentum = {1.125 + i, -2.25 + i, 30.5 + i + offset};
     field::energy_deposit(h) = 0.0625 + i + offset;
@@ -121,7 +121,7 @@ std::vector<Hit> makeSimHits(int offset) {
     if constexpr (
         requires { h.geometry_node_id; } ||
         requires { h.geometryNodeId; }) {  // added in v0.4.0
-      field::geometry_node_id(h) = 900 + 7 * i + offset;
+      field::geometry_node_id(h) = 900 + (7 * i) + offset;
     }
     v.push_back(h);
   }
@@ -135,7 +135,7 @@ std::vector<Particle> makeSimParticles(int offset) {
     Particle p;
     field::track_id(p) = 7 + i + offset;
     field::parent_id(p) = 6 + i;
-    field::pdg_code(p) = 211 - 2 * i + offset;
+    field::pdg_code(p) = 211 - (2 * i) + offset;
     p.vertex = {0.5 + i + offset, -1.25 + i, 2.75 + i};
     p.endpoint = {100.5 + i, -200.25 + i + offset, 5000.75 + i};
     p.momentum = {3.125 + i, -4.25 + i, 50.5 + i + offset};
@@ -225,7 +225,7 @@ std::vector<Fit> makeTrackFitResults(int offset) {
     }
     for (int m = 0; m < 1 + i; ++m) {
       field::residuals_x(f).push_back(-0.125 + m);
-      field::residuals_y(f).push_back(0.0625 * (m + 1) + offset);
+      field::residuals_y(f).push_back((0.0625 * (m + 1)) + offset);
     }
     v.push_back(f);
   }

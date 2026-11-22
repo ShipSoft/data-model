@@ -48,7 +48,7 @@ int main() {
 
   // Both canonical recipes satisfy the contract, at every offset the suite
   // uses: entries for the two top-level entries and the +5 simResult shift.
-  for (int offset : {0, 1, 5, 6}) {
+  for (int const offset : {0, 1, 5, 6}) {
     std::string const suffix = " (offset " + std::to_string(offset) + ")";
     ok &= SHiP::test::check(
         "test_utils recipe" + suffix, true,

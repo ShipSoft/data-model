@@ -22,15 +22,15 @@ constexpr int kEntries = 2;
 constexpr char const* kFileName = "test_rntuple_io_tmp.root";
 bool writeFile() {
   auto model = ROOT::RNTupleModel::Create();
-  auto eventHeader = model->MakeField<SHiP::EventHeader>("event_header");
-  auto mcParticles =
+  auto const eventHeader = model->MakeField<SHiP::EventHeader>("event_header");
+  auto const mcParticles =
       model->MakeField<std::vector<SHiP::MCParticle>>("mc_particles");
-  auto simHits = model->MakeField<std::vector<SHiP::SimHit>>("sim_hits");
-  auto simParticles =
+  auto const simHits = model->MakeField<std::vector<SHiP::SimHit>>("sim_hits");
+  auto const simParticles =
       model->MakeField<std::vector<SHiP::SimParticle>>("sim_particles");
-  auto recParticles =
+  auto const recParticles =
       model->MakeField<std::vector<SHiP::RecParticle>>("rec_particles");
-  auto simResult = model->MakeField<SHiP::SimResult>("sim_result");
+  auto const simResult = model->MakeField<SHiP::SimResult>("sim_result");
   auto writer =
       ROOT::RNTupleWriter::Recreate(std::move(model), "events", kFileName);
   if (!writer) {
@@ -38,7 +38,8 @@ bool writeFile() {
     return false;
   }
   for (int entry = 0; entry < kEntries; ++entry) {
-    *eventHeader = SHiP::EventHeader{0.125 + entry, 7000 + entry};
+    *eventHeader = SHiP::EventHeader{.weight = 0.125 + entry,
+                                     .original_event_id = 7000 + entry};
     *mcParticles = SHiP::test::makeMCParticles(entry);
     *simHits = SHiP::test::makeSimHits(entry);
     *simParticles = SHiP::test::makeSimParticles(entry);
@@ -60,22 +61,23 @@ bool readAndCompare() {
     return false;
   }
   auto const& entry = reader->GetModel().GetDefaultEntry();
-  auto eventHeader = entry.GetPtr<SHiP::EventHeader>("event_header");
-  auto mcParticles =
+  auto const eventHeader = entry.GetPtr<SHiP::EventHeader>("event_header");
+  auto const mcParticles =
       entry.GetPtr<std::vector<SHiP::MCParticle>>("mc_particles");
-  auto simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("sim_hits");
-  auto simParticles =
+  auto const simHits = entry.GetPtr<std::vector<SHiP::SimHit>>("sim_hits");
+  auto const simParticles =
       entry.GetPtr<std::vector<SHiP::SimParticle>>("sim_particles");
-  auto recParticles =
+  auto const recParticles =
       entry.GetPtr<std::vector<SHiP::RecParticle>>("rec_particles");
-  auto simResult = entry.GetPtr<SHiP::SimResult>("sim_result");
+  auto const simResult = entry.GetPtr<SHiP::SimResult>("sim_result");
   bool ok = true;
   for (int i = 0; i < kEntries; ++i) {
     reader->LoadEntry(i);
     std::string const suffix = " (entry " + std::to_string(i) + ")";
-    ok &=
-        SHiP::test::check("EventHeader round-trip" + suffix,
-                          SHiP::EventHeader{0.125 + i, 7000 + i}, *eventHeader);
+    ok &= SHiP::test::check(
+        "EventHeader round-trip" + suffix,
+        SHiP::EventHeader{.weight = 0.125 + i, .original_event_id = 7000 + i},
+        *eventHeader);
     ok &= SHiP::test::check("MCParticle round-trip" + suffix,
                             SHiP::test::makeMCParticles(i), *mcParticles);
     ok &= SHiP::test::check("MCParticle mothers" + suffix, true,
@@ -93,7 +95,7 @@ bool readAndCompare() {
 }
 }  // namespace
 int main() {
-  bool ok = writeFile() && readAndCompare();
+  bool const ok = writeFile() && readAndCompare();
   std::remove(kFileName);
   std::cout << (ok ? "All RNTuple I/O tests passed"
                    : "RNTuple I/O tests FAILED")

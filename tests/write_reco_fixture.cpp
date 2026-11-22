@@ -16,7 +16,7 @@
 #include "TFile.h"
 #include "reference_values.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char* const* argv) {
   if (argc != 2) {
     std::cerr << "usage: write_reco_fixture <output.root>\n";
     return 64;
