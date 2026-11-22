@@ -12,23 +12,23 @@
 #include "ROOT/RNTupleWriter.hxx"
 #include "reference_values.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char* const* argv) {
   if (argc != 2) {
     std::cerr << "usage: write_reference <output.root>\n";
     return 64;
   }
   auto model = ROOT::RNTupleModel::Create();
 #ifdef SHIP_REF_HAS_EVENT_HEADER
-  auto eventHeader = model->MakeField<SHiP::EventHeader>("event_header");
+  auto const eventHeader = model->MakeField<SHiP::EventHeader>("event_header");
 #endif
-  auto mcParticles =
+  auto const mcParticles =
       model->MakeField<std::vector<SHiP::MCParticle>>("mcParticles");
-  auto simHits = model->MakeField<std::vector<SHiP::SimHit>>("simHits");
-  auto simParticles =
+  auto const simHits = model->MakeField<std::vector<SHiP::SimHit>>("simHits");
+  auto const simParticles =
       model->MakeField<std::vector<SHiP::SimParticle>>("simParticles");
-  auto recParticles =
+  auto const recParticles =
       model->MakeField<std::vector<SHiP::RecParticle>>("recParticles");
-  auto simResult = model->MakeField<SHiP::SimResult>("simResult");
+  auto const simResult = model->MakeField<SHiP::SimResult>("simResult");
   auto writer =
       ROOT::RNTupleWriter::Recreate(std::move(model), "events", argv[1]);
   if (!writer) {

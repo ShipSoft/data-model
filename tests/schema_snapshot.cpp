@@ -85,8 +85,8 @@ bool dumpRNTupleSection(std::ostream& os) {
     model->AddField(ROOT::RFieldBase::Create(fieldName, name).Unwrap());
   }
   {
-    auto writer = ROOT::RNTupleWriter::Recreate(std::move(model),
-                                                "schema_probe", kProbeFileName);
+    auto const writer = ROOT::RNTupleWriter::Recreate(
+        std::move(model), "schema_probe", kProbeFileName);
     if (!writer) {
       std::cerr << "FAIL: cannot create probe RNTuple\n";
       return false;
@@ -107,7 +107,7 @@ bool dumpRNTupleSection(std::ostream& os) {
 
 }  // namespace
 
-int main(int argc, char** argv) {
+int main(int argc, char* const* argv) {
   if (argc != 3 || (std::string(argv[1]) != "--check" &&
                     std::string(argv[1]) != "--update")) {
     std::cerr << "usage: schema_snapshot --check|--update <snapshot.txt>\n";
@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  std::ifstream in{snapshotPath};
+  std::ifstream const in{snapshotPath};
   if (!in) {
     std::cout << "FAIL: cannot read snapshot " << snapshotPath
               << " — run: pixi run update-schema-snapshot\n";

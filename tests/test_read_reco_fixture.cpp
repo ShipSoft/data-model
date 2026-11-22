@@ -72,7 +72,7 @@ bool checkEntries(ROOT::RNTupleReader& reader, char const* field,
 
 }  // namespace
 
-int main(int argc, char** argv) {
+int main(int argc, char* const* argv) {
   if (argc != 3) {
     std::cerr << "usage: test_read_reco_fixture <fixture.root> "
                  "<trackfits|wrappers>\n";

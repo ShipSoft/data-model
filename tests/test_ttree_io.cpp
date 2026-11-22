@@ -65,7 +65,8 @@ bool writeFile() {
   tree.Branch("sim_result", &simResult);
 
   for (int entry = 0; entry < kEntries; ++entry) {
-    eventHeader = SHiP::EventHeader{0.125 + entry, 7000 + entry};
+    eventHeader = SHiP::EventHeader{.weight = 0.125 + entry,
+                                    .original_event_id = 7000 + entry};
     mcParticles = SHiP::test::makeMCParticles(entry);
     simHits = SHiP::test::makeSimHits(entry);
     simParticles = SHiP::test::makeSimParticles(entry);
@@ -112,9 +113,11 @@ bool readAndCompare() {
   for (int entry = 0; entry < kEntries; ++entry) {
     tree->GetEntry(entry);
     std::string const suffix = " (entry " + std::to_string(entry) + ")";
-    ok &= SHiP::test::check("EventHeader round-trip" + suffix,
-                            SHiP::EventHeader{0.125 + entry, 7000 + entry},
-                            *eventHeader);
+    ok &=
+        SHiP::test::check("EventHeader round-trip" + suffix,
+                          SHiP::EventHeader{.weight = 0.125 + entry,
+                                            .original_event_id = 7000 + entry},
+                          *eventHeader);
     ok &= SHiP::test::check("MCParticle round-trip" + suffix,
                             SHiP::test::makeMCParticles(entry), *mcParticles);
     ok &= SHiP::test::check("MCParticle mothers" + suffix, true,

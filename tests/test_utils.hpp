@@ -20,7 +20,7 @@ inline std::vector<MCParticle> makeMCParticles(int offset) {
   std::vector<MCParticle> v;
   for (int i = 0; i < 3; ++i) {
     MCParticle p;
-    p.pdg_code = 11 + 100 * i + offset;
+    p.pdg_code = 11 + (100 * i) + offset;
     p.vertex = {1.5 + i + offset, -2.25 + i, 3.75 + i};
     p.momentum = {0.125 + i, -0.25 + i, 40.5 + i + offset};
     p.energy = 40.625 + i + offset;
@@ -43,10 +43,10 @@ inline std::vector<SimHit> makeSimHits(int offset) {
   std::vector<SimHit> v;
   for (int i = 0; i < 3; ++i) {
     SimHit h;
-    h.detector_id = 1000 + 10 * i + offset;
-    h.geometry_node_id = 5000 + 100 * i + offset;
+    h.detector_id = 1000 + (10 * i) + offset;
+    h.geometry_node_id = 5000 + (100 * i) + offset;
     h.track_id = 42 + i + offset;
-    h.pdg_code = -13 + 2 * i;
+    h.pdg_code = -13 + (2 * i);
     h.position = {10.5 + i + offset, -20.25 + i, 3000.75 + i};
     h.momentum = {1.125 + i, -2.25 + i, 30.5 + i + offset};
     h.energy_deposit = 0.0625 + i + offset;
@@ -64,7 +64,7 @@ inline std::vector<SimParticle> makeSimParticles(int offset) {
     SimParticle p;
     p.track_id = 7 + i + offset;
     p.parent_id = 6 + i;
-    p.pdg_code = 211 - 2 * i + offset;
+    p.pdg_code = 211 - (2 * i) + offset;
     p.vertex = {0.5 + i + offset, -1.25 + i, 2.75 + i};
     p.endpoint = {100.5 + i, -200.25 + i + offset, 5000.75 + i};
     p.momentum = {3.125 + i, -4.25 + i, 50.5 + i + offset};
