@@ -65,21 +65,6 @@ foreach(ref IN LISTS reference_files)
             NAME compat_read_${label}
             COMMAND test_read_reference ${ref} ${label}
         )
-        # The pre-v0.5.0 files were written by unversioned classes, which ROOT
-        # 6.40 cannot rule-read into the versioned, renamed classes (see
-        # data/README.md). Mark them expected-to-fail rather than deleting or
-        # weakening them: they keep asserting the true values, and ctest starts
-        # reporting them as FAILED the day a ROOT with the fix reaches
-        # pixi.lock, because passing is what WILL_FAIL does not allow. That
-        # report is the signal to drop this block and the known-issue sections.
-        # The cost is that a genuine regression in one of these four reads
-        # stays hidden until then. compat_read_v0.5.0 and compat_read_head
-        # use the same reader and rules and are not marked, but nothing else
-        # reads the pre-v0.5.0 layout checksums listed in the rules.
-        string(REGEX REPLACE "^v" "" version "${label}")
-        if((NOT label STREQUAL "head") AND (version VERSION_LESS 0.5.0))
-            set_tests_properties(compat_read_${label} PROPERTIES WILL_FAIL TRUE)
-        endif()
     endif()
 endforeach()
 
