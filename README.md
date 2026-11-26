@@ -51,7 +51,8 @@ when these tests fail.
 ## Dependencies
 
 - ROOT 6.40+ (Core, RIO), built with C++23 (`root_cxx_standard = "==23"` in
-  conda)
+  conda). Reading files written before v0.5.0 needs ROOT 6.42+ (see
+  `tests/data/README.md`).
 
 ## Licence
 
