@@ -3,6 +3,7 @@
 /// canonical value recipe, with expectations masked to the writing version
 /// (members that did not exist on disk must read back default-initialized).
 /// See tests/data/README.md for the compatibility policy.
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -53,6 +54,8 @@ struct Version {
 constexpr Version kV030{0, 3, 0};
 constexpr Version kV040{0, 4, 0};
 constexpr Version kV050{0, 5, 0};
+// First release with MCParticle/SimParticle `weight`.
+constexpr Version kV070{.major = 0, .minor = 7, .patch = 0};
 
 bool parseVersion(std::string_view arg, Version& out) {
   if (arg == "head") {
@@ -156,9 +159,19 @@ int main(int argc, char** argv) {
   // Mask table: one entry per "member M introduced in version X" — members
   // that did not exist in the writing version must read back as defaults.
   auto maskMCParticles = [&](std::vector<SHiP::MCParticle>& particles) {
-    if (version < kV050) {
-      for (auto& p : particles) {
+    for (auto& p : particles) {
+      if (version < kV050) {
         p.mothers.clear();
+      }
+      if (version < kV070) {
+        p.weight = 1.0;
+      }
+    }
+  };
+  auto const maskSimParticles = [&](std::vector<SHiP::SimParticle>& particles) {
+    if (version < kV070) {
+      for (auto& p : particles) {
+        p.weight = 1.0;
       }
     }
   };
@@ -177,7 +190,21 @@ int main(int argc, char** argv) {
     }
   };
 
+  // Every entry is read into vectors whose elements already hold a weight
+  // other than 1. ROOT reuses such elements without constructing them again,
+  // so a file without `weight` reads back 1 only if a read rule sets it.
+  auto const poisonWeights = [](auto& particles, std::size_t size) {
+    particles.assign(size, {});
+    for (auto& p : particles) {
+      p.weight = 42.0;
+    }
+  };
+
   for (int i = 0; i < SHiP::ref::kEntries; ++i) {
+    poisonWeights(*mcParticles, SHiP::ref::makeMCParticles(i).size());
+    poisonWeights(*simParticles, SHiP::ref::makeSimParticles(i).size());
+    poisonWeights(simResult->particles,
+                  SHiP::ref::makeSimResult(i).particles.size());
     reader->LoadEntry(i);
     std::string const suffix =
         " (" + versionLabel + ", entry " + std::to_string(i) + ")";
@@ -200,8 +227,10 @@ int main(int argc, char** argv) {
     maskSimHits(expectedSimHits);
     ok &= SHiP::test::check("SimHit" + suffix, expectedSimHits, *simHits);
 
-    ok &= SHiP::test::check("SimParticle" + suffix,
-                            SHiP::ref::makeSimParticles(i), *simParticles);
+    auto expectedSimParticles = SHiP::ref::makeSimParticles(i);
+    maskSimParticles(expectedSimParticles);
+    ok &= SHiP::test::check("SimParticle" + suffix, expectedSimParticles,
+                            *simParticles);
 
     auto expectedRecParticles = SHiP::ref::makeRecParticles(i);
     maskRecParticles(expectedRecParticles);
@@ -210,6 +239,7 @@ int main(int argc, char** argv) {
 
     auto expectedSimResult = SHiP::ref::makeSimResult(i);
     maskSimHits(expectedSimResult.hits);
+    maskSimParticles(expectedSimResult.particles);
     ok &=
         SHiP::test::check("SimResult" + suffix, expectedSimResult, *simResult);
   }

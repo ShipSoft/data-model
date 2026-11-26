@@ -7,8 +7,15 @@ model. Two independent safety nets are exercised by ctest (part of
 1. **Compat read tests** (`compat_read_<version>`): every reference file
    must be readable with the *current* library, materialized into the
    current structs, with all values matching the canonical recipe. Members
-   that did not exist in the writing version must read back
-   default-initialized (ROOT RNTuple automatic schema evolution).
+   that did not exist in the writing version must read back with their
+   documented default. ROOT RNTuple does not guarantee that on its own: it
+   reuses the elements of a vector it reads into without constructing them
+   again, and does not construct the elements of a class it considers
+   trivially constructible (`SimParticle`). Such a member therefore needs a
+   read rule in `include/SHiP/LinkDef.h`, scoped to the checksums of the
+   older layouts, that sets it (see `weight`). The compat reads load every
+   entry into vectors whose elements already hold a non-default `weight`,
+   so a missing rule for it fails the test.
 2. **Schema snapshot** (`schema_snapshot`): `schema_snapshot.txt` is a text
    dump of the persistent schema (TClass layout of every dictionary class +
    the RNTuple field tree). CI fails on *any* schema change — even a
@@ -60,6 +67,7 @@ camelCase layout as version 2, and `MCParticle` as version 3 because it
 gained `mothers` in that release. The snake_case layout is version 3 for
 every class with a renamed member, and version 4 for `MCParticle`.
 `EventHeader` and `SimResult` had no member renamed and stay at version 2.
+Adding `weight` made `MCParticle` version 5 and `SimParticle` version 4.
 
 [root-project/root#23146]: https://github.com/root-project/root/issues/23146
 
@@ -143,12 +151,14 @@ formulas there (e.g. `SimHit::geometry_node_id = 900 + 7*i + offset`,
 other members they carry no `offset`; the recipe encodes the documented
 invariant, namely that `mothers[0]` equals `mother_id` and that an entry
 without a mother has an empty list rather than a `-1` in it —
-`RecParticle::hits` filled from `makeSimHits(offset + 2)`). Per entry
+`RecParticle::hits` filled from `makeSimHits(offset + 2)`,
+`MCParticle::weight = 0.5 + 0.25*i + offset` and
+`SimParticle::weight = 0.125 + 0.5*i + offset`). Per entry
 `e` (0-based): field offsets are `e` for the top-level collections and
 `e + 5` inside `simResult`; each collection has 3 elements. A reference file
 written by version V contains values for exactly the members existing in V;
-newer members read back default-initialized and are masked accordingly in
-`test_read_reference.cpp`.
+newer members read back with their default (set by a read rule where
+needed, see above) and are masked accordingly in `test_read_reference.cpp`.
 
 The mother-index invariants the `MCParticle` recipe encodes are machine-checked
 rather than merely asserted here: `SHiP::mothers_are_consistent` (declared beside

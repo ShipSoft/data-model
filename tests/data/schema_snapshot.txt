@@ -2,7 +2,7 @@
 class SHiP::EventHeader version=2 checksum=0xd65dd49a
   double weight
   long original_event_id
-class SHiP::MCParticle version=4 checksum=0x8d1ef3c
+class SHiP::MCParticle version=5 checksum=0xed896501
   int pdg_code
   array<double,3> vertex
   array<double,3> momentum
@@ -11,6 +11,7 @@ class SHiP::MCParticle version=4 checksum=0x8d1ef3c
   int mother_id
   vector<int> mothers
   int status
+  double weight
 class SHiP::SimHit version=3 checksum=0x86596cd3
   int detector_id
   int geometry_node_id
@@ -21,7 +22,7 @@ class SHiP::SimHit version=3 checksum=0x86596cd3
   double energy_deposit
   double time
   double path_length
-class SHiP::SimParticle version=3 checksum=0xbd363faa
+class SHiP::SimParticle version=4 checksum=0xd7e4b68f
   int track_id
   int parent_id
   int pdg_code
@@ -31,6 +32,7 @@ class SHiP::SimParticle version=3 checksum=0xbd363faa
   double energy
   double time
   int creator_process
+  double weight
 class SHiP::SimResult version=2 checksum=0xbb708e7a
   vector<SHiP::SimHit> hits
   vector<SHiP::SimParticle> particles
@@ -85,7 +87,7 @@ class SHiP::RecParticle version=3 checksum=0xc908f3a0
 SHiP__EventHeader : SHiP::EventHeader (typever=2, checksum=0xd65dd49a)
   weight : double (typever=0)
   original_event_id : std::int64_t (typever=0)
-SHiP__MCParticle : SHiP::MCParticle (typever=4, checksum=0x8d1ef3c)
+SHiP__MCParticle : SHiP::MCParticle (typever=5, checksum=0xed896501)
   pdg_code : std::int32_t (typever=0)
   vertex : std::array<double,3> (typever=0)
     _0 : double (typever=0)
@@ -97,6 +99,7 @@ SHiP__MCParticle : SHiP::MCParticle (typever=4, checksum=0x8d1ef3c)
   mothers : std::vector<std::int32_t> (typever=0)
     _0 : std::int32_t (typever=0)
   status : std::int32_t (typever=0)
+  weight : double (typever=0)
 SHiP__SimHit : SHiP::SimHit (typever=3, checksum=0x86596cd3)
   detector_id : std::int32_t (typever=0)
   geometry_node_id : std::int32_t (typever=0)
@@ -109,7 +112,7 @@ SHiP__SimHit : SHiP::SimHit (typever=3, checksum=0x86596cd3)
   energy_deposit : double (typever=0)
   time : double (typever=0)
   path_length : double (typever=0)
-SHiP__SimParticle : SHiP::SimParticle (typever=3, checksum=0xbd363faa)
+SHiP__SimParticle : SHiP::SimParticle (typever=4, checksum=0xd7e4b68f)
   track_id : std::int32_t (typever=0)
   parent_id : std::int32_t (typever=0)
   pdg_code : std::int32_t (typever=0)
@@ -122,6 +125,7 @@ SHiP__SimParticle : SHiP::SimParticle (typever=3, checksum=0xbd363faa)
   energy : double (typever=0)
   time : double (typever=0)
   creator_process : std::int32_t (typever=0)
+  weight : double (typever=0)
 SHiP__SimResult : SHiP::SimResult (typever=2, checksum=0xbb708e7a)
   hits : std::vector<SHiP::SimHit> (typever=0)
     _0 : SHiP::SimHit (typever=3, checksum=0x86596cd3)
@@ -137,7 +141,7 @@ SHiP__SimResult : SHiP::SimResult (typever=2, checksum=0xbb708e7a)
       time : double (typever=0)
       path_length : double (typever=0)
   particles : std::vector<SHiP::SimParticle> (typever=0)
-    _0 : SHiP::SimParticle (typever=3, checksum=0xbd363faa)
+    _0 : SHiP::SimParticle (typever=4, checksum=0xd7e4b68f)
       track_id : std::int32_t (typever=0)
       parent_id : std::int32_t (typever=0)
       pdg_code : std::int32_t (typever=0)
@@ -150,6 +154,7 @@ SHiP__SimResult : SHiP::SimResult (typever=2, checksum=0xbb708e7a)
       energy : double (typever=0)
       time : double (typever=0)
       creator_process : std::int32_t (typever=0)
+      weight : double (typever=0)
 SHiP__RecHit : SHiP::RecHit (typever=3, checksum=0xabd4d8e)
   detector_id : std::int32_t (typever=0)
   track_id : std::int32_t (typever=0)
