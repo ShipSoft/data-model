@@ -106,7 +106,7 @@ CMAKE_FILE="CMakeLists.txt"
 #   project(Foo                                            # multi-line
 #       VERSION 0.1.0 ...
 #   )
-# `cmake_minimum_required(VERSION 3.21)` is not matched because its version is
+# `cmake_minimum_required(VERSION 3.24)` is not matched because its version is
 # only two-component.
 VERSION_RE='(^|[[:space:](])VERSION[[:space:]]+[0-9]+\.[0-9]+\.[0-9]+'
 if ! grep -qE "${VERSION_RE}" "${CMAKE_FILE}"; then

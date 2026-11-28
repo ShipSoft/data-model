@@ -48,7 +48,7 @@ mp-units = ">=2.5"
 
 [dependencies]
 cxx-compiler = "*"
-cmake = ">=3.21"
+cmake = ">=3.24"
 ninja = "*"
 git = "*"
 # 6.42 reads the pre-v0.5.0 reference files through the rename rules
